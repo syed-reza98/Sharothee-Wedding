@@ -39,7 +39,7 @@ We propose a bilingual wedding website for your multi-day celebration, featuring
 - Live streaming
 - Local guide for guests
 
-The website will use React.js/Next.js, Laravel, and  GCP, delivered in 3 weeks with 6 months of complimentary support.
+The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks with 6 months of complimentary support.
 
 ---
 
