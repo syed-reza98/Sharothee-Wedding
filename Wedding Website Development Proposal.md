@@ -80,7 +80,7 @@ The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks wi
 
 | Milestone                | Deliverable/Outcome            | Target Date     |
 |--------------------------|-------------------------------|-----------------|
-| Planning & Design        | Approved UI/UX mockups        | August 3, 2025  |
+| Planning & Design        | Approved UI/UX mockups        | August 6, 2025  |
 | Core Development         | Backend, database, CMS        | August 10, 2025 |
 | Feature Integration      | RSVP, galleries, live stream  | August 13, 2025 |
 | Testing & Refinement     | QA, bug fixes, optimization   | August 16, 2025 |
