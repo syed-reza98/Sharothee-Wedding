@@ -94,7 +94,7 @@ The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks wi
 |--------------|-------------------------|-------------------------------------------|
 | Timeline     | Tight schedule          | Modular dev, parallel workflows           |
 | Performance  | High-traffic events     | GCP autoscaling, load testing             |
-| Budget       | Third-party cost changes| Budget buffer, client approval for changes|
+| Budget       | Third-party cost changes | Budget buffer, client approval for changes|
 | Content      | Delayed submissions     | Clear schedule, flexible CMS              |
 
 ---
