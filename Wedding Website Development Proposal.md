@@ -103,7 +103,7 @@ The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks wi
 
 **Total Cost:** 210,100 BDT
 
-| Milestone                  | Payment Trigger         | %    | Amount (BDT) |
+| Milestone                  | Payment Trigger        | %    | Amount (BDT) |
 |----------------------------|----------------------- |------|--------------|
 | Project Kickoff            | Agreement signed       | 40%  | 84,040       |
 | Development Completion     | Website launch         | 30%  | 63,030       |
