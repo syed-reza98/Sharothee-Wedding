@@ -43,6 +43,9 @@ yarn-error.log*
 lerna-debug.log*
 server/storage/logs/*.log
 
+# Workflow logs (include for debugging)
+!logs/workflows/*.log
+
 # Runtime data
 pids/
 *.pid
