@@ -2,33 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'title',
+        'name',
         'description',
-        'event_date',
+        'venue_id',
         'start_time',
         'end_time',
-        'venue_id',
         'dress_code',
-        'type',
-        'is_live_streamed',
-        'sort_order'
+        'special_instructions',
+        'live_stream_url',
+        'rsvp_required',
+        'rsvp_deadline'
     ];
 
     protected $casts = [
-        'event_date' => 'date',
-        'start_time' => 'datetime:H:i',
-        'end_time' => 'datetime:H:i',
-        'is_live_streamed' => 'boolean'
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'rsvp_deadline' => 'date',
+        'rsvp_required' => 'boolean'
     ];
 
     public function venue(): BelongsTo
@@ -38,16 +35,6 @@ class Event extends Model
 
     public function rsvps(): HasMany
     {
-        return $this->hasMany(RSVP::class);
-    }
-
-    public function liveStreams(): HasMany
-    {
-        return $this->hasMany(LiveStream::class);
-    }
-
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('sort_order')->orderBy('event_date')->orderBy('start_time');
+        return $this->hasMany(Rsvp::class);
     }
 }

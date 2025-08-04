@@ -123,7 +123,7 @@ export default function ContactPage() {
           </h1>
           <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
           <p className="text-xl text-muted max-w-2xl mx-auto">
-            Have questions about the wedding? Need assistance with travel or accommodations? We're here to help!
+            Have questions about the wedding? Need assistance with travel or accommodations? We&apos;re here to help!
           </p>
         </div>
       </section>
@@ -141,7 +141,7 @@ export default function ContactPage() {
                 <div className="text-4xl mb-4">✉️</div>
                 <h3 className="text-xl font-semibold text-foreground mb-2">Message Sent!</h3>
                 <p className="text-muted">
-                  Thank you for reaching out. We'll get back to you within 24 hours.
+                  Thank you for reaching out. We&apos;ll get back to you within 24 hours.
                 </p>
               </div>
             ) : (

@@ -193,10 +193,10 @@ export default function EventsPage() {
       <section className="py-16 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-serif font-semibold text-secondary mb-6">
-            Can't Make It? Join Us Online
+            Can&apos;t Make It? Join Us Online
           </h2>
           <p className="text-muted mb-8 max-w-2xl mx-auto">
-            We understand not everyone can travel to be with us in person. We'll be live streaming key moments 
+            We understand not everyone can travel to be with us in person. We&apos;ll be live streaming key moments 
             so you can still be part of our special day.
           </p>
           <div className="bg-white rounded-lg p-6 shadow-md max-w-md mx-auto">
@@ -217,7 +217,7 @@ export default function EventsPage() {
             Ready to Celebrate With Us?
           </h2>
           <p className="text-muted mb-8">
-            Let us know which events you'll be attending so we can plan accordingly.
+            Let us know which events you&apos;ll be attending so we can plan accordingly.
           </p>
           <Link 
             href="/rsvp"

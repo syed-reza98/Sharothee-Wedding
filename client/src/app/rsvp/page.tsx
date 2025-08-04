@@ -6,8 +6,20 @@ import { useState } from "react";
 export default function RSVPPage() {
   const [step, setStep] = useState(1);
   const [token, setToken] = useState('');
-  const [guestInfo, setGuestInfo] = useState<any>(null);
-  const [responses, setResponses] = useState<any>({});
+  const [guestInfo, setGuestInfo] = useState<{
+    name: string;
+    email: string;
+    country: string;
+  } | null>(null);
+  const [responses, setResponses] = useState<Record<number, {
+    attending: string;
+    plusOnes: number;
+    dietary: string;
+    comments: string;
+    response?: string;
+    num_attendees?: number;
+    dietary_preferences?: string;
+  }>>({});
 
   const events = [
     { id: 1, title: "Mehndi Ceremony", date: "2025-08-15", time: "6:00 PM" },
@@ -29,7 +41,7 @@ export default function RSVPPage() {
     }
   };
 
-  const handleResponseChange = (eventId: number, field: string, value: any) => {
+  const handleResponseChange = (eventId: number, field: string, value: string | number) => {
     setResponses(prev => ({
       ...prev,
       [eventId]: {
@@ -91,7 +103,7 @@ export default function RSVPPage() {
           </h1>
           <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
           <p className="text-xl text-muted max-w-2xl mx-auto">
-            We can't wait to celebrate with you! Please let us know if you'll be joining us.
+            We can&apos;t wait to celebrate with you! Please let us know if you&apos;ll be joining us.
           </p>
         </div>
       </section>
@@ -139,9 +151,9 @@ export default function RSVPPage() {
               </form>
 
               <div className="mt-8 p-4 bg-cream-50 rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">Don't have an RSVP code?</h3>
+                <h3 className="font-semibold text-foreground mb-2">Don&apos;t have an RSVP code?</h3>
                 <p className="text-sm text-muted mb-3">
-                  If you can't find your RSVP code, please contact us and we'll help you out.
+                  If you can&apos;t find your RSVP code, please contact us and we&apos;ll help you out.
                 </p>
                 <Link 
                   href="/contact"
@@ -158,10 +170,10 @@ export default function RSVPPage() {
               <div className="text-center mb-8">
                 <div className="text-4xl mb-4">👋</div>
                 <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">
-                  Welcome, {guestInfo.name}!
+                  Welcome, {guestInfo?.name}!
                 </h2>
                 <p className="text-muted">
-                  Please let us know which events you'll be attending.
+                  Please let us know which events you&apos;ll be attending.
                 </p>
               </div>
 
@@ -280,7 +292,7 @@ export default function RSVPPage() {
                 Thank You!
               </h2>
               <p className="text-muted mb-8 max-w-md mx-auto">
-                Your RSVP has been submitted successfully. We'll send you a confirmation email 
+                Your RSVP has been submitted successfully. We&apos;ll send you a confirmation email 
                 with all the details shortly.
               </p>
               

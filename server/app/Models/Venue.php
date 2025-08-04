@@ -2,20 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Venue extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'name',
         'address',
+        'city',
+        'state',
+        'zip_code',
+        'country',
+        'latitude',
+        'longitude',
         'phone',
-        'google_maps_url',
-        'description'
+        'website',
+        'description',
+        'amenities'
+    ];
+
+    protected $casts = [
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
+        'amenities' => 'array'
     ];
 
     public function events(): HasMany

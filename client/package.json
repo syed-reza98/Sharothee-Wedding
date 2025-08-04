@@ -8,34 +8,42 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.5",
     "@headlessui/react": "^2.0.4",
     "@heroicons/react": "^2.0.18",
-    "framer-motion": "^11.5.4",
-    "axios": "^1.7.4",
-    "react-hook-form": "^7.52.2",
     "@tanstack/react-query": "^5.51.23",
-    "zustand": "^4.5.4",
+    "axios": "^1.7.4",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
-    "sharp": "^0.33.4"
+    "framer-motion": "^11.5.4",
+    "next": "15.4.5",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-hook-form": "^7.52.2",
+    "sharp": "^0.33.4",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.13",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/typography": "^0.5.13"
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
