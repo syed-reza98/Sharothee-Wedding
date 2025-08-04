@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fefcf7;
+  --foreground: #1f1f1f;
+  --primary: #d4a574;
+  --primary-dark: #b8946a;
+  --secondary: #8b5a3c;
+  --accent: #f7e7ce;
+  --muted: #6b7280;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Playfair Display', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --color-cream: {
+    50: #fefcf7;
+    100: #fdf8ed;
+    200: #faf0d2;
+    300: #f7e7ce;
+    400: #f2d7a7;
+    500: #d4a574;
+    600: #b8946a;
+    700: #9c7e57;
+    800: #7d6345;
+    900: #5c4932;
+  };
+  --color-warm-gray: {
+    50: #f9f7f4;
+    100: #f3efea;
+    200: #e6ddd1;
+    300: #d6c9b8;
+    400: #c2b19d;
+    500: #a69885;
+    600: #8b7f6c;
+    700: #716656;
+    800: #5a5044;
+    900: #453c33;
+  };
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a1a1a;
+    --foreground: #f5f5f5;
+    --primary: #d4a574;
+    --primary-dark: #b8946a;
+    --secondary: #a67c52;
+    --accent: #2d2419;
+    --muted: #9ca3af;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--accent);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Smooth transitions */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Wedding-specific animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-floatIn {
+  animation: floatIn 0.8s ease-out forwards;
+}
+
+/* Elegant gradient backgrounds */
+.gradient-wedding {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--background) 50%, #f7e7ce 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 165, 116, 0.1) 0%,
+    rgba(247, 231, 206, 0.3) 50%,
+    rgba(212, 165, 116, 0.1) 100%
+  );
+}
+
+/* Typography utilities */
+.font-serif {
+  font-family: var(--font-serif);
+}

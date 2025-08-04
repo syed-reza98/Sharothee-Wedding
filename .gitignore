@@ -1,0 +1,190 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Production builds
+client/.next/
+client/out/
+client/build/
+server/public/build/
+server/public/hot
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+client/.env*
+server/.env*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+server/storage/logs/*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+out
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Laravel specific
+server/bootstrap/compiled.php
+server/app/storage/
+server/storage/framework/cache/*
+server/storage/framework/sessions/*
+server/storage/framework/views/*
+server/storage/logs/*
+!server/storage/framework/cache/.gitkeep
+!server/storage/framework/sessions/.gitkeep
+!server/storage/framework/views/.gitkeep
+!server/storage/logs/.gitkeep
+
+# Laravel Sanctum
+server/storage/oauth-*.key
+
+# Composer
+server/composer.phar
+server/composer.lock
+
+# Laravel Mix
+server/public/js/app.js
+server/public/css/app.css
+server/public/mix-manifest.json
+
+# Laravel Nova
+server/nova
+
+# PHPUnit
+server/coverage.xml
+server/.phpunit.result.cache
+
+# Docker
+.docker/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Media uploads (exclude from git, use cloud storage)
+server/storage/app/public/uploads/*
+!server/storage/app/public/uploads/.gitkeep
+client/public/uploads/*
+!client/public/uploads/.gitkeep
+
+# Compiled assets
+server/public/build/*
+server/public/storage
+
+# Telescope
+server/storage/telescope/*
+
+# Homestead
+Homestead.json
+Homestead.yaml
+
+# Vagrant
+.vagrant/
+
+# Local development certificates
+*.pem
+*.key
+*.crt
+
+# Test artifacts
+test-results/
+playwright-report/
+test-results.xml
+
+# Vercel
+.vercel
+
+# Deployment scripts (if sensitive)
+deploy.sh
+production.yml
+
+# Package manager locks (uncomment if you want to exclude them)
+# package-lock.json
+# yarn.lock
+# composer.lock

@@ -1,0 +1,41 @@
+{
+  "name": "incia-arvin-wedding-client",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Incia & Arvin's Wedding Website - Frontend",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "next": "15.4.5",
+    "@headlessui/react": "^2.0.4",
+    "@heroicons/react": "^2.0.18",
+    "framer-motion": "^11.5.4",
+    "axios": "^1.7.4",
+    "react-hook-form": "^7.52.2",
+    "@tanstack/react-query": "^5.51.23",
+    "zustand": "^4.5.4",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.13"
+  }
+}
