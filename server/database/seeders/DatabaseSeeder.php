@@ -19,5 +19,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Call the wedding data seeder
+        $this->call(WeddingDataSeeder::class);
     }
 }
