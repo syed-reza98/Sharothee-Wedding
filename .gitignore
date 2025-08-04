@@ -15,7 +15,9 @@ server/public/hot
 .env.production
 .env.staging
 client/.env*
-server/.env*
+server/.env
+server/.env.*
+!server/.env.example
 
 # IDE and editor files
 .vscode/
@@ -34,7 +36,6 @@ ehthumbs.db
 Thumbs.db
 
 # Logs
-logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -94,6 +95,7 @@ dist
 # Gatsby files
 .cache/
 public
+!server/public/
 
 # Storybook build outputs
 .out

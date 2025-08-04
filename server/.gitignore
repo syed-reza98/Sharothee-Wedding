@@ -3,6 +3,7 @@
 .env
 .env.backup
 .env.production
+!.env.example
 .phpactor.json
 .phpunit.result.cache
 /.fleet
@@ -16,6 +17,8 @@
 /public/build
 /public/hot
 /public/storage
+!/public/index.php
+!/public/.htaccess
 /storage/*.key
 /storage/pail
 /vendor
