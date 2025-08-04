@@ -76,6 +76,7 @@ jobs:
         
     - name: Get Composer Cache Directory
       id: composer-cache
+      working-directory: ./server
       run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       
     - name: Cache Composer dependencies

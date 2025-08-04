@@ -1,5 +1,20 @@
 import type { Metadata } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-playfair',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Incia & Arvin's Wedding",
@@ -19,8 +34,13 @@ export const metadata: Metadata = {
     title: "Incia & Arvin's Wedding",
     description: "Join us in celebrating the love story of Incia & Arvin",
   },
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+};
+
+// Separate viewport export as required by Next.js 13+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -29,15 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
       <body className="font-sans antialiased bg-cream-50 text-gray-800">
         {children}
       </body>
