@@ -1,0 +1,244 @@
+﻿2025-08-04T04:06:37.9393799Z Current runner version: '2.327.1'
+2025-08-04T04:06:37.9417128Z ##[group]Runner Image Provisioner
+2025-08-04T04:06:37.9418017Z Hosted Compute Agent
+2025-08-04T04:06:37.9418863Z Version: 20250711.363
+2025-08-04T04:06:37.9419459Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-08-04T04:06:37.9420218Z Build Date: 2025-07-11T20:04:25Z
+2025-08-04T04:06:37.9420765Z ##[endgroup]
+2025-08-04T04:06:37.9421295Z ##[group]Operating System
+2025-08-04T04:06:37.9421883Z Ubuntu
+2025-08-04T04:06:37.9422364Z 24.04.2
+2025-08-04T04:06:37.9422783Z LTS
+2025-08-04T04:06:37.9423280Z ##[endgroup]
+2025-08-04T04:06:37.9423725Z ##[group]Runner Image
+2025-08-04T04:06:37.9424288Z Image: ubuntu-24.04
+2025-08-04T04:06:37.9424918Z Version: 20250728.1.0
+2025-08-04T04:06:37.9425878Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250728.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-08-04T04:06:37.9427391Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250728.1
+2025-08-04T04:06:37.9428620Z ##[endgroup]
+2025-08-04T04:06:37.9431403Z ##[group]GITHUB_TOKEN Permissions
+2025-08-04T04:06:37.9433629Z Actions: write
+2025-08-04T04:06:37.9434137Z Attestations: write
+2025-08-04T04:06:37.9434724Z Checks: write
+2025-08-04T04:06:37.9435191Z Contents: write
+2025-08-04T04:06:37.9435694Z Deployments: write
+2025-08-04T04:06:37.9436258Z Discussions: write
+2025-08-04T04:06:37.9436768Z Issues: write
+2025-08-04T04:06:37.9437239Z Metadata: read
+2025-08-04T04:06:37.9437660Z Models: read
+2025-08-04T04:06:37.9438208Z Packages: write
+2025-08-04T04:06:37.9438865Z Pages: write
+2025-08-04T04:06:37.9439334Z PullRequests: write
+2025-08-04T04:06:37.9439944Z RepositoryProjects: write
+2025-08-04T04:06:37.9440511Z SecurityEvents: write
+2025-08-04T04:06:37.9441121Z Statuses: write
+2025-08-04T04:06:37.9441642Z ##[endgroup]
+2025-08-04T04:06:37.9443639Z Secret source: Actions
+2025-08-04T04:06:37.9444352Z Prepare workflow directory
+2025-08-04T04:06:37.9777530Z Prepare all required actions
+2025-08-04T04:06:37.9814879Z Getting action download info
+2025-08-04T04:06:38.3054417Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-08-04T04:06:38.3055421Z Version: 4.2.2
+2025-08-04T04:06:38.3056359Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-08-04T04:06:38.3057620Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-08-04T04:06:38.3058355Z ##[endgroup]
+2025-08-04T04:06:38.4291745Z ##[group]Download immutable action package 'actions/setup-node@v4'
+2025-08-04T04:06:38.4293288Z Version: 4.4.0
+2025-08-04T04:06:38.4294613Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+2025-08-04T04:06:38.4296435Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+2025-08-04T04:06:38.4297614Z ##[endgroup]
+2025-08-04T04:06:38.5286921Z ##[group]Download immutable action package 'actions/upload-artifact@v4'
+2025-08-04T04:06:38.5287632Z Version: 4.6.2
+2025-08-04T04:06:38.5288258Z Digest: sha256:290722aa3281d5caf23d0acdc3dbeb3424786a1a01a9cc97e72f147225e37c38
+2025-08-04T04:06:38.5289323Z Source commit SHA: ea165f8d65b6e75b540449e92b4886f43607fa02
+2025-08-04T04:06:38.5289911Z ##[endgroup]
+2025-08-04T04:06:38.7173620Z Complete job name: Frontend (Next.js)
+2025-08-04T04:06:38.7877281Z ##[group]Run actions/checkout@v4
+2025-08-04T04:06:38.7878097Z with:
+2025-08-04T04:06:38.7878699Z   repository: syed-reza98/Sharothee-Wedding
+2025-08-04T04:06:38.7879382Z   token: ***
+2025-08-04T04:06:38.7879765Z   ssh-strict: true
+2025-08-04T04:06:38.7880144Z   ssh-user: git
+2025-08-04T04:06:38.7880533Z   persist-credentials: true
+2025-08-04T04:06:38.7880977Z   clean: true
+2025-08-04T04:06:38.7881369Z   sparse-checkout-cone-mode: true
+2025-08-04T04:06:38.7881829Z   fetch-depth: 1
+2025-08-04T04:06:38.7882209Z   fetch-tags: false
+2025-08-04T04:06:38.7882604Z   show-progress: true
+2025-08-04T04:06:38.7882992Z   lfs: false
+2025-08-04T04:06:38.7883351Z   submodules: false
+2025-08-04T04:06:38.7883741Z   set-safe-directory: true
+2025-08-04T04:06:38.7884407Z ##[endgroup]
+2025-08-04T04:06:38.8938774Z Syncing repository: syed-reza98/Sharothee-Wedding
+2025-08-04T04:06:38.8940567Z ##[group]Getting Git version info
+2025-08-04T04:06:38.8941542Z Working directory is '/home/runner/work/Sharothee-Wedding/Sharothee-Wedding'
+2025-08-04T04:06:38.8942565Z [command]/usr/bin/git version
+2025-08-04T04:06:38.9048666Z git version 2.50.1
+2025-08-04T04:06:38.9073960Z ##[endgroup]
+2025-08-04T04:06:38.9087346Z Temporarily overriding HOME='/home/runner/work/_temp/8af56b5f-7d7c-4be5-ae20-d48b16ceb4af' before making global git config changes
+2025-08-04T04:06:38.9088915Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-04T04:06:38.9092534Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sharothee-Wedding/Sharothee-Wedding
+2025-08-04T04:06:38.9133555Z Deleting the contents of '/home/runner/work/Sharothee-Wedding/Sharothee-Wedding'
+2025-08-04T04:06:38.9138044Z ##[group]Initializing the repository
+2025-08-04T04:06:38.9143857Z [command]/usr/bin/git init /home/runner/work/Sharothee-Wedding/Sharothee-Wedding
+2025-08-04T04:06:38.9241734Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-08-04T04:06:38.9243450Z hint: is subject to change. To configure the initial branch name to use in all
+2025-08-04T04:06:38.9244988Z hint: of your new repositories, which will suppress this warning, call:
+2025-08-04T04:06:38.9246069Z hint:
+2025-08-04T04:06:38.9246791Z hint: 	git config --global init.defaultBranch <name>
+2025-08-04T04:06:38.9247626Z hint:
+2025-08-04T04:06:38.9248158Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-08-04T04:06:38.9249248Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-08-04T04:06:38.9249948Z hint:
+2025-08-04T04:06:38.9250323Z hint: 	git branch -m <name>
+2025-08-04T04:06:38.9250742Z hint:
+2025-08-04T04:06:38.9251337Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-08-04T04:06:38.9252868Z Initialized empty Git repository in /home/runner/work/Sharothee-Wedding/Sharothee-Wedding/.git/
+2025-08-04T04:06:38.9257390Z [command]/usr/bin/git remote add origin https://github.com/syed-reza98/Sharothee-Wedding
+2025-08-04T04:06:38.9290268Z ##[endgroup]
+2025-08-04T04:06:38.9290971Z ##[group]Disabling automatic garbage collection
+2025-08-04T04:06:38.9293999Z [command]/usr/bin/git config --local gc.auto 0
+2025-08-04T04:06:38.9321707Z ##[endgroup]
+2025-08-04T04:06:38.9322378Z ##[group]Setting up auth
+2025-08-04T04:06:38.9328616Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-04T04:06:38.9357559Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-04T04:06:38.9704222Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-04T04:06:38.9737698Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-04T04:06:38.9991388Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-08-04T04:06:39.0032900Z ##[endgroup]
+2025-08-04T04:06:39.0041917Z ##[group]Fetching the repository
+2025-08-04T04:06:39.0044119Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7dbedb8b3a4276aa98fd160e5b38a424bc4afe6c:refs/remotes/pull/1/merge
+2025-08-04T04:06:39.2738187Z From https://github.com/syed-reza98/Sharothee-Wedding
+2025-08-04T04:06:39.2739331Z  * [new ref]         7dbedb8b3a4276aa98fd160e5b38a424bc4afe6c -> pull/1/merge
+2025-08-04T04:06:39.2763938Z ##[endgroup]
+2025-08-04T04:06:39.2764606Z ##[group]Determining the checkout info
+2025-08-04T04:06:39.2765928Z ##[endgroup]
+2025-08-04T04:06:39.2770943Z [command]/usr/bin/git sparse-checkout disable
+2025-08-04T04:06:39.2812463Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-08-04T04:06:39.2838208Z ##[group]Checking out the ref
+2025-08-04T04:06:39.2841383Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/1/merge
+2025-08-04T04:06:39.2950370Z Note: switching to 'refs/remotes/pull/1/merge'.
+2025-08-04T04:06:39.2951081Z 
+2025-08-04T04:06:39.2951685Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-08-04T04:06:39.2953093Z changes and commit them, and you can discard any commits you make in this
+2025-08-04T04:06:39.2954477Z state without impacting any branches by switching back to a branch.
+2025-08-04T04:06:39.2955314Z 
+2025-08-04T04:06:39.2955694Z If you want to create a new branch to retain commits you create, you may
+2025-08-04T04:06:39.2956495Z do so (now or later) by using -c with the switch command. Example:
+2025-08-04T04:06:39.2956941Z 
+2025-08-04T04:06:39.2957136Z   git switch -c <new-branch-name>
+2025-08-04T04:06:39.2957465Z 
+2025-08-04T04:06:39.2957703Z Or undo this operation with:
+2025-08-04T04:06:39.2958190Z 
+2025-08-04T04:06:39.2958622Z   git switch -
+2025-08-04T04:06:39.2958990Z 
+2025-08-04T04:06:39.2959385Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-08-04T04:06:39.2959924Z 
+2025-08-04T04:06:39.2960527Z HEAD is now at 7dbedb8 Merge f1f66574d06b583727994cda709d5fb43d14b0c2 into 503050c763e7797407bafb4b54776a0882eb19b4
+2025-08-04T04:06:39.2962442Z ##[endgroup]
+2025-08-04T04:06:39.2991360Z [command]/usr/bin/git log -1 --format=%H
+2025-08-04T04:06:39.3012577Z 7dbedb8b3a4276aa98fd160e5b38a424bc4afe6c
+2025-08-04T04:06:39.3245173Z ##[group]Run actions/setup-node@v4
+2025-08-04T04:06:39.3245696Z with:
+2025-08-04T04:06:39.3246041Z   node-version: 20
+2025-08-04T04:06:39.3246411Z   cache: npm
+2025-08-04T04:06:39.3246855Z   cache-dependency-path: client/package-lock.json
+2025-08-04T04:06:39.3247404Z   always-auth: false
+2025-08-04T04:06:39.3247801Z   check-latest: false
+2025-08-04T04:06:39.3248339Z   token: ***
+2025-08-04T04:06:39.3249054Z ##[endgroup]
+2025-08-04T04:06:39.4965167Z Found in cache @ /opt/hostedtoolcache/node/20.19.4/x64
+2025-08-04T04:06:39.4971602Z ##[group]Environment details
+2025-08-04T04:06:39.8377394Z node: v20.19.4
+2025-08-04T04:06:39.8377899Z npm: 10.8.2
+2025-08-04T04:06:39.8378210Z yarn: 1.22.22
+2025-08-04T04:06:39.8379402Z ##[endgroup]
+2025-08-04T04:06:39.8398601Z [command]/opt/hostedtoolcache/node/20.19.4/x64/bin/npm config get cache
+2025-08-04T04:06:39.9499817Z /home/runner/.npm
+2025-08-04T04:06:40.0948191Z npm cache is not found
+2025-08-04T04:06:40.1099290Z ##[group]Run npm ci
+2025-08-04T04:06:40.1099646Z [36;1mnpm ci[0m
+2025-08-04T04:06:40.1137842Z shell: /usr/bin/bash -e {0}
+2025-08-04T04:06:40.1138147Z ##[endgroup]
+2025-08-04T04:06:43.5825610Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-08-04T04:06:45.5876698Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-08-04T04:06:54.1492987Z 
+2025-08-04T04:06:54.1493807Z added 727 packages, and audited 728 packages in 14s
+2025-08-04T04:06:54.1494388Z 
+2025-08-04T04:06:54.1494738Z 192 packages are looking for funding
+2025-08-04T04:06:54.1495310Z   run `npm fund` for details
+2025-08-04T04:06:54.1505979Z 
+2025-08-04T04:06:54.1506430Z found 0 vulnerabilities
+2025-08-04T04:06:54.1947261Z ##[group]Run npm run lint
+2025-08-04T04:06:54.1947564Z [36;1mnpm run lint[0m
+2025-08-04T04:06:54.1977422Z shell: /usr/bin/bash -e {0}
+2025-08-04T04:06:54.1977668Z ##[endgroup]
+2025-08-04T04:06:54.3049916Z 
+2025-08-04T04:06:54.3050567Z > incia-arvin-wedding-client@1.0.0 lint
+2025-08-04T04:06:54.3051043Z > next lint
+2025-08-04T04:06:54.3051187Z 
+2025-08-04T04:06:56.4061904Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-08-04T04:06:56.4067631Z This information is used to shape Next.js' roadmap and prioritize features.
+2025-08-04T04:06:56.4070167Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-08-04T04:06:56.4071267Z https://nextjs.org/telemetry
+2025-08-04T04:06:56.4071599Z 
+2025-08-04T04:06:56.5813308Z 
+2025-08-04T04:06:56.5813911Z ./src/app/layout.tsx
+2025-08-04T04:06:56.5815816Z 36:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+2025-08-04T04:06:56.5816725Z 
+2025-08-04T04:06:56.5817359Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+2025-08-04T04:06:56.6813149Z ##[group]Run npm run type-check
+2025-08-04T04:06:56.6813451Z [36;1mnpm run type-check[0m
+2025-08-04T04:06:56.6842264Z shell: /usr/bin/bash -e {0}
+2025-08-04T04:06:56.6842514Z ##[endgroup]
+2025-08-04T04:06:56.7927581Z 
+2025-08-04T04:06:56.7928350Z > incia-arvin-wedding-client@1.0.0 type-check
+2025-08-04T04:06:56.7929195Z > tsc --noEmit
+2025-08-04T04:06:59.3022864Z 
+2025-08-04T04:06:59.3047546Z ##[error]src/__tests__/ContactPage.test.tsx(4,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3061753Z ##[error]src/__tests__/ContactPage.test.tsx(5,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3063483Z ##[error]src/__tests__/ContactPage.test.tsx(7,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3065449Z ##[error]src/__tests__/ContactPage.test.tsx(10,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3066927Z ##[error]src/__tests__/ContactPage.test.tsx(17,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3068141Z ##[error]src/__tests__/ContactPage.test.tsx(18,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3069737Z ##[error]src/__tests__/ContactPage.test.tsx(19,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3071674Z ##[error]src/__tests__/ContactPage.test.tsx(22,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3073231Z ##[error]src/__tests__/ContactPage.test.tsx(26,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3074445Z ##[error]src/__tests__/EventsPage.test.tsx(5,1): error TS2304: Cannot find name 'jest'.
+2025-08-04T04:06:59.3076412Z ##[error]src/__tests__/EventsPage.test.tsx(13,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3078864Z ##[error]src/__tests__/EventsPage.test.tsx(14,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3080473Z ##[error]src/__tests__/EventsPage.test.tsx(16,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3082358Z ##[error]src/__tests__/EventsPage.test.tsx(19,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3083862Z ##[error]src/__tests__/EventsPage.test.tsx(24,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3085756Z ##[error]src/__tests__/EventsPage.test.tsx(27,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3087541Z ##[error]src/__tests__/EventsPage.test.tsx(32,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3089785Z ##[error]src/__tests__/HomePage.test.tsx(4,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3092039Z ##[error]src/__tests__/HomePage.test.tsx(5,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3093501Z ##[error]src/__tests__/HomePage.test.tsx(8,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3095573Z ##[error]src/__tests__/HomePage.test.tsx(11,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3097098Z ##[error]src/__tests__/HomePage.test.tsx(14,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3099136Z ##[error]src/__tests__/HomePage.test.tsx(17,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3100656Z ##[error]src/__tests__/HomePage.test.tsx(20,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3101957Z ##[error]src/__tests__/RSVPPage.test.tsx(5,1): error TS2304: Cannot find name 'jest'.
+2025-08-04T04:06:59.3103884Z ##[error]src/__tests__/RSVPPage.test.tsx(13,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3106096Z ##[error]src/__tests__/RSVPPage.test.tsx(14,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3107545Z ##[error]src/__tests__/RSVPPage.test.tsx(17,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3109647Z ##[error]src/__tests__/RSVPPage.test.tsx(20,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3111179Z ##[error]src/__tests__/RSVPPage.test.tsx(24,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3112320Z ##[error]src/__tests__/RSVPPage.test.tsx(25,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3114192Z ##[error]src/__tests__/RSVPPage.test.tsx(28,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-08-04T04:06:59.3115636Z ##[error]src/__tests__/RSVPPage.test.tsx(31,5): error TS2304: Cannot find name 'expect'.
+2025-08-04T04:06:59.3346300Z ##[error]Process completed with exit code 2.
+2025-08-04T04:06:59.3448927Z Post job cleanup.
+2025-08-04T04:06:59.4394760Z [command]/usr/bin/git version
+2025-08-04T04:06:59.4430224Z git version 2.50.1
+2025-08-04T04:06:59.4472656Z Temporarily overriding HOME='/home/runner/work/_temp/862f4029-fa7a-490f-87ce-495bb8d2be6e' before making global git config changes
+2025-08-04T04:06:59.4473594Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-04T04:06:59.4477465Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sharothee-Wedding/Sharothee-Wedding
+2025-08-04T04:06:59.4510213Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-04T04:06:59.4542359Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-04T04:06:59.4759947Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-04T04:06:59.4779869Z http.https://github.com/.extraheader
+2025-08-04T04:06:59.4793019Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-08-04T04:06:59.4822520Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-04T04:06:59.5151761Z Cleaning up orphan processes
