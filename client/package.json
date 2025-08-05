@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:github": "next build && next export",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",

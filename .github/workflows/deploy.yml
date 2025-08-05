@@ -4,7 +4,11 @@ on:
   push:
     branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '20'
+  PHP_VERSION: '8.3'
 
 jobs:
   # Frontend Build and Test
@@ -19,7 +23,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
         cache-dependency-path: client/package-lock.json
         
@@ -35,17 +39,32 @@ jobs:
       working-directory: ./client
       run: npm run type-check
       
+    - name: Run unit tests
+      working-directory: ./client
+      run: npm run test
+      
     - name: Build application
       working-directory: ./client
       env:
-        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        NEXT_PUBLIC_API_URL: ${{ github.ref == 'refs/heads/main' && secrets.NEXT_PUBLIC_API_URL_PROD || secrets.NEXT_PUBLIC_API_URL_DEV }}
+        NODE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
       run: npm run build
       
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
+      if: success()
       with:
         name: frontend-build
         path: client/.next
+        retention-days: 1
+        if-no-files-found: error
+
+    - name: Upload static export for GitHub Pages
+      uses: actions/upload-artifact@v4
+      if: success() && github.ref == 'refs/heads/develop'
+      with:
+        name: github-pages-build
+        path: client/out
         retention-days: 1
 
   # Backend Build and Test
@@ -70,9 +89,9 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.3'
-        extensions: mbstring, dom, fileinfo, mysql, gd
-        coverage: none
+        php-version: ${{ env.PHP_VERSION }}
+        extensions: mbstring, dom, fileinfo, mysql, gd, zip, bcmath
+        coverage: xdebug
         
     - name: Get Composer Cache Directory
       id: composer-cache
@@ -88,7 +107,7 @@ jobs:
         
     - name: Install Composer dependencies
       working-directory: ./server
-      run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+      run: composer install --prefer-dist --no-progress --no-interaction --optimize-autoloader
       
     - name: Setup Environment
       working-directory: ./server
@@ -107,8 +126,9 @@ jobs:
         DB_PASSWORD: root
       run: |
         php artisan migrate --force
+        php artisan db:seed --force
         
-    - name: Run tests
+    - name: Run tests with coverage
       working-directory: ./server
       env:
         DB_CONNECTION: mysql
@@ -117,14 +137,124 @@ jobs:
         DB_DATABASE: wedding_test
         DB_USERNAME: root
         DB_PASSWORD: root
-      run: php artisan test
+      run: php artisan test --coverage --min=80
 
-  # Deploy to Production
-  deploy-production:
-    name: Deploy to Production
+    - name: Upload backend artifacts
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: backend-build
+        path: |
+          server/vendor
+          server/bootstrap/cache
+          server/.env
+        retention-days: 1
+
+  # GitHub Pages Deployment (Development Phase)
+  deploy-github-pages:
+    name: Deploy to GitHub Pages (Development)
     needs: [frontend, backend]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    # Set permissions for GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./client
+      run: npm ci
+      
+    - name: Build for GitHub Pages
+      working-directory: ./client
+      env:
+        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL_DEV || 'https://api.example.com' }}
+        NODE_ENV: development
+        NEXT_PUBLIC_GITHUB_PAGES: true
+      run: |
+        npm run build
+        touch out/.nojekyll
+        echo "Built for GitHub Pages deployment"
+        
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Upload to GitHub Pages
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: client/out
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+  # Development Backend API (Mock/Testing)
+  deploy-dev-backend:
+    name: Deploy Development Backend API
+    needs: [backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_VERSION }}
+        extensions: mbstring, dom, fileinfo, sqlite3, gd, zip, bcmath
+        
+    - name: Install Composer dependencies
+      working-directory: ./server
+      run: composer install --no-dev --optimize-autoloader
+      
+    - name: Setup Environment for Development
+      working-directory: ./server
+      run: |
+        cp .env.example .env
+        php artisan key:generate
+        sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=sqlite/' .env
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=database\/database.sqlite/' .env
+        touch database/database.sqlite
+        
+    - name: Run Migrations and Seeds
+      working-directory: ./server
+      run: |
+        php artisan migrate --force
+        php artisan db:seed --force
+        
+    - name: Create API Documentation
+      working-directory: ./server
+      run: |
+        mkdir -p public/docs
+        echo "# Wedding API Documentation" > public/docs/README.md
+        echo "API endpoints available at development environment" >> public/docs/README.md
+        php artisan route:list --json > public/docs/routes.json
+
+  # Production Cloud Deployment
+  deploy-production:
+    name: Deploy to Production Cloud
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
     - name: Checkout code
@@ -140,18 +270,23 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         working-directory: ./client
         
-    # Deploy Backend (placeholder - customize based on your hosting provider)
-    - name: Deploy Backend
+    # Deploy Backend to Cloud Provider (configurable)
+    - name: Deploy Backend to Production
       run: |
-        echo "Backend deployment would go here"
-        echo "Configure for your hosting provider (Google Cloud, Azure, AWS, etc.)"
+        echo "🚀 Production Backend Deployment"
+        echo "Configure for your hosting provider:"
+        echo "- Google Cloud Run: gcloud run deploy"
+        echo "- AWS Lambda: serverless deploy"
+        echo "- Azure Container Apps: az containerapp up"
+        echo "- Railway: railway up"
+        echo "- DigitalOcean App Platform: doctl apps create"
 
-  # Deploy to Staging
+  # Staging Deployment
   deploy-staging:
-    name: Deploy to Staging
+    name: Deploy to Staging Environment  
     needs: [frontend, backend]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'pull_request'
     
     steps:
     - name: Checkout code
@@ -167,4 +302,42 @@ jobs:
         
     - name: Deploy Backend to Staging
       run: |
-        echo "Staging backend deployment would go here"
+        echo "🧪 Staging Backend Deployment"
+        echo "Configure staging environment for testing"
+
+  # Save Workflow Logs on Failure
+  save-logs:
+    name: Save Workflow Logs
+    runs-on: ubuntu-latest
+    if: failure()
+    needs: [frontend, backend]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create logs directory
+      run: mkdir -p logs/workflows
+      
+    - name: Save workflow logs
+      run: |
+        DATE=$(date +"%Y%m%d_%H%M%S")
+        WORKFLOW_NAME="deploy_$(echo ${{ github.ref_name }} | sed 's/[^a-zA-Z0-9]/_/g')"
+        LOG_FILE="logs/workflows/${WORKFLOW_NAME}_${DATE}_failure.log"
+        
+        echo "# Workflow Failure Log" > $LOG_FILE
+        echo "Date: $(date)" >> $LOG_FILE
+        echo "Branch: ${{ github.ref_name }}" >> $LOG_FILE
+        echo "Commit: ${{ github.sha }}" >> $LOG_FILE
+        echo "Workflow: ${{ github.workflow }}" >> $LOG_FILE
+        echo "" >> $LOG_FILE
+        echo "## Failure Details" >> $LOG_FILE
+        echo "Check GitHub Actions logs for detailed error messages" >> $LOG_FILE
+        
+    - name: Commit and push logs
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add logs/workflows/
+        git commit -m "Add workflow failure logs [skip ci]" || exit 0
+        git push
