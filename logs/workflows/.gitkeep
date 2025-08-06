@@ -1,0 +1,6 @@
+# This directory stores GitHub Actions workflow failure logs for debugging and knowledge management
+# 
+# Naming convention:
+# {workflow-name}_{job-name}_{date}_{run-number}.log
+# 
+# Example: deploy_backend_2025-01-27_12345.log
