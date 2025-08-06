@@ -99,7 +99,9 @@ print_test_result $TEST_EXIT_CODE "Laravel unit tests (14 tests)"
 echo -e "${BLUE}🎨 Phase 3: Frontend Testing${NC}"
 echo "============================="
 
-cd /home/runner/work/Sharothee-Wedding/Sharothee-Wedding/client
+# Use CLIENT_DIR environment variable if set, otherwise default to relative path
+CLIENT_DIR="${CLIENT_DIR:-$(dirname "$0")/client}"
+cd "$CLIENT_DIR"
 
 # 1. Test Node.js application
 echo "Testing Node.js application setup..."
