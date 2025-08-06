@@ -176,7 +176,7 @@ echo "================================="
 
 # Check GitHub workflow file
 echo "Checking GitHub workflow configuration..."
-if [ -f "/home/runner/work/Sharothee-Wedding/Sharothee-Wedding/.github/workflows/deploy.yml" ]; then
+if [ -f ".github/workflows/deploy.yml" ]; then
     print_test_result 0 "GitHub workflow configuration exists"
 else
     print_test_result 1 "GitHub workflow configuration missing"
