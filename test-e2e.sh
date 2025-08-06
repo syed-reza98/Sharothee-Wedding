@@ -31,7 +31,7 @@ print_test_result() {
 echo -e "${BLUE}📊 Phase 1: Backend API Testing${NC}"
 echo "================================"
 
-cd /home/runner/work/Sharothee-Wedding/Sharothee-Wedding/server
+cd "$(dirname "$0")/server"
 
 # 1. Test Laravel application health
 echo "Testing Laravel application health..."
