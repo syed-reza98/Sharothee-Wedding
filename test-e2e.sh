@@ -186,13 +186,13 @@ fi
 
 # Check environment files
 echo "Checking environment configuration..."
-if [ -f "/home/runner/work/Sharothee-Wedding/Sharothee-Wedding/server/.env.example" ]; then
+if [ -f "server/.env.example" ]; then
     print_test_result 0 "Backend environment example exists"
 else
     print_test_result 1 "Backend environment example missing"
 fi
 
-if [ -f "/home/runner/work/Sharothee-Wedding/Sharothee-Wedding/client/.env.local.example" ]; then
+if [ -f "client/.env.local.example" ]; then
     print_test_result 0 "Frontend environment example exists"
 else
     print_test_result 1 "Frontend environment example missing"
