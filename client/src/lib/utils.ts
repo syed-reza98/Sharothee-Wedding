@@ -20,7 +20,7 @@ export function generateSecureToken(): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const length = 32;
   const array = new Uint8Array(length);
-  getRandomValues(array);
+  window.crypto.getRandomValues(array);
   let result = '';
   for (let i = 0; i < length; i++) {
     result += characters.charAt(array[i] % characters.length);
