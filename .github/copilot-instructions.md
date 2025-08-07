@@ -2,7 +2,9 @@
 
 **ALWAYS reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
-Sharothee Wedding Website is a full-featured Next.js 15.4.5 wedding website built with TypeScript, Tailwind CSS, and Prisma. The application includes RSVP management, event scheduling, photo galleries, live streaming, contact forms, and an admin dashboard for managing wedding logistics.
+Sharothee Wedding Website is a full-featured Next.js 15.4.5 wedding website built with TypeScript, Tailwind CSS, and Prisma. The application includes RSVP management, event scheduling, photo galleries, live streaming, contact forms, and an admin dashboard for managing wedding logistics. The project uses MySQL database with Prisma ORM and is deployed on Hostinger VPS.
+
+**NOTE**: This project uses MySQL database (not PostgreSQL) and Next.js full-stack architecture (not separate Laravel backend). All documentation and configuration files have been updated to reflect this consistent technology stack.
 
 ## Working Effectively
 
@@ -15,7 +17,7 @@ Sharothee Wedding Website is a full-featured Next.js 15.4.5 wedding website buil
 - **MUST create `.env.local` file before building** with these required variables:
 ```bash
 # Database
-DATABASE_URL="postgresql://user:password@localhost:5432/wedding_db"
+DATABASE_URL="mysql://username:password@hostname:3306/wedding_db"
 
 # NextAuth
 NEXTAUTH_SECRET="your-nextauth-secret-key-here"
@@ -37,6 +39,8 @@ CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
   - Uses Next.js 15.4.5 with Turbopack for fast development
 - **Lint code**: `npm run lint` -- takes ~5 seconds. Always run before committing.
 - **Type check**: `npm run type-check` -- takes ~3 seconds
+
+**NOTE**: Build will fail without proper `.env.local` environment file. Always create environment file before building.
 
 ### Testing
 - **Run tests**: `npm test` -- takes ~3 seconds. NEVER CANCEL. Set timeout to 30+ minutes.
@@ -114,15 +118,17 @@ client/
 - **Reset database**: `npm run db:reset`
 - **Open Prisma Studio**: `npm run db:studio`
 
+**Note**: All database operations require a MySQL connection string in DATABASE_URL environment variable.
+
 ### Static Export Limitation
 - Static export (`output: 'export'`) is **disabled** due to NextAuth incompatibility
 - Application requires server-side functionality for authentication and API routes
-- Deploy to platforms supporting Node.js runtime (Vercel, Netlify, Railway)
+- Deploy to platforms supporting Node.js runtime (Vercel, Netlify, Hostinger VPS)
 
 ## Known Issues and Workarounds
 
 ### Build Issues
-- **Missing API keys**: Build fails without proper `.env.local` file. Always create environment file first.
+- **Missing API keys**: Build fails without proper `.env.local` file. Always create environment file first with all required variables (DATABASE_URL, NEXTAUTH_SECRET, RESEND_API_KEY, etc.).
 - **NextAuth + Static Export**: Cannot use static export with NextAuth. Use server deployment instead.
 
 ### Test Issues  
@@ -138,9 +144,9 @@ client/
 
 ## CI/CD Considerations
 - No GitHub Actions workflows currently configured
-- Manual deployment recommended to Vercel or similar platform
+- Manual deployment recommended to Hostinger VPS or similar platform
 - Ensure environment variables are configured in deployment platform
-- Database connection required for all API functionality
+- MySQL database connection required for all API functionality
 
 ## Emergency Contacts
 - **Primary contact**: hello@inciaandarvins.wedding
