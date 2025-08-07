@@ -165,7 +165,7 @@ npm test - SUCCESS
 ### 1. Add Environment Variables Documentation
 Create `.env.example` file with required variables:
 ```env
-DATABASE_URL="postgresql://..."
+DATABASE_URL="mysql://username:password@hostname:3306/wedding_db"
 NEXTAUTH_SECRET="..."
 NEXTAUTH_URL="http://localhost:3000"
 CLOUDINARY_CLOUD_NAME="..."

@@ -34,8 +34,7 @@ From classmates to forever partners, Incia & Arvin’s story is one of love that
 ### Folder Structure
 ```
 wedding-website/
-├── client/ # Frontend Next 3                 
-├── server/ # Backend Laravel
+├── client/ # Frontend Next.js                 
 ├── docs/                   # Project documentation
 │   └── requirements.md
 ├── .github/                # GitHub Actions CI/CD
@@ -52,7 +51,7 @@ wedding-website/
 ```md
 # Incia & Arvin's Wedding Website 🎉
 
-A full-featured wedding website built using **Nuxt 3** (frontend) and **Laravel** (backend) to manage events, RSVPs, guest accommodations, and multimedia galleries.
+A full-featured wedding website built using **Next.js** with React for a comprehensive full-stack application to manage events, RSVPs, guest accommodations, and multimedia galleries.
 
 ## Features
 - Live video streaming
@@ -62,23 +61,20 @@ A full-featured wedding website built using **Nuxt 3** (frontend) and **Laravel*
 - Fully mobile responsive
 
 ## Tech Stack
-- Nuxt 3 + Tailwind CSS
-- Laravel + MySQL
-- GitHub Actions for CI/CD
-- Docker for development
+- Next.js 15 + React 19 + TypeScript + Tailwind CSS
+- Next.js API Routes + MySQL + Prisma ORM
+- NextAuth.js for authentication
+- Cloudinary for media storage
+- Resend for email notifications
+- Hostinger VPS deployment
 
 ## Getting Started
 ```bash
-# Frontend
-cd client
+# Clone and setup
+git clone https://github.com/syed-reza98/Sharothee-Wedding.git
+cd Sharothee-Wedding/client
 npm install
 npm run dev
-
-# Backend
-cd server
-composer install
-php artisan migrate
-php artisan serve
 ```
 
 ## License
@@ -131,17 +127,16 @@ php artisan serve
    - Setup milestones and labels on GitHub
 3. **Design Phase**:
    - Figma/UI layout design
-   - Plan Nuxt page structure
+   - Plan Next.js page structure
 4. **Development Phase**:
-   - `client/` (Nuxt) for user-facing site
-   - `server/` (Laravel) for admin/API
+   - `client/` (Next.js) for full-stack application
    - Use GitHub Flow: `main`, `dev`, `feature/*` branches
 5. **Testing Phase**:
    - Unit test RSVP, Admin forms
    - Manual test on mobile and live stream
 6. **CI/CD**:
    - GitHub Actions: lint, build, deploy
-   - Hosting via Vercel (frontend), Render or Railway (backend)
+   - Hosting via Hostinger VPS
 7. **Release Phase**:
    - `v1.0` tag with deployment instructions
 8. **Post-Launch**:
@@ -153,9 +148,9 @@ php artisan serve
 
 ## 📌 Next Steps
 
-- [ ] Choose a base template or go custom with Nuxt UI
+- [ ] Choose a base template or go custom with Next.js UI
 - [ ] Set up GitHub repo with folder structure
-- [ ] Begin backend scaffolding with Laravel
+- [ ] Begin full-stack development with Next.js
 - [ ] Prepare staging domain for review
 
 ---
