@@ -37,7 +37,9 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Simple admin check for development
-        if (credentials.email === "admin@wedding.com" && credentials.password === "admin123") {
+        const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+        if (credentials.email === ADMIN_EMAIL && credentials.password === ADMIN_PASSWORD) {
           // Try to find or create admin user
           let user = await prisma.user.findUnique({
             where: { email: credentials.email }
