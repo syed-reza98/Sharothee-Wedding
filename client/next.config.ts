@@ -1,30 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable experimental features
-  experimental: {
-    // Enable if needed for future features
-  },
+  // Enable static export for GitHub Pages
+  output: 'export',
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   
-  // Image optimization
+  // Configure for GitHub Pages subdirectory if needed
+  basePath: process.env.NODE_ENV === 'production' ? '' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  
+  // Output directory for static export
+  distDir: '.next',
+  
+  // Optimize images for static export
   images: {
-    domains: ['res.cloudinary.com'], // Add Cloudinary domain for image uploads
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-    ],
+    unoptimized: true,
   },
   
-  // API routes configuration
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
-    ];
+  // Disable server-side features not available in static export
+  experimental: {
+    // Remove esmExternals to avoid warnings
   },
 };
 
