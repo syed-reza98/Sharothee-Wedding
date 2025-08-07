@@ -81,7 +81,7 @@ From classmates to forever partners, Incia & Arvin’s story is one of love that
 Mono-Repo setup with Vercel/Google Cloud/Microsoft Azure Deployment. (Add Nessesary Files of Folder)
 ```
 wedding-website/
-├── client/ # Full-stack Next.js application
+├── client/ # full-stack Next.js application
 ├── docs/                   # Project documentation
 │   └── requirements.md
 ├── .github/                # GitHub Actions CI/CD for Vercel/Google Cloud/Microsoft Azure . Need to deploy both client and server in Vercel/Google Cloud/Microsoft Azure
