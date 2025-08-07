@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     const hotel = await prisma.hotel.create({
       data: {
         ...validatedData,
+        amenities: validatedData.amenities ? JSON.stringify(validatedData.amenities) : null,
         deadline: validatedData.deadline ? new Date(validatedData.deadline) : null
       }
     })
@@ -74,6 +75,7 @@ export async function PUT(request: NextRequest) {
       where: { id },
       data: {
         ...updateData,
+        amenities: updateData.amenities ? JSON.stringify(updateData.amenities) : null,
         deadline: updateData.deadline ? new Date(updateData.deadline) : null
       }
     })
