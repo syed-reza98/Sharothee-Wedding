@@ -39,7 +39,7 @@ We propose a bilingual wedding website for your multi-day celebration, featuring
 - Live streaming
 - Local guide for guests
 
-The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks with 6 months of complimentary support.
+The website will use Next.js, MySQL, Prisma ORM, and Hostinger VPS, delivered in 3 weeks with 6 months of complimentary support.
 
 ---
 
@@ -67,11 +67,14 @@ The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks wi
 
 ## 4. Technical Specifications
 
-- Frontend: React.js (Next.js), Tailwind CSS
-- Backend: Laravel (PHP)
-- Database: PostgreSQL / MySQL
-- Hosting: Google Cloud Platform (GCP), Cloud Run, Cloud Storage
-- Email: MailerSend
+- Frontend: Next.js 15 with React 19, TypeScript, Tailwind CSS 4
+- Backend: Next.js API Routes with serverless architecture
+- Database: MySQL with Prisma ORM
+- Authentication: NextAuth.js with secure JWT tokens
+- File Storage: Cloudinary for media management and optimization
+- Email Service: Resend for transactional emails and notifications
+- Hosting: Hostinger VPS with Nginx reverse proxy
+- SSL: Let's Encrypt SSL certificates
 - Compatibility: Chrome 90+, Safari 14+, Firefox 90+, Android 8+, iOS 13+
 
 ---
@@ -93,7 +96,7 @@ The website will use React.js/Next.js, Laravel, and GCP, delivered in 3 weeks wi
 | Category     | Potential Issue          | Mitigation Strategy                       |
 |--------------|-------------------------|-------------------------------------------|
 | Timeline     | Tight schedule          | Modular dev, parallel workflows           |
-| Performance  | High-traffic events     | GCP autoscaling, load testing             |
+| Performance  | High-traffic events     | Hostinger VPS scaling, load testing      |
 | Budget       | Third-party cost changes | Budget buffer, client approval for changes|
 | Content      | Delayed submissions     | Clear schedule, flexible CMS              |
 
