@@ -7,10 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export function generateRSVPToken(): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = '';
-  for (let i = 0; i < 8; i++) {
   const array = new Uint8Array(8);
   window.crypto.getRandomValues(array);
+  let result = '';
   for (let i = 0; i < array.length; i++) {
     result += characters.charAt(array[i] % characters.length);
   }
@@ -19,13 +18,12 @@ export function generateRSVPToken(): string {
 
 export function generateSecureToken(): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 32; i++) {
   const length = 32;
-  const bytes = crypto.randomBytes(length);
+  const array = new Uint8Array(length);
+  window.crypto.getRandomValues(array);
   let result = '';
   for (let i = 0; i < length; i++) {
-    result += characters.charAt(bytes[i] % characters.length);
+    result += characters.charAt(array[i] % characters.length);
   }
   return result;
 }

@@ -1,24 +1,24 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable static export for GitHub Pages
-  output: 'export',
-  trailingSlash: true,
-  skipTrailingSlashRedirect: true,
+  // Commented out static export for now due to NextAuth incompatibility
+  // output: 'export',
+  // trailingSlash: true,
+  // skipTrailingSlashRedirect: true,
   
   // Configure for GitHub Pages subdirectory if needed
   basePath: process.env.NODE_ENV === 'production' ? '' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
   
-  // Output directory for static export
+  // Output directory
   distDir: '.next',
   
-  // Optimize images for static export
+  // Optimize images
   images: {
     unoptimized: true,
   },
   
-  // Disable server-side features not available in static export
+  // Experimental features
   experimental: {
     // Remove esmExternals to avoid warnings
   },
