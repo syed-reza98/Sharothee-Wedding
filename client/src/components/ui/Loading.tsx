@@ -27,7 +27,11 @@ export function LoadingSpinner({
 
   return (
     <div
-      className={`inline-block animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] ${sizeClasses[size]} ${colorClasses[color]} ${className}`}
+  const baseSpinnerClasses =
+    "inline-block animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]";
+  return (
+    <div
+      className={`${baseSpinnerClasses} ${sizeClasses[size]} ${colorClasses[color]} ${className}`}
       role="status"
       aria-label="Loading..."
     >
