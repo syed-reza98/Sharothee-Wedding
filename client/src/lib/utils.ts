@@ -9,7 +9,10 @@ export function generateRSVPToken(): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
   for (let i = 0; i < 8; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  const array = new Uint8Array(8);
+  window.crypto.getRandomValues(array);
+  for (let i = 0; i < array.length; i++) {
+    result += characters.charAt(array[i] % characters.length);
   }
   return result;
 }
