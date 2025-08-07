@@ -35,7 +35,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 - **Frontend**: Next.js 15.4.5, React 19.1.0, TypeScript
 - **Styling**: Tailwind CSS 4, Headless UI, Heroicons
 - **Backend**: Next.js API Routes
-- **Database**: PostgreSQL with Prisma ORM
+- **Database**: MySQL with Prisma ORM
 - **Authentication**: NextAuth.js with JWT tokens
 - **File Storage**: Cloudinary for media management
 - **Email Service**: Resend for notifications
@@ -49,7 +49,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 ### Prerequisites
 - Node.js 18+ 
 - npm or yarn
-- PostgreSQL database
+- MySQL database
 - Cloudinary account (for media storage)
 - Resend account (for emails)
 
@@ -73,7 +73,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
    Configure the following variables:
    ```env
    # Database
-   DATABASE_URL="postgresql://username:password@localhost:5432/wedding_db"
+   DATABASE_URL="mysql://username:password@localhost:3306/wedding_db"
    
    # NextAuth
    NEXTAUTH_SECRET="your-secret-key"
@@ -124,7 +124,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 1. **Server Setup**
    - Ubuntu 20.04+ VPS
    - Node.js 18+ installed
-   - PostgreSQL database setup
+   - MySQL database setup
    - Nginx as reverse proxy
    - SSL certificate (Let's Encrypt)
 
@@ -132,7 +132,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
    ```bash
    # Set production environment variables
    export NODE_ENV=production
-   export DATABASE_URL="postgresql://..."
+   export DATABASE_URL="mysql://username:password@hostname:3306/wedding_db"
    export NEXTAUTH_URL="https://yourdomain.com"
    ```
 

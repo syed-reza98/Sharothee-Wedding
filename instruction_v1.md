@@ -81,8 +81,7 @@ From classmates to forever partners, Incia & Arvin’s story is one of love that
 Mono-Repo setup with Vercel/Google Cloud/Microsoft Azure Deployment. (Add Nessesary Files of Folder)
 ```
 wedding-website/
-├── client/ # Frontend Next.js                 
-├── server/ # Backend Laravel + MySQL
+├── client/ # Full-stack Next.js application
 ├── docs/                   # Project documentation
 │   └── requirements.md
 ├── .github/                # GitHub Actions CI/CD for Vercel/Google Cloud/Microsoft Azure . Need to deploy both client and server in Vercel/Google Cloud/Microsoft Azure
@@ -98,7 +97,7 @@ wedding-website/
 
 # Incia & Arvin's Wedding Website 🎉
 
-A full-featured wedding website built using **Nuxt 3** (frontend) and **Laravel** (backend) to manage events, RSVPs, guest accommodations, and multimedia galleries.
+A full-featured wedding website built using **Next.js** with React for a comprehensive full-stack application to manage events, RSVPs, guest accommodations, and multimedia galleries.
 
 ## Features
 - Live video streaming
@@ -108,9 +107,12 @@ A full-featured wedding website built using **Nuxt 3** (frontend) and **Laravel*
 - Fully mobile responsive
 
 ## Tech Stack
-- Next.js + Tailwind CSS
-- Laravel + MySQL
-- GitHub Actions for CI/CD (Vercel/Google Cloud/Microsoft Azure)
+- Next.js 15 + React 19 + TypeScript + Tailwind CSS
+- Next.js API Routes + MySQL + Prisma ORM
+- NextAuth.js for authentication
+- Cloudinary for media storage  
+- Resend for email notifications
+- Hostinger VPS deployment
 
 / Add rest off the Nessesary informations
 
@@ -150,8 +152,7 @@ A full-featured wedding website built using **Nuxt 3** (frontend) and **Laravel*
    - Plan page structure
    - High Priority on Mobile UI layout design
 4. **Development Phase**:
-   - `client/` (Next) for user-facing site
-   - `server/` (Laravel) for admin/API
+   - `client/` (Next.js) for full-stack application
    - Use GitHub Flow: `main`, `dev`, `feature/*` branches
 5. **Testing Phase**:
    - Unit test RSVP, Admin forms

@@ -39,7 +39,7 @@ We propose a bilingual wedding website for your multi-day celebration, featuring
 - Live streaming
 - Local guide for guests
 
-The website will use Next.js, PostgreSQL, Prisma ORM, and Hostinger VPS, delivered in 3 weeks with 6 months of complimentary support.
+The website will use Next.js, MySQL, Prisma ORM, and Hostinger VPS, delivered in 3 weeks with 6 months of complimentary support.
 
 ---
 
@@ -69,7 +69,7 @@ The website will use Next.js, PostgreSQL, Prisma ORM, and Hostinger VPS, deliver
 
 - Frontend: Next.js 15 with React 19, TypeScript, Tailwind CSS 4
 - Backend: Next.js API Routes with serverless architecture
-- Database: PostgreSQL with Prisma ORM
+- Database: MySQL with Prisma ORM
 - Authentication: NextAuth.js with secure JWT tokens
 - File Storage: Cloudinary for media management and optimization
 - Email Service: Resend for transactional emails and notifications
