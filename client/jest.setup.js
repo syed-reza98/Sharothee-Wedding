@@ -24,8 +24,21 @@ jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(() => new URLSearchParams()),
 }))
 
-// Mock prisma client for testing
+// Mock prisma client for testing only if it exists
 jest.mock('@/lib/prisma', () => ({
+  __esModule: true,
+  default: {
+    $queryRaw: jest.fn(),
+    user: { count: jest.fn(() => Promise.resolve(0)) },
+    guest: { count: jest.fn(() => Promise.resolve(0)) },
+    event: { count: jest.fn(() => Promise.resolve(0)) },
+    venue: { count: jest.fn(() => Promise.resolve(0)) },
+    rSVP: { count: jest.fn(() => Promise.resolve(0)) },
+    mediaItem: { count: jest.fn(() => Promise.resolve(0)) },
+    stream: { count: jest.fn(() => Promise.resolve(0)) },
+    hotel: { count: jest.fn(() => Promise.resolve(0)) },
+    contactRequest: { count: jest.fn(() => Promise.resolve(0)) },
+  },
   prisma: {
     $queryRaw: jest.fn(),
     user: { count: jest.fn(() => Promise.resolve(0)) },
@@ -38,4 +51,4 @@ jest.mock('@/lib/prisma', () => ({
     hotel: { count: jest.fn(() => Promise.resolve(0)) },
     contactRequest: { count: jest.fn(() => Promise.resolve(0)) },
   },
-}))
+}), { virtual: true })

@@ -25,10 +25,9 @@ export function LoadingSpinner({
     gray: 'text-gray-500'
   }
 
-  return (
-    <div
   const baseSpinnerClasses =
     "inline-block animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]";
+    
   return (
     <div
       className={`${baseSpinnerClasses} ${sizeClasses[size]} ${colorClasses[color]} ${className}`}
