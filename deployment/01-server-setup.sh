@@ -33,7 +33,15 @@ npm install -g pm2
 
 # Configure MySQL
 echo "🗄️ Configuring MySQL..."
-mysql_secure_installation
+# Non-interactive MySQL hardening
+mysql -u root <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'CHANGE_THIS_ROOT_PASSWORD';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+EOF
 
 # Create MySQL database and user
 echo "📊 Creating wedding database..."
