@@ -26,6 +26,14 @@ backup_database() {
     
     # Create database dump
     mysqldump -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" > "$BACKUP_FILE"
+    # Check if database password is provided
+    if [ -z "$DB_PASSWORD" ]; then
+        echo "Please provide database password:"
+        read -s DB_PASSWORD
+    fi
+    
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    BACKUP_FILE="$BACKUP_DIR/db_backup_$TIMESTAMP.sql"
     
     # Create temporary MySQL config file to avoid exposing password
     TMP_MYCNF=$(mktemp)
