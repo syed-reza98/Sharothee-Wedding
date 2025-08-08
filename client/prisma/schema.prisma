@@ -127,7 +127,7 @@ model Hotel {
   email       String?
   website     String?
   description String?
-  amenities   String[]
+  amenities   String?
   bookingCode String?
   discount    String?
   deadline    DateTime?
