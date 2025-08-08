@@ -27,7 +27,20 @@ backup_database() {
     # Create database dump
     mysqldump -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" > "$BACKUP_FILE"
     
-    if [ $? -eq 0 ]; then
+    # Create temporary MySQL config file to avoid exposing password
+    TMP_MYCNF=$(mktemp)
+    cat > "$TMP_MYCNF" <<EOF
+[client]
+user=$DB_USER
+password=$DB_PASSWORD
+EOF
+
+    # Create database dump using the config file
+    mysqldump --defaults-extra-file="$TMP_MYCNF" "$DB_NAME" > "$BACKUP_FILE"
+    local DUMP_STATUS=$?
+    rm -f "$TMP_MYCNF"
+    
+    if [ $DUMP_STATUS -eq 0 ]; then
         # Compress the backup
         gzip "$BACKUP_FILE"
         log_message "Database backup completed: ${BACKUP_FILE}.gz"
