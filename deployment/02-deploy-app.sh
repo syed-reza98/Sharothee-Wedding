@@ -22,7 +22,8 @@ backup_current() {
 # Function to create environment file
 create_env_file() {
     echo "⚙️ Creating environment configuration..."
-    cat > "$APP_DIR/releases/$TIMESTAMP/.env.local" << EOF
+    mkdir -p "$APP_DIR/releases/$TIMESTAMP/client"
+    cat > "$APP_DIR/releases/$TIMESTAMP/client/.env.local" << EOF
 # Database Configuration
 DATABASE_URL="mysql://wedding_user:YOUR_DB_PASSWORD@localhost:3306/wedding_db"
 
