@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const hotel = await prisma.hotel.create({
       data: {
         ...validatedData,
-        amenities: validatedData.amenities ? JSON.stringify(validatedData.amenities) : null,
+        amenities: serializeAmenities(validatedData.amenities),
         deadline: validatedData.deadline ? new Date(validatedData.deadline) : null
       }
     })
