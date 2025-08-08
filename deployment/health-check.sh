@@ -21,7 +21,42 @@ send_alert() {
     echo "$message" | mail -s "$subject" "$ALERT_EMAIL" 2>/dev/null || \
     echo "Failed to send email alert: $subject - $message" >> "$LOG_FILE"
 }
+# Resend API configuration
+RESEND_API_KEY="your_resend_api_key_here"
+RESEND_API_URL="https://api.resend.com/emails"
 
+# Function to log messages
+log_message() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
+# Function to send alert using Resend API
+send_alert() {
+    local subject="$1"
+    local message="$2"
+
+    # Prepare JSON payload
+    local payload=$(cat <<EOF
+{
+  "to": "$ALERT_EMAIL",
+  "from": "$ALERT_EMAIL",
+  "subject": "$subject",
+  "text": "$message"
+}
+EOF
+    )
+
+    # Send email via Resend API
+    response=$(curl -s -w "%{http_code}" -o /dev/null \
+        -X POST "$RESEND_API_URL" \
+        -H "Authorization: Bearer $RESEND_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d "$payload")
+
+    if [ "$response" != "200" ]; then
+        echo "Failed to send email alert via Resend API: $subject - $message" >> "$LOG_FILE"
+    fi
+}
 # Check if PM2 process is running
 check_pm2_status() {
     log_message "Checking PM2 status..."
