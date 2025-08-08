@@ -73,7 +73,9 @@ create_env_file
 
 echo "⚠️  IMPORTANT: Update environment variables before continuing!"
 echo "Edit file: $APP_DIR/releases/$TIMESTAMP/client/.env.local"
-read -p "Press Enter after updating environment variables..."
+if [ "$CI" != "true" ]; then
+    read -p "Press Enter after updating environment variables..."
+fi
 
 # Generate Prisma client
 echo "🔄 Generating Prisma client..."
