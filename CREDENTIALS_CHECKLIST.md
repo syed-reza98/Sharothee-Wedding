@@ -76,7 +76,7 @@ Add these secrets:
 | `VPS_PORT` | `22` | SSH port number |
 | `DATABASE_URL` | `mysql://wedding_user:password@localhost:3306/wedding_db` | Database connection string |
 | `NEXTAUTH_SECRET` | [Generated secret] | JWT signing key |
-| `NEXTAUTH_URL` | `https://yourdomain.com` | Your website URL |
+| `NEXTAUTH_URL` | `https://arvinwedsincia.com` | Your website URL |
 | `RESEND_API_KEY` | [Resend API key] | Email service key |
 | `CLOUDINARY_CLOUD_NAME` | [Cloudinary cloud name] | Media storage cloud name |
 | `CLOUDINARY_API_KEY` | [Cloudinary API key] | Media storage API key |
@@ -102,12 +102,12 @@ curl -sSL https://raw.githubusercontent.com/syed-reza98/Sharothee-Wedding/main/d
 ### Step 2: Update domain name
 ```bash
 nano /etc/nginx/sites-available/wedding
-# Replace 'yourdomain.com' with actual domain
+# Replace 'arvinwedsincia.com' with actual domain
 ```
 
 ### Step 3: SSL Certificate
 ```bash
-./deployment/03-setup-ssl.sh yourdomain.com
+./deployment/03-setup-ssl.sh arvinwedsincia.com
 ```
 
 ### Step 4: Deploy Application

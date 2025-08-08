@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     )
     
     await sendEmail({
-      to: ["hello@inciaandarvins.wedding"],
+      to: ["hello@arvinwedsincia.com"],
       subject: `New Contact Request: ${validatedData.subject}`,
       html: adminEmailHtml
     })

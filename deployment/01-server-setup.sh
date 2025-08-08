@@ -82,7 +82,7 @@ echo "🌐 Setting up basic Nginx configuration..."
 cat > /etc/nginx/sites-available/wedding << 'EOF'
 server {
     listen 80;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name arvinwedsincia.com www.arvinwedsincia.com;
     
     # Redirect all HTTP traffic to HTTPS
     return 301 https://$server_name$request_uri;
@@ -90,11 +90,11 @@ server {
 
 server {
     listen 443 ssl http2;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name arvinwedsincia.com www.arvinwedsincia.com;
     
     # SSL configuration (will be configured later with Let's Encrypt)
-    # ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    # ssl_certificate /etc/letsencrypt/live/arvinwedsincia.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/arvinwedsincia.com/privkey.pem;
     
     location / {
         proxy_pass http://localhost:3000;

@@ -24,7 +24,7 @@ VPS_SSH_KEY=your-private-ssh-key
 VPS_PORT=22
 DATABASE_URL=mysql://wedding_user:password@localhost:3306/wedding_db
 NEXTAUTH_SECRET=your-secure-random-string
-NEXTAUTH_URL=https://yourdomain.com
+NEXTAUTH_URL=https://arvinwedsincia.com
 RESEND_API_KEY=re_your_resend_api_key
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
@@ -46,7 +46,7 @@ CLOUDINARY_API_SECRET=your-api-secret
 3. **Update domain name in Nginx config**:
    ```bash
    nano /etc/nginx/sites-available/wedding
-   # Replace 'yourdomain.com' with your actual domain
+   # Replace 'arvinwedsincia.com' with your actual domain
    ```
 
 4. **Create MySQL database user password**:
@@ -60,12 +60,12 @@ CLOUDINARY_API_SECRET=your-api-secret
 
 1. **Run SSL setup script**:
    ```bash
-   ./deployment/03-setup-ssl.sh yourdomain.com
+   ./deployment/03-setup-ssl.sh arvinwedsincia.com
    ```
 
 2. **Verify SSL certificate**:
    ```bash
-   curl -I https://yourdomain.com
+   curl -I https://arvinwedsincia.com
    ```
 
 ## Step 3: Application Deployment
@@ -107,8 +107,8 @@ CLOUDINARY_API_SECRET=your-api-secret
 
 2. **Test website**:
    ```bash
-   curl -I https://yourdomain.com
-   curl https://yourdomain.com/api/health
+   curl -I https://arvinwedsincia.com
+   curl https://arvinwedsincia.com/api/health
    ```
 
 3. **Verify all features**:
@@ -184,7 +184,7 @@ tail -f /var/www/wedding/logs/combined.log
 1. Check Nginx status: `systemctl status nginx`
 2. Test Nginx config: `nginx -t`
 3. Check firewall: `ufw status`
-4. Verify domain DNS: `nslookup yourdomain.com`
+4. Verify domain DNS: `nslookup arvinwedsincia.com`
 
 ## Support
 

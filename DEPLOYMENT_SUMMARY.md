@@ -74,7 +74,7 @@ curl -sSL https://raw.githubusercontent.com/syed-reza98/Sharothee-Wedding/main/d
 nano /etc/nginx/sites-available/wedding
 
 # Setup SSL certificate
-./deployment/03-setup-ssl.sh yourdomain.com
+./deployment/03-setup-ssl.sh arvinwedsincia.com
 ```
 
 ### 4. Deploy Application (5 minutes)
@@ -91,7 +91,7 @@ su - deploy
 ```bash
 # Check application status
 pm2 status
-curl -I https://yourdomain.com
+curl -I https://arvinwedsincia.com
 ```
 
 **Total Setup Time: ~25 minutes** ⏱️
@@ -149,7 +149,7 @@ curl -I https://yourdomain.com
 - **Troubleshooting**: Comprehensive troubleshooting section in README
 
 ### Health Monitoring
-- **Endpoint**: `https://yourdomain.com/api/health`
+- **Endpoint**: `https://arvinwedsincia.com/api/health`
 - **Logs**: `/var/www/wedding/logs/`
 - **PM2 Status**: `pm2 status`
 - **System Status**: `./deployment/health-check.sh`

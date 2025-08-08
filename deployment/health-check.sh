@@ -4,8 +4,8 @@
 # Run this script periodically to monitor the application
 
 APP_NAME="wedding-website"
-APP_URL="https://yourdomain.com"
-ALERT_EMAIL="admin@yourdomain.com"
+APP_URL="https://arvinwedsincia.com"
+ALERT_EMAIL="admin@arvinwedsincia.com"
 LOG_FILE="/var/www/wedding/logs/health-check.log"
 
 # Function to log messages

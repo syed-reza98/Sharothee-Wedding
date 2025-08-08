@@ -5,7 +5,7 @@
 
 set -e
 
-DOMAIN="yourdomain.com"
+DOMAIN="arvinwedsincia.com"
 
 echo "🔒 Setting up SSL certificate for $DOMAIN..."
 
@@ -18,7 +18,7 @@ echo "Setting up SSL for domain: $DOMAIN"
 
 # Update Nginx configuration with actual domain
 echo "🌐 Updating Nginx configuration with domain: $DOMAIN"
-sed -i "s/yourdomain.com/$DOMAIN/g" /etc/nginx/sites-available/wedding
+sed -i "s/arvinwedsincia.com/$DOMAIN/g" /etc/nginx/sites-available/wedding
 
 # Test Nginx configuration
 nginx -t

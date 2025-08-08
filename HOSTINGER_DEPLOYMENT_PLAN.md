@@ -19,7 +19,7 @@ This document provides a comprehensive deployment plan for deploying the Sharoth
    - SSH Port: (usually 22 or custom)
 
 2. **Domain Information**:
-   - Domain name: `yourdomain.com`
+   - Domain name: `arvinwedsincia.com`
    - DNS configuration status: ✅ Already configured
    - SSL certificate requirement: Required
 

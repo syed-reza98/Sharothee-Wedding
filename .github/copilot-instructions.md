@@ -149,7 +149,7 @@ client/
 - MySQL database connection required for all API functionality
 
 ## Emergency Contacts
-- **Primary contact**: hello@inciaandarvins.wedding
+- **Primary contact**: hello@arvinwedsincia.com
 - **Phone**: +880 1234-567890  
 - **Location**: Dhaka, Bangladesh
 

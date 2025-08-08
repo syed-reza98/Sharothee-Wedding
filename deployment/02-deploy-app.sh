@@ -28,7 +28,7 @@ DATABASE_URL="mysql://wedding_user:YOUR_DB_PASSWORD@localhost:3306/wedding_db"
 
 # NextAuth Configuration
 NEXTAUTH_SECRET="YOUR_NEXTAUTH_SECRET_HERE"
-NEXTAUTH_URL="https://yourdomain.com"
+NEXTAUTH_URL="https://arvinwedsincia.com"
 
 # Email Service (Resend)
 RESEND_API_KEY="YOUR_RESEND_API_KEY"
@@ -150,7 +150,7 @@ pm2 startup | tail -1 | sudo bash || true
 
 # Update Nginx configuration with correct domain
 echo "🌐 Updating Nginx configuration..."
-sudo sed -i 's/yourdomain.com/'"$DOMAIN"'/g' /etc/nginx/sites-available/wedding || true
+sudo sed -i 's/arvinwedsincia.com/'"$DOMAIN"'/g' /etc/nginx/sites-available/wedding || true
 
 # Test Nginx configuration
 sudo nginx -t
