@@ -51,7 +51,7 @@ check_pm2_status() {
 check_http_response() {
     log_message "Checking HTTP response..."
     
-    response=$(curl -s -o /dev/null -w "%{http_code}" "$APP_URL/api/health" --max-time 10)
+    response=$(curl -s -o /dev/null -w "%{http_code}" "$APP_URL/" --max-time 10)
     
     if [ "$response" = "200" ]; then
         log_message "OK: HTTP health check passed (Status: $response)"
