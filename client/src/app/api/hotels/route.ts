@@ -75,7 +75,7 @@ export async function PUT(request: NextRequest) {
       where: { id },
       data: {
         ...updateData,
-        amenities: updateData.amenities ? JSON.stringify(updateData.amenities) : null,
+        amenities: updateData.amenities ? serializeAmenities(updateData.amenities) : null,
         deadline: updateData.deadline ? new Date(updateData.deadline) : null
       }
     })
