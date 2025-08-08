@@ -4,7 +4,7 @@ module.exports = {
     script: 'npm',
     args: 'start',
     cwd: '/var/www/wedding/current/client',
-    instances: 'max',
+    instances: 2,
     exec_mode: 'cluster',
     env: {
       NODE_ENV: 'production',
