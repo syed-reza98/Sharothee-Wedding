@@ -148,6 +148,23 @@ client/
 - Ensure environment variables are configured in deployment platform
 - MySQL database connection required for all API functionality
 
+## Deployment Information
+
+### Hostinger VPS Deployment
+- **Complete Deployment Guide**: See `HOSTINGER_VPS_DEPLOYMENT_PLAN.md`
+- **Quick Deployment Checklist**: See `DEPLOYMENT_CHECKLIST.md`
+- **Technology Stack**: Next.js 15.4.5 + MySQL + Prisma + NextAuth.js
+- **Hosting Platform**: Hostinger VPS with domain integration
+- **SSL**: Let's Encrypt certificates with auto-renewal
+- **Process Management**: PM2 with Nginx reverse proxy
+
+### Required for Production Deployment
+- Hostinger VPS credentials and SSH access
+- MySQL database configuration
+- Cloudinary API keys for media uploads
+- Resend API key for email functionality
+- Domain DNS properly pointed to VPS
+
 ## Emergency Contacts
 - **Primary contact**: hello@arvinwedsincia.com
 - **Phone**: +880 1234-567890  
