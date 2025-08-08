@@ -120,7 +120,7 @@ jobs:
         sleep 30
         
         # Check if website is responding
-        response=$(curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.NEXTAUTH_URL }}/api/health || echo "000")
+        response=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.NEXTAUTH_URL }}/api/health" || echo "000")
         
         if [ "$response" = "200" ]; then
           echo "✅ Health check passed - Application is running"
