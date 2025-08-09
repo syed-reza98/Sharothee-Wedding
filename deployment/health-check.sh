@@ -21,7 +21,7 @@ send_alert() {
     echo "$message" | mail -s "$subject" "$ALERT_EMAIL" 2>/dev/null || \
     echo "Failed to send email alert: $subject - $message" >> "$LOG_FILE"
 # Resend API configuration
-RESEND_API_KEY="your_resend_api_key_here"
+RESEND_API_KEY="${RESEND_API_KEY:?Resend API key not set. Please set the RESEND_API_KEY environment variable.}"
 RESEND_API_URL="https://api.resend.com/emails"
 
 # Function to log messages
