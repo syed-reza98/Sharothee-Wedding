@@ -25,7 +25,6 @@ backup_database() {
     BACKUP_FILE="$BACKUP_DIR/db_backup_$TIMESTAMP.sql"
     
     # Create database dump
-    mysqldump -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" > "$BACKUP_FILE"
     # Check if database password is provided
     if [ -z "$DB_PASSWORD" ]; then
         echo "Please provide database password:"
