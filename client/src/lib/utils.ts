@@ -61,3 +61,37 @@ export function truncateText(text: string, length: number): string {
   if (text.length <= length) return text;
   return text.substring(0, length) + '...';
 }
+
+// Hotel amenities serialization
+export function serializeAmenities(amenities: string[] | string | undefined): string | null {
+  if (!amenities) return null;
+  if (typeof amenities === 'string') {
+    return amenities;
+  }
+  return Array.isArray(amenities) ? amenities.join(',') : null;
+}
+
+export function deserializeAmenities(amenities: string | null): string[] {
+  if (!amenities) return [];
+  return amenities.split(',').filter(Boolean).map(item => item.trim());
+}
+
+// Date formatting utilities
+export function formatDateForInput(date: Date | string): string {
+  const d = new Date(date);
+  return d.toISOString().split('T')[0];
+}
+
+export function formatTimeForInput(time: string): string {
+  // Convert time string to 24-hour format for input
+  return time;
+}
+
+// Validation helpers
+export function validateRSVPToken(token: string): boolean {
+  return /^[A-Z0-9]{8}$/.test(token);
+}
+
+export function sanitizePhoneNumber(phone: string): string {
+  return phone.replace(/\D/g, '');
+}

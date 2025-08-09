@@ -16,6 +16,14 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Check if Prisma is available
+    if (!prisma) {
+      return NextResponse.json(
+        { error: "Database not available", guests: [] },
+        { status: 503 }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
@@ -63,7 +71,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Error fetching guests:", error)
     return NextResponse.json(
-      { error: "Failed to fetch guests" },
+      { 
+        error: "Failed to fetch guests", 
+        guests: [],
+        pagination: { page: 1, limit: 10, total: 0, totalPages: 0 }
+      },
       { status: 500 }
     )
   }
