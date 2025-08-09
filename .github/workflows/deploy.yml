@@ -1,0 +1,140 @@
+name: Deploy to Hostinger VPS
+
+on:
+  push:
+    branches: [ main, production ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd client
+        npm ci
+
+    - name: Run tests
+      run: |
+        cd client
+        npm test -- --passWithNoTests
+
+    - name: Build application
+      run: |
+        cd client
+        npm run build
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+        NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+        CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+        CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: ${{ secrets.VPS_PORT }}
+        script: |
+          # Set variables
+          APP_DIR="/var/www/wedding"
+          REPO_URL="https://github.com/${{ github.repository }}.git"
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          
+          # Create release directory
+          mkdir -p "$APP_DIR/releases"
+          cd "$APP_DIR/releases"
+          
+          # Clone repository
+          git clone -b ${{ github.ref_name }} "$REPO_URL" "$TIMESTAMP"
+          cd "$TIMESTAMP/client"
+          
+          # Install dependencies
+          npm ci --production=false
+          
+          # Create environment file
+          cat > .env.local << 'EOF'
+          DATABASE_URL="${{ secrets.DATABASE_URL }}"
+          NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}"
+          NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}"
+          RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
+          CLOUDINARY_CLOUD_NAME="${{ secrets.CLOUDINARY_CLOUD_NAME }}"
+          CLOUDINARY_API_KEY="${{ secrets.CLOUDINARY_API_KEY }}"
+          CLOUDINARY_API_SECRET="${{ secrets.CLOUDINARY_API_SECRET }}"
+          NODE_ENV="production"
+          PORT=3000
+          EOF
+          
+          # Generate Prisma client and run migrations
+          npm run db:generate
+          npm run db:push
+          
+          # Build application
+          npm run build
+          
+          # Backup current deployment
+          if [ -d "$APP_DIR/current" ]; then
+            mv "$APP_DIR/current" "$APP_DIR/backup-$(date +%Y%m%d-%H%M%S)" || true
+          fi
+          
+          # Update symbolic link
+          ln -sfn "$APP_DIR/releases/$TIMESTAMP" "$APP_DIR/current"
+          
+          # Restart application
+          pm2 restart wedding-website || pm2 start ecosystem.config.js --env production
+          pm2 save
+          
+          # Cleanup old releases (keep last 5)
+          cd "$APP_DIR/releases"
+          ls -t | tail -n +6 | xargs -d '\n' rm -rf -- || true
+          
+          echo "Deployment completed successfully!"
+
+    - name: Health Check
+      run: |
+        # Wait for application to start
+        sleep 30
+        
+        # Check if website is responding
+        response=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.NEXTAUTH_URL }}/api/health" || echo "000")
+        
+        if [ "$response" = "200" ]; then
+          echo "✅ Health check passed - Application is running"
+        else
+          echo "❌ Health check failed - HTTP status: $response"
+          exit 1
+        fi
+
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ "${{ job.status }}" = "success" ]; then
+          echo "🎉 Deployment successful!"
+          echo "Website: ${{ secrets.NEXTAUTH_URL }}"
+        else
+          echo "❌ Deployment failed!"
+        fi

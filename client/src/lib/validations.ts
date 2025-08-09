@@ -70,7 +70,7 @@ export const hotelSchema = z.object({
   email: z.string().email().optional(),
   website: z.string().url().optional(),
   description: z.string().optional(),
-  amenities: z.array(z.string()).optional(),
+  amenities: z.string().optional(),
   bookingCode: z.string().optional(),
   discount: z.string().optional(),
   deadline: z.string().optional(),
