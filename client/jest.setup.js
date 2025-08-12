@@ -7,8 +7,15 @@ import { TextEncoder, TextDecoder } from 'util'
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 
+// For API route tests we switch environment to 'node' via per-file @jest-environment pragma instead of polyfilling Request/Response.
+
 // Mock fetch for API testing
 global.fetch = jest.fn()
+
+// Ensure Prisma has a DATABASE_URL during tests (sqlite file)
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = 'file:./test.db'
+}
 
 // Mock next/navigation for usePathname
 jest.mock('next/navigation', () => ({

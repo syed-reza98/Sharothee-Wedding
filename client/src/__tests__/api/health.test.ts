@@ -1,3 +1,7 @@
+/** @jest-environment node */
+
+jest.mock('@/lib/prisma')
+
 import { GET } from '@/app/api/health/route'
 
 // Mock Prisma
@@ -36,18 +40,15 @@ describe('/api/health', () => {
 
   it('should return healthy status when database is accessible', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const prisma = require('@/lib/prisma')
-    
-    // Mock successful database query
-    prisma.$queryRaw.mockResolvedValue([{ result: 1 }])
-    prisma.user.count.mockResolvedValue(5)
-    prisma.venue.count.mockResolvedValue(2)
-    prisma.event.count.mockResolvedValue(3)
-    prisma.rSVP.count.mockResolvedValue(10)
-    prisma.guest.count.mockResolvedValue(15)
-    prisma.mediaItem.count.mockResolvedValue(20)
-    prisma.hotel.count.mockResolvedValue(4)
-    prisma.liveStream.count.mockResolvedValue(1)
+  const { prisma } = require('@/lib/prisma')
+  prisma.user.count.mockResolvedValue(5)
+  prisma.venue.count.mockResolvedValue(2)
+  prisma.event.count.mockResolvedValue(3)
+  prisma.rSVP.count.mockResolvedValue(10)
+  prisma.guest.count.mockResolvedValue(15)
+  prisma.mediaItem.count.mockResolvedValue(20)
+  prisma.hotel.count.mockResolvedValue(4)
+  prisma.stream.count.mockResolvedValue(1)
 
     const response = await GET()
     const data = await response.json()
@@ -65,10 +66,8 @@ describe('/api/health', () => {
 
   it('should return unhealthy status when database is not accessible', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const prisma = require('@/lib/prisma')
-    
-    // Mock database connection failure
-    prisma.$queryRaw.mockRejectedValue(new Error('Connection failed'))
+  const { prisma } = require('@/lib/prisma')
+  prisma.$queryRaw.mockRejectedValue(new Error('Connection failed'))
 
     const response = await GET()
     const data = await response.json()
@@ -81,12 +80,10 @@ describe('/api/health', () => {
 
   it('should handle partial database failures gracefully', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const prisma = require('@/lib/prisma')
-    
-    // Mock successful connection but failed model counts
-    prisma.$queryRaw.mockResolvedValue([{ result: 1 }])
-    prisma.user.count.mockRejectedValue(new Error('Table not found'))
-    prisma.venue.count.mockResolvedValue(2)
+  const { prisma } = require('@/lib/prisma')
+  prisma.$queryRaw.mockResolvedValue([{ result: 1 }])
+  prisma.user.count.mockRejectedValue(new Error('Table not found'))
+  prisma.venue.count.mockResolvedValue(2)
 
     const response = await GET()
     const data = await response.json()
@@ -100,8 +97,8 @@ describe('/api/health', () => {
 
   it('should include environment information', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const prisma = require('@/lib/prisma')
-    prisma.$queryRaw.mockResolvedValue([{ result: 1 }])
+  const { prisma } = require('@/lib/prisma')
+  prisma.$queryRaw.mockResolvedValue([{ result: 1 }])
 
     const response = await GET()
     const data = await response.json()

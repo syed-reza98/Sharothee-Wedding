@@ -16,19 +16,15 @@ describe('Events Page', () => {
     expect(container).toBeInTheDocument()
   })
 
-  it('displays event timeline structure', () => {
-    const { container } = render(<EventsPage />)
-    
-    // Check for timeline elements
-    const timelineElements = container.querySelectorAll('.space-y-12')
-    expect(timelineElements.length).toBeGreaterThan(0)
+  it('displays event timeline items', () => {
+    const { getAllByTestId } = render(<EventsPage />)
+    const items = getAllByTestId('event-timeline-item')
+    expect(items.length).toBeGreaterThan(0)
   })
 
-  it('shows event cards with emojis', () => {
-    const { container } = render(<EventsPage />)
-    
-    // Check for event emoji indicators
-    const emojiElements = container.querySelectorAll('.text-3xl')
+  it('shows event cards with icons', () => {
+    const { getAllByTestId } = render(<EventsPage />)
+    const emojiElements = getAllByTestId('event-icon')
     expect(emojiElements.length).toBeGreaterThan(0)
   })
 })
