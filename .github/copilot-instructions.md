@@ -2,9 +2,35 @@
 
 **ALWAYS reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
-Sharothee Wedding Website is a full-featured Next.js 15.4.5 wedding website built with TypeScript, Tailwind CSS, and Prisma. The application includes RSVP management, event scheduling, photo galleries, live streaming, contact forms, and an admin dashboard for managing wedding logistics. The project uses MySQL database with Prisma ORM and is deployed on Hostinger VPS.
+Sharothee Wedding Website is a full-featured Next.js 15.4.5 wedding website built with TypeScript, Tailwind CSS, and Prisma. The application includes RSVP management, event scheduling, photo galleries, live streaming, contact forms, and an admin dashboard for managing wedding logistics. The project uses SQLite/MySQL database with Prisma ORM and is deployed on Hostinger VPS.
 
-**NOTE**: This project uses MySQL database (not PostgreSQL) and Next.js full-stack architecture (not separate Laravel backend). All documentation and configuration files have been updated to reflect this consistent technology stack.
+**NOTE**: Database is SQLite in development (`prisma/dev.db`) and MySQL in production. Uses Next.js full-stack architecture with App Router (not separate backend). All work happens in `/client` directory.
+
+## Architecture Patterns
+
+### Database & Data Flow
+- **Prisma Schema**: Single source of truth in `prisma/schema.prisma` - SQLite in dev, MySQL in prod
+- **Type Safety**: Prisma generates TypeScript types automatically. Always run `npx prisma generate` after schema changes
+- **Data Layer**: All database operations go through `src/lib/prisma.ts` singleton with proper connection pooling
+- **Validation**: Zod schemas in `src/lib/validations.ts` mirror Prisma models for API validation
+
+### API Route Architecture 
+- **RESTful Structure**: `src/app/api/[resource]/route.ts` - each resource has CRUD operations
+- **NextAuth Integration**: Admin routes use `getServerSession(authOptions)` for protection
+- **Error Handling**: Consistent API responses with proper HTTP status codes
+- **Validation Flow**: Request → Zod validation → Prisma operation → Response
+
+### Component Patterns
+- **Page Components**: In `src/app/[route]/page.tsx` using App Router
+- **Layout Hierarchy**: Root layout (`app/layout.tsx`) → nested layouts for admin (`(admin)/layout.tsx`)  
+- **Shared Components**: In `src/components/` - Navigation, Footer, UI components
+- **Admin Protection**: Admin pages wrapped in authentication checks using NextAuth
+
+### Authentication System
+- **NextAuth.js**: Credentials-based admin login with simple email/password (see `src/lib/auth.ts`)
+- **Session Management**: JWT strategy, not database sessions
+- **Admin Routes**: Use `(admin)` route group for automatic layout inheritance
+- **Default Credentials**: Set via `ADMIN_EMAIL` and `ADMIN_PASSWORD` environment variables
 
 ## Working Effectively
 
@@ -48,6 +74,8 @@ CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
   - Core functionality tests pass successfully
 - **Run tests with coverage**: `npm run test:coverage`
 - **Watch mode**: `npm run test:watch`
+- **Test Structure**: Jest + React Testing Library with `src/__tests__/` directory
+- **API Testing**: Tests may fail in Jest environment due to missing Next.js Request/Response context (expected)
 
 ## Validation
 
@@ -117,6 +145,7 @@ client/
 - **Run migrations**: `npm run db:migrate`
 - **Reset database**: `npm run db:reset`
 - **Open Prisma Studio**: `npm run db:studio`
+- **Seed database**: `npm run db:seed`
 
 **Note**: All database operations require a MySQL connection string in DATABASE_URL environment variable.
 

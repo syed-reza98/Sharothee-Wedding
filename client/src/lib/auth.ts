@@ -1,6 +1,5 @@
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { prisma } from "./prisma"
 
 declare module "next-auth" {
   interface Session {
@@ -37,29 +36,15 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Simple admin check for development
-        const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+        const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@wedding.com";
+        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+        
         if (credentials.email === ADMIN_EMAIL && credentials.password === ADMIN_PASSWORD) {
-          // Try to find or create admin user
-          let user = await prisma.user.findUnique({
-            where: { email: credentials.email }
-          })
-
-          if (!user) {
-            user = await prisma.user.create({
-              data: {
-                email: credentials.email,
-                name: "Admin",
-                role: "ADMIN"
-              }
-            })
-          }
-
           return {
-            id: user.id,
-            email: user.email,
-            name: user.name || "Admin",
-            role: user.role,
+            id: "admin-1",
+            email: credentials.email,
+            name: "Wedding Admin",
+            role: "ADMIN",
           }
         }
 

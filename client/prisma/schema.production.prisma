@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+// This is your Prisma schema file for PRODUCTION (MySQL)
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -16,12 +16,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -71,24 +71,24 @@ model Guest {
 }
 
 model Venue {
-  id          String  @id @default(cuid())
-  name        String
-  address     String
-  city        String
-  country     String
-  latitude    Float?
-  longitude   Float?
+  id           String   @id @default(cuid())
+  name         String
+  address      String
+  city         String
+  country      String
+  latitude     Float?
+  longitude    Float?
   googleMapUrl String?
-  description String?
-  events      Event[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description  String?  @db.Text
+  events       Event[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Event {
   id          String   @id @default(cuid())
   title       String
-  description String
+  description String   @db.Text
   date        DateTime
   time        String
   venue       Venue    @relation(fields: [venueId], references: [id])
@@ -109,8 +109,8 @@ model RSVP {
   eventId            String
   response           RSVPResponse
   attendees          Int          @default(1)
-  dietaryPreferences String?
-  comments           String?
+  dietaryPreferences String?      @db.Text
+  comments           String?      @db.Text
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
@@ -118,7 +118,7 @@ model RSVP {
 }
 
 model Hotel {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   address     String
   city        String
@@ -126,25 +126,25 @@ model Hotel {
   phone       String?
   email       String?
   website     String?
-  description String?
-  amenities   String?
+  description String?   @db.Text
+  amenities   String?   @db.Text
   bookingCode String?
   discount    String?
   deadline    DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model MediaItem {
   id          String    @id @default(cuid())
   title       String?
-  description String?
+  description String?   @db.Text
   type        MediaType
   url         String
   publicId    String?   // Cloudinary public ID
   category    String
   album       String?
-  caption     String?
+  caption     String?   @db.Text
   public      Boolean   @default(true)
   approved    Boolean   @default(false)
   featured    Boolean   @default(false)
@@ -155,30 +155,30 @@ model MediaItem {
 }
 
 model Stream {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
-  description String?
+  description String?   @db.Text
   streamUrl   String
-  isLive      Boolean  @default(false)
+  isLive      Boolean   @default(false)
   eventId     String?
-  event       Event?   @relation(fields: [eventId], references: [id])
+  event       Event?    @relation(fields: [eventId], references: [id])
   startTime   DateTime?
   endTime     DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model ContactRequest {
-  id        String        @id @default(cuid())
+  id        String         @id @default(cuid())
   name      String
   email     String
   phone     String?
   subject   ContactSubject
-  message   String
-  status    RequestStatus @default(PENDING)
-  adminNote String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  message   String         @db.Text
+  status    RequestStatus  @default(PENDING)
+  adminNote String?        @db.Text
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 // Enums

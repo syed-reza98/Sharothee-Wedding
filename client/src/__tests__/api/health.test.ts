@@ -24,7 +24,10 @@ jest.mock('@/lib/prisma', () => ({
   hotel: {
     count: jest.fn(),
   },
-  liveStream: {
+  stream: {
+    count: jest.fn(),
+  },
+  contactRequest: {
     count: jest.fn(),
   },
 }))
@@ -47,7 +50,8 @@ describe('/api/health', () => {
     prisma.guest.count.mockResolvedValue(15)
     prisma.mediaItem.count.mockResolvedValue(20)
     prisma.hotel.count.mockResolvedValue(4)
-    prisma.liveStream.count.mockResolvedValue(1)
+    prisma.stream.count.mockResolvedValue(1)
+    prisma.contactRequest.count.mockResolvedValue(2)
 
     const response = await GET()
     const data = await response.json()
