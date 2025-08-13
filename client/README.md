@@ -2,6 +2,77 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Development with SQLite (Recommended for Local Development)
+
+For local development, the project includes SQLite support for easier setup:
+
+```bash
+# Setup SQLite development environment
+npm run db:push:dev && npm run dev:sqlite
+```
+
+This will:
+1. Create/update SQLite database (`dev.db`) using the development schema
+2. Generate Prisma client for SQLite
+3. Start the development server with Turbopack
+
+### Development with MySQL
+
+To use MySQL locally (matching production environment):
+
+```bash
+# Setup environment
+cp .env.example .env.local
+# Edit .env.local with your MySQL DATABASE_URL
+
+# Setup database
+npm run db:push
+npm run dev
+```
+
+## Environment Setup
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. For SQLite development (default):
+   ```env
+   DATABASE_URL="file:./dev.db"
+   ```
+
+3. For MySQL development/production:
+   ```env
+   DATABASE_URL="mysql://username:password@localhost:3306/wedding_db"
+   ```
+
+## Database Scripts
+
+### SQLite Development Scripts
+- `npm run db:push:dev` - Push schema to SQLite database
+- `npm run db:generate:dev` - Generate Prisma client for SQLite
+- `npm run db:studio:dev` - Open Prisma Studio for SQLite
+- `npm run dev:sqlite` - Generate client and start dev server
+
+### Production MySQL Scripts  
+- `npm run db:push` - Push schema to MySQL database
+- `npm run db:generate` - Generate Prisma client for MySQL
+- `npm run db:studio` - Open Prisma Studio for MySQL
+- `npm run dev` - Start development server
+
+## API Health Check
+
+The application includes a health check endpoint at `/api/health` that verifies database connectivity:
+
+```bash
+curl -i http://localhost:3000/api/health
+```
+
+Returns `200` with `{ ok: true, ... }` when healthy, or `503` with error details when unhealthy.
+
+## Getting Started (Original Instructions)
+
 First, run the development server:
 
 ```bash

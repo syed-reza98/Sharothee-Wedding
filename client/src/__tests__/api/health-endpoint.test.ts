@@ -7,27 +7,24 @@ describe('Health API Endpoint', () => {
     expect(response.status).toBe(200)
     
     const data = await response.json()
-    expect(data).toHaveProperty('status')
+    expect(data).toHaveProperty('ok', true)
     expect(data).toHaveProperty('timestamp')
-    expect(data).toHaveProperty('database')
-    expect(data).toHaveProperty('environment')
-    expect(data).toHaveProperty('version')
+    expect(data).toHaveProperty('uptime')
+    expect(data).toHaveProperty('responseTimeMs')
+    expect(data).toHaveProperty('db')
   })
   
   it('should return database connection status', async () => {
     const response = await GET()
     const data = await response.json()
     
-    expect(data.database).toHaveProperty('status')
-    expect(data.database).toHaveProperty('models')
+    expect(data.db).toHaveProperty('status', 'ok')
   })
   
-  it('should return environment information', async () => {
+  it('should include cache-control header', async () => {
     const response = await GET()
-    const data = await response.json()
     
-    expect(data.environment).toHaveProperty('nodeVersion')
-    expect(data.environment).toHaveProperty('platform')
-    expect(data.environment).toHaveProperty('environment')
+    expect(response.headers.get('cache-control')).toBe('no-store')
+    expect(response.headers.get('content-type')).toBe('application/json')
   })
 })

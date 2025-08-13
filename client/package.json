@@ -5,6 +5,7 @@
   "description": "Incia & Arvin's Wedding Website - Frontend",
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:sqlite": "prisma generate --schema=prisma/schema.dev.prisma && next dev --turbopack",
     "build": "next build",
     "build:github": "next build && next export",
     "start": "next start",
@@ -19,6 +20,10 @@
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "db:generate:dev": "prisma generate --schema=prisma/schema.dev.prisma",
+    "db:push:dev": "prisma db push --schema=prisma/schema.dev.prisma",
+    "db:reset:dev": "prisma migrate reset --schema=prisma/schema.dev.prisma",
+    "db:studio:dev": "prisma studio --schema=prisma/schema.dev.prisma",
     "postinstall": "prisma generate"
   },
   "dependencies": {
