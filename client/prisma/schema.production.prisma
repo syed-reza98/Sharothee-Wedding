@@ -1,0 +1,222 @@
+// This is your Prisma schema file for PRODUCTION (MySQL)
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(ADMIN)
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Guest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  token     String   @unique
+  country   String?
+  phone     String?
+  rsvps     RSVP[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Venue {
+  id           String   @id @default(cuid())
+  name         String
+  address      String
+  city         String
+  country      String
+  latitude     Float?
+  longitude    Float?
+  googleMapUrl String?
+  description  String?  @db.Text
+  events       Event[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  date        DateTime
+  time        String
+  venue       Venue    @relation(fields: [venueId], references: [id])
+  venueId     String
+  rsvps       RSVP[]
+  streams     Stream[]
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RSVP {
+  id                 String       @id @default(cuid())
+  guest              Guest        @relation(fields: [guestId], references: [id])
+  guestId            String
+  event              Event        @relation(fields: [eventId], references: [id])
+  eventId            String
+  response           RSVPResponse
+  attendees          Int          @default(1)
+  dietaryPreferences String?      @db.Text
+  comments           String?      @db.Text
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@unique([guestId, eventId])
+}
+
+model Hotel {
+  id          String    @id @default(cuid())
+  name        String
+  address     String
+  city        String
+  country     String
+  phone       String?
+  email       String?
+  website     String?
+  description String?   @db.Text
+  amenities   String?   @db.Text
+  bookingCode String?
+  discount    String?
+  deadline    DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model MediaItem {
+  id          String    @id @default(cuid())
+  title       String?
+  description String?   @db.Text
+  type        MediaType
+  url         String
+  publicId    String?   // Cloudinary public ID
+  category    String
+  album       String?
+  caption     String?   @db.Text
+  public      Boolean   @default(true)
+  approved    Boolean   @default(false)
+  featured    Boolean   @default(false)
+  order       Int       @default(0)
+  uploadedBy  String?   // User ID or guest email
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Stream {
+  id          String    @id @default(cuid())
+  title       String
+  description String?   @db.Text
+  streamUrl   String
+  isLive      Boolean   @default(false)
+  eventId     String?
+  event       Event?    @relation(fields: [eventId], references: [id])
+  startTime   DateTime?
+  endTime     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ContactRequest {
+  id        String         @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   ContactSubject
+  message   String         @db.Text
+  status    RequestStatus  @default(PENDING)
+  adminNote String?        @db.Text
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+// Enums
+enum Role {
+  ADMIN
+  MODERATOR
+}
+
+enum RSVPResponse {
+  ATTENDING
+  NOT_ATTENDING
+  MAYBE
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum StreamPlatform {
+  YOUTUBE
+  FACEBOOK
+  VIMEO
+  CUSTOM
+}
+
+enum ContactSubject {
+  RSVP
+  TRAVEL
+  EVENTS
+  DIETARY
+  ACCESSIBILITY
+  GENERAL
+  EMERGENCY
+}
+
+enum RequestStatus {
+  PENDING
+  RESPONDED
+  CLOSED
+}
