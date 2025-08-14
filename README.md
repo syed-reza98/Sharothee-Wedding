@@ -1,3 +1,6 @@
+[![Deploy to Hostinger VPS with Backups](https://github.com/syed-reza98/Sharothee-Wedding/actions/workflows/deploy-vps.yml/badge.svg)](https://github.com/syed-reza98/Sharothee-Wedding/actions/workflows/deploy-vps.yml)
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
