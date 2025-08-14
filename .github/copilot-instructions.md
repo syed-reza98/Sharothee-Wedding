@@ -1,6 +1,6 @@
 # Sharothee Wedding Website
 
-Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
+Always consult the guidelines in this document first. Use external search or bash commands only if you cannot find the required information here or if the instructions do not address your specific issue.
 
 Sharothee Wedding Website is a production-ready Next.js 15.4.5 wedding platform with advanced RSVP management, multi-event scheduling, media galleries, live streaming, and admin dashboard. Uses SQLite (dev) → MySQL (prod) with Prisma ORM. All application files are in the **ROOT DIRECTORY** of the repository.
 
