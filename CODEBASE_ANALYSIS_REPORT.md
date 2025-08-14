@@ -1,8 +1,22 @@
 # Sharothee Wedding Website - Comprehensive Codebase Analysis & Implementation Report
 
+## 🚨 Repository Restructure Notice
+
+**Important Update (2025-08-13)**: The repository has been restructured with the following changes:
+- **Client directory migration**: All application files moved from `/client/` to repository root
+- **Legacy file reorganization**: Previous files relocated to `/docs/`, `/other_files/`, and credentials folder  
+- **Path updates**: All command examples now use repository root context
+- **Configuration migration**: All config files (package.json, next.config.ts, etc.) moved to root
+
+See [docs/REPOSITORY_REVIEW_2025-08-14.md](docs/REPOSITORY_REVIEW_2025-08-14.md) for comprehensive post-restructure analysis.
+
+## 🔒 Security Notice
+
+**Credentials Documentation**: This repository contains intentionally committed credentials and server information in designated folders as per owner requirements. These files should be handled with care and are clearly labeled for production deployment purposes. See [SECURITY.md](SECURITY.md) for security policies and proper handling procedures.
+
 ## 🎯 Executive Summary
 
-I have completed a thorough end-to-end analysis of the Sharothee Wedding Website codebase. The application is **production-ready** with a robust Next.js 15.4.5 architecture, comprehensive RSVP management system, and solid technical foundation.
+I have completed a thorough end-to-end analysis of the Sharothee Wedding Website codebase following the recent directory restructure. The application is **production-ready** with a robust Next.js 15.4.5 architecture, comprehensive RSVP management system, and solid technical foundation.
 
 ## ✅ Current Status - All Systems Operational
 
@@ -175,10 +189,7 @@ $ npm run db:seed
 
 ### 1. **Command Execution Pattern**
 ```bash
-# ALWAYS navigate to client directory first
-cd i:\CodeStorm\Hostinger\Sharothee-Wedding\client
-
-# Then execute any command
+# Commands now execute from repository root (post-restructure)
 npm install
 npm run dev
 npx prisma generate
@@ -341,10 +352,12 @@ src/
 
 ## 💡 Recommendations for AI Agents
 
-### 1. **Always Navigate to Client Directory First**
+### 1. **Execute Commands from Repository Root**
 ```bash
-cd i:\CodeStorm\Hostinger\Sharothee-Wedding\client
-# Then run any command
+# All commands now run from repository root (post-restructure)
+npm install
+npm run dev
+npx prisma generate
 ```
 
 ### 2. **Understand the RSVP Flow**

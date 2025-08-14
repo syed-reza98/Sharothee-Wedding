@@ -1,13 +1,22 @@
 # Wedding Website - Comprehensive Review & Improvement Report
 
+## 🚨 Repository Restructure Notice
+
+**Important Update (2025-08-13)**: The repository has been restructured with the following changes:
+- **Client directory migration**: All application files moved from `/client/` to repository root
+- **Legacy file reorganization**: Previous files relocated to `/docs/`, `/other_files/`, and credentials folder
+- **Updated references**: All commands and paths now use repository root context
+
+See [docs/REPOSITORY_REVIEW_2025-08-14.md](docs/REPOSITORY_REVIEW_2025-08-14.md) for comprehensive post-restructure analysis.
+
 ## 📋 Executive Summary
 
-I've conducted a thorough review of the client folder for the wedding website. The codebase is well-structured and follows modern Next.js best practices. Below are my findings and recommendations for improvements.
+I've conducted a thorough review of the wedding website codebase following the recent directory restructure. The codebase is well-structured and follows modern Next.js best practices. Below are my findings and recommendations for improvements.
 
 ## ✅ Current Status
 
 ### What's Working Well
-- ✅ Clean Next.js 13+ App Router architecture
+- ✅ Clean Next.js 15.4.5 App Router architecture
 - ✅ TypeScript implementation with proper typing
 - ✅ Responsive design with Tailwind CSS
 - ✅ Prisma database schema is comprehensive
@@ -160,18 +169,37 @@ npm test - SUCCESS
 - Authentication middleware working
 - Validation schemas implemented
 
+## 🧪 Testing Status
+
+### Current Testing Infrastructure
+- **Framework**: Jest with React Testing Library
+- **Configuration**: Complete TypeScript support via `jest.config.js`
+- **Mock Strategy**: Comprehensive Prisma client mocking
+- **Coverage**: Component and API route testing patterns implemented
+
+**Reference**: See [docs/Testing.md](docs/Testing.md) for detailed testing guidelines and current status.
+
+### Environment Configuration
+
+**Reference**: See [docs/Environments.md](docs/Environments.md) for comprehensive environment guidance covering:
+- Development environment (SQLite)
+- Production environment (MySQL)  
+- Environment variable management
+- Database migration workflows
+
 ## 🎯 Key Recommendations for Immediate Implementation
 
 ### 1. Add Environment Variables Documentation
 Create `.env.example` file with required variables:
 ```env
-DATABASE_URL="mysql://username:password@hostname:3306/wedding_db"
-NEXTAUTH_SECRET="..."
+# Database (SQLite for development, MySQL for production)
+DATABASE_URL="file:./prisma/dev.db"
+NEXTAUTH_SECRET="secure-random-string"
 NEXTAUTH_URL="http://localhost:3000"
-CLOUDINARY_CLOUD_NAME="..."
-CLOUDINARY_API_KEY="..."
-CLOUDINARY_API_SECRET="..."
-RESEND_API_KEY="..."
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+RESEND_API_KEY="your-resend-key"
 ```
 
 ### 2. Implement Global Error Boundary
