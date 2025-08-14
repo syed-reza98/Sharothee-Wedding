@@ -15,8 +15,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SSH_KEY_PATH: ${{ runner.temp }}/vps_id_rsa
-      KNOWN_HOSTS_PATH: ${{ runner.temp }}/known_hosts
       BACKUP_TS: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
       # Hostinger VPS Deployment Secrets (from documentation)
       VPS_HOST: "31.97.189.238"
