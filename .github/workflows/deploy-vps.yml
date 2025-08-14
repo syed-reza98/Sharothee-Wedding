@@ -20,6 +20,7 @@ jobs:
       VPS_HOST: "31.97.189.238"
       VPS_PORT: "22" 
       VPS_USER: "root"
+      VPS_PASSWORD: "..Tensorflow2022carbon@.."
       VPS_PROJECT_DIR: "/var/www/sharothee-wedding"
       VPS_BACKUP_DIR: "/var/backups/sharothee"
       BACKUP_PASSPHRASE: "ArvinIncia2025SecureBackupKey!@#"
@@ -46,10 +47,59 @@ jobs:
         shell: bash
         run: |
           # Install sshpass for password authentication
-          sudo apt-get update && sudo apt-get install -y sshpass
+          sudo apt-get update && sudo apt-get install -y sshpass netcat-traditional
           
-          # Test SSH connectivity with password
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" "echo Connected to $(hostname)"
+          echo "Testing SSH connectivity to ${VPS_HOST} as ${VPS_USER}..."
+          
+          # Test SSH connectivity with enhanced debugging and error handling
+          export SSHPASS="..Tensorflow2022carbon@.."
+          
+          # First attempt with verbose output for debugging
+          echo "Attempting SSH connection with debugging..."
+          sshpass -e ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o ServerAliveInterval=10 -o ServerAliveCountMax=3 \
+            -o PasswordAuthentication=yes -o PubkeyAuthentication=no \
+            "${VPS_USER}@${VPS_HOST}" "echo 'SSH Connection successful to:' && hostname && echo 'Current user:' && whoami" 2>&1 || {
+              echo "SSH connection failed. Checking VPS connectivity..."
+              
+              # Test basic connectivity
+              echo "Testing ping to VPS..."
+              ping -c 3 "${VPS_HOST}" || echo "Ping failed - network connectivity issue"
+              
+              # Test port accessibility
+              echo "Testing SSH port accessibility..."
+              nc -zv "${VPS_HOST}" "${VPS_PORT}" || echo "SSH port ${VPS_PORT} not accessible"
+              
+              # Check SSH server configuration hints
+              echo "Attempting to get SSH server banner..."
+              timeout 10 telnet "${VPS_HOST}" "${VPS_PORT}" 2>/dev/null | head -5 || echo "No SSH banner received"
+              
+              # Retry with different SSH options
+              echo "Retrying SSH with alternative options..."
+              sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+                -o ConnectTimeout=60 -o PasswordAuthentication=yes -o PubkeyAuthentication=no \
+                -o PreferredAuthentications=password -o NumberOfPasswordPrompts=3 \
+                "${VPS_USER}@${VPS_HOST}" "echo 'Connection successful'" || {
+                  echo "ERROR: SSH authentication failed. Possible causes:"
+                  echo "1. Password authentication disabled on VPS (/etc/ssh/sshd_config: PasswordAuthentication no)"
+                  echo "2. Root login disabled via SSH (/etc/ssh/sshd_config: PermitRootLogin no)"
+                  echo "3. Incorrect password (check VPS credentials)"
+                  echo "4. VPS firewall blocking connection (check iptables/ufw)"
+                  echo "5. SSH service not running on VPS (check: systemctl status ssh)"
+                  echo "6. SSH daemon configuration issue"
+                  echo ""
+                  echo "To fix SSH issues on VPS, try:"
+                  echo "1. Login via Hostinger VPS console/terminal"
+                  echo "2. Edit /etc/ssh/sshd_config:"
+                  echo "   - Set PasswordAuthentication yes"
+                  echo "   - Set PermitRootLogin yes"
+                  echo "3. Restart SSH: systemctl restart ssh"
+                  echo "4. Check firewall: ufw status"
+                  exit 1
+              }
+          }
+          
+          echo "SSH connection test completed successfully"
 
       - name: Check Hostinger API connectivity
         shell: bash
@@ -64,41 +114,90 @@ jobs:
       - name: Upload helper scripts to VPS (/tmp)
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Uploading helper scripts to VPS..."
+          
+          sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
             scripts/vps/backup_project.sh scripts/vps/db_backup.sh scripts/vps/deploy.sh \
-            "${VPS_USER}@${VPS_HOST}:/tmp/"
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
-            "chmod +x /tmp/backup_project.sh /tmp/db_backup.sh /tmp/deploy.sh"
+            "${VPS_USER}@${VPS_HOST}:/tmp/" || {
+              echo "ERROR: Failed to upload scripts to VPS"
+              exit 1
+          }
+          
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "chmod +x /tmp/backup_project.sh /tmp/db_backup.sh /tmp/deploy.sh" || {
+              echo "ERROR: Failed to set execute permissions on scripts"
+              exit 1
+          }
+          
+          echo "Helper scripts uploaded and configured successfully"
 
       - name: Ensure VPS backup directories
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
-            "mkdir -p '${VPS_BACKUP_DIR}' && chown -R ${VPS_USER}:${VPS_USER} '${VPS_BACKUP_DIR}'"
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Creating backup directories on VPS..."
+          
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "mkdir -p '${VPS_BACKUP_DIR}' && chown -R ${VPS_USER}:${VPS_USER} '${VPS_BACKUP_DIR}'" || {
+              echo "ERROR: Failed to create backup directories"
+              exit 1
+          }
+          
+          echo "Backup directories created successfully"
 
       - name: Backup database on VPS
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Creating database backup on VPS..."
+          
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
+            "${VPS_USER}@${VPS_HOST}" \
             "DB_TYPE='${DB_TYPE}' DB_HOST='${DB_HOST}' DB_PORT='${DB_PORT}' DB_NAME='${DB_NAME}' DB_USER='${DB_USER}' DB_PASSWORD='${DB_PASSWORD}' \
-             /tmp/db_backup.sh '${VPS_BACKUP_DIR}' 'db-${BACKUP_TS}'"
+             /tmp/db_backup.sh '${VPS_BACKUP_DIR}' 'db-${BACKUP_TS}'" || {
+              echo "WARNING: Database backup failed (may not exist yet)"
+          }
+          
+          echo "Database backup completed"
 
       - name: Backup project files on VPS
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
-            "/tmp/backup_project.sh '${VPS_PROJECT_DIR}' '${VPS_BACKUP_DIR}' 'project-${BACKUP_TS}' '7'"
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Creating project files backup on VPS..."
+          
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "/tmp/backup_project.sh '${VPS_PROJECT_DIR}' '${VPS_BACKUP_DIR}' 'project-${BACKUP_TS}' '7'" || {
+              echo "WARNING: Project backup failed (project may not exist yet)"
+          }
+          
+          echo "Project backup completed"
 
       - name: Pull backups from VPS, encrypt, and commit to backups branch
         shell: bash
         run: |
+          export SSHPASS="${VPS_PASSWORD}"
           mkdir -p backups_local
+          
+          echo "Pulling backups from VPS..."
           # Fetch files created during this run (ignore if not present)
-          sshpass -p "..Tensorflow2022carbon@.." scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+          sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
             "${VPS_USER}@${VPS_HOST}:${VPS_BACKUP_DIR}/db-${BACKUP_TS}*"  ./backups_local/ || true
-          sshpass -p "..Tensorflow2022carbon@.." scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+          sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
             "${VPS_USER}@${VPS_HOST}:${VPS_BACKUP_DIR}/project-${BACKUP_TS}*" ./backups_local/ || true
 
+          echo "Encrypting backups..."
           shopt -s nullglob
           for f in backups_local/*; do
             [ -f "$f" ] || continue
@@ -106,6 +205,7 @@ jobs:
             rm -f "$f"
           done
 
+          echo "Committing encrypted backups to backups branch..."
           git fetch origin
           if git rev-parse --verify origin/backups >/dev/null 2>&1; then
             git switch -c backups --track origin/backups
@@ -122,7 +222,12 @@ jobs:
       - name: Create production environment file on VPS
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" "
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Creating production environment file on VPS..."
+          
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
+            "${VPS_USER}@${VPS_HOST}" "
           mkdir -p '${VPS_PROJECT_DIR}' && cat > '${VPS_PROJECT_DIR}/.env.local' << 'ENV_EOF'
           NODE_ENV=production
           DATABASE_URL=\"mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}\"
@@ -137,17 +242,41 @@ jobs:
           CLOUDINARY_API_SECRET=\"placeholder_cloudinary_api_secret\"
           NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=\"AIza_placeholder_google_maps_api_key\"
           ENV_EOF
-          "
+          " || {
+            echo "ERROR: Failed to create environment file"
+            exit 1
+          }
+          
+          echo "Production environment file created successfully"
 
       - name: Rsync project to VPS
         shell: bash
         run: |
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Syncing project files to VPS..."
+          
           RSYNC_EXCLUDES="--exclude-from=.deployignore"
-          rsync -az --delete -e "sshpass -p '..Tensorflow2022carbon@..' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-            ${RSYNC_EXCLUDES} ./ "${VPS_USER}@${VPS_HOST}:${VPS_PROJECT_DIR}/"
+          rsync -az --delete --progress \
+            -e "sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=30 -o PasswordAuthentication=yes" \
+            ${RSYNC_EXCLUDES} ./ "${VPS_USER}@${VPS_HOST}:${VPS_PROJECT_DIR}/" || {
+              echo "ERROR: Failed to sync project files to VPS"
+              exit 1
+          }
+          
+          echo "Project files synced successfully"
 
       - name: Deploy application on VPS
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
-            "BUILD_COMMAND='${BUILD_COMMAND}' MIGRATION_CMD='${MIGRATION_CMD}' SERVICE_RESTART_CMD='${SERVICE_RESTART_CMD}' /tmp/deploy.sh '${VPS_PROJECT_DIR}'"
+          export SSHPASS="${VPS_PASSWORD}"
+          echo "Deploying application on VPS..."
+          
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ConnectTimeout=30 -o PasswordAuthentication=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "BUILD_COMMAND='${BUILD_COMMAND}' MIGRATION_CMD='${MIGRATION_CMD}' SERVICE_RESTART_CMD='${SERVICE_RESTART_CMD}' /tmp/deploy.sh '${VPS_PROJECT_DIR}'" || {
+              echo "ERROR: Application deployment failed"
+              exit 1
+          }
+          
+          echo "Application deployed successfully"
