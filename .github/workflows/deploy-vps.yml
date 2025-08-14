@@ -1,0 +1,164 @@
+name: Deploy to Hostinger VPS with Backups
+
+on:
+  push:
+    branches:
+      - "salman_14_08_25"
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to deploy (default branch)"
+        required: true
+        default: "salman_14_08_25"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SSH_KEY_PATH: ${{ runner.temp }}/vps_id_rsa
+      KNOWN_HOSTS_PATH: ${{ runner.temp }}/known_hosts
+      BACKUP_TS: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || '' }}
+
+      - name: Set up SSH key
+        shell: bash
+        run: |
+          umask 077
+          printf "%s\n" "${VPS_SSH_KEY}" > "${SSH_KEY_PATH}"
+          ssh-keygen -y -f "${SSH_KEY_PATH}" >/dev/null 2>&1 || true
+          ssh-keyscan -p "${VPS_PORT:-22}" "${VPS_HOST}" > "${KNOWN_HOSTS_PATH}"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Test SSH connectivity
+        shell: bash
+        run: |
+          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" "echo Connected to $(hostname)"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+
+      - name: Upload helper scripts to VPS (/tmp)
+        shell: bash
+        run: |
+          scp -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -P "${VPS_PORT:-22}" \
+            scripts/vps/backup_project.sh scripts/vps/db_backup.sh scripts/vps/deploy.sh \
+            "${VPS_USER}@${VPS_HOST}:/tmp/"
+          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+            "chmod +x /tmp/backup_project.sh /tmp/db_backup.sh /tmp/deploy.sh"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+
+      - name: Ensure VPS backup directories
+        shell: bash
+        run: |
+          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+            "sudo mkdir -p '${VPS_BACKUP_DIR}' && sudo chown -R ${VPS_USER}:${VPS_USER} '${VPS_BACKUP_DIR}'"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
+
+      - name: Backup database on VPS (if configured)
+        if: ${{ secrets.DB_TYPE != '' && secrets.DB_TYPE != 'none' }}
+        shell: bash
+        run: |
+          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+            "DB_TYPE='${DB_TYPE}' DB_HOST='${DB_HOST}' DB_PORT='${DB_PORT}' DB_NAME='${DB_NAME}' DB_USER='${DB_USER}' DB_PASSWORD='${DB_PASSWORD}' \
+             /tmp/db_backup.sh '${VPS_BACKUP_DIR}' 'db-${BACKUP_TS}'"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
+          DB_TYPE: ${{ secrets.DB_TYPE }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Backup project files on VPS
+        shell: bash
+        run: |
+          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+            "/tmp/backup_project.sh '${VPS_PROJECT_DIR}' '${VPS_BACKUP_DIR}' 'project-${BACKUP_TS}' '${KEEP_BACKUPS:-7}'"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PROJECT_DIR: ${{ secrets.VPS_PROJECT_DIR }}
+          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
+          KEEP_BACKUPS: 7
+
+      - name: Pull backups from VPS, encrypt, and commit to backups branch
+        shell: bash
+        run: |
+          mkdir -p backups_local
+          # Fetch files created during this run (ignore if not present)
+          scp -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -P "${VPS_PORT:-22}" \
+            "${VPS_USER}@${VPS_HOST}:${VPS_BACKUP_DIR}/db-${BACKUP_TS}*"  ./backups_local/ || true
+          scp -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -P "${VPS_PORT:-22}" \
+            "${VPS_USER}@${VPS_HOST}:${VPS_BACKUP_DIR}/project-${BACKUP_TS}*" ./backups_local/ || true
+
+          shopt -s nullglob
+          for f in backups_local/*; do
+            [ -f "$f" ] || continue
+            openssl enc -aes-256-cbc -salt -pbkdf2 -pass env:BACKUP_PASSPHRASE -in "$f" -out "$f.enc"
+            rm -f "$f"
+          done
+
+          git fetch origin
+          if git rev-parse --verify origin/backups >/dev/null 2>&1; then
+            git switch -c backups --track origin/backups
+          else
+            git switch -c backups
+          fi
+          mkdir -p "backups/${BACKUP_TS}"
+          mv backups_local/*.enc "backups/${BACKUP_TS}/" || true
+          git add "backups/${BACKUP_TS}" || true
+          git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+            commit -m "chore(backups): encrypted backups ${BACKUP_TS}" || echo "Nothing to commit"
+          git push origin HEAD:backups || true
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
+
+      - name: Rsync project to VPS
+        shell: bash
+        run: |
+          RSYNC_EXCLUDES="--exclude-from=.deployignore"
+          rsync -az --delete -e "ssh -i ${SSH_KEY_PATH} -o StrictHostKeyChecking=yes -o UserKnownHostsFile=${KNOWN_HOSTS_PATH} -p ${VPS_PORT:-22}" \
+            ${RSYNC_EXCLUDES} ./ "${VPS_USER}@${VPS_HOST}:${VPS_PROJECT_DIR}/"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PROJECT_DIR: ${{ secrets.VPS_PROJECT_DIR }}
+
+      - name: Optional build, migrate, and restart on VPS
+        shell: bash
+        run: |
+          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+            "BUILD_COMMAND='${BUILD_COMMAND}' MIGRATION_CMD='${MIGRATION_CMD}' SERVICE_RESTART_CMD='${SERVICE_RESTART_CMD}' /tmp/deploy.sh '${VPS_PROJECT_DIR}'"
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PROJECT_DIR: ${{ secrets.VPS_PROJECT_DIR }}
+          BUILD_COMMAND: ${{ secrets.BUILD_COMMAND }}
+          MIGRATION_CMD: ${{ secrets.MIGRATION_CMD }}
+          SERVICE_RESTART_CMD: ${{ secrets.SERVICE_RESTART_CMD }}

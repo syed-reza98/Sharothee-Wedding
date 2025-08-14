@@ -1,0 +1,25 @@
+# VCS & CI
+.git/
+.github/
+
+# Dependencies & caches
+node_modules/
+.bun/
+.pnpm-store/
+.yarn/
+.cache/
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Local configs & env
+*.local.*
+*.log
+.env
+.env.*
+!.env.example
+
+# Backups
+backups/
