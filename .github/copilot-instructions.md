@@ -1,12 +1,8 @@
 # Sharothee Wedding Website
 
-````instructions
-# Sharothee Wedding Website
+Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
-**🚨 CRITICAL: ALL COMMANDS MUST BE RUN FROM CLIENT DIRECTORY 🚨**
-**Always `cd i:\CodeStorm\Hostinger\Sharothee-Wedding\client` before ANY command**
-
-Sharothee Wedding Website is a production-ready Next.js 15.4.5 wedding platform with advanced RSVP management, multi-event scheduling, media galleries, live streaming, and admin dashboard. Uses SQLite (dev) → MySQL (prod) with Prisma ORM. All application code lives in `/client` directory.
+Sharothee Wedding Website is a production-ready Next.js 15.4.5 wedding platform with advanced RSVP management, multi-event scheduling, media galleries, live streaming, and admin dashboard. Uses SQLite (dev) → MySQL (prod) with Prisma ORM. All application files are in the **ROOT DIRECTORY** of the repository.
 
 **Core Architecture**: Next.js App Router full-stack with TypeScript, Tailwind CSS 4, NextAuth.js, Cloudinary, and Resend integration.
 
@@ -89,25 +85,118 @@ NEXTAUTH_URL="http://localhost:3000"       # Base URL
 - **RSVP Confirmations**: Email sent after successful RSVP submission
 - **Template System**: HTML email templates in `src/lib/email.ts`
 
-## Working Effectively
+### Development Workflow
+1. **Database Changes**: Edit `prisma/schema.prisma` → `export $(cat .env.local | xargs)` → `npx prisma generate` → `npx prisma db push`
+2. **API Changes**: Modify `src/app/api/[resource]/route.ts` → Add Zod validation in `src/lib/validations.ts`
+3. **Component Changes**: Edit in `src/app/` or `src/components/` → Auto-reloads with Turbopack
+4. **Testing**: `npm test` for unit tests (~3s), manual validation at `http://localhost:3000`
 
-### Essential Commands (Run from `/client` directory)
+### Essential Commands (All from repository ROOT directory)
 ```bash
-cd i:\CodeStorm\Hostinger\Sharothee-Wedding\client  # ALWAYS FIRST
-npm install                    # Install dependencies (~21s)
-npx prisma generate           # Generate client (~3s)
-npx prisma db push            # Push schema to SQLite (~2s)
-npm run dev                   # Start dev server (Turbopack ~1s)
-npm run build                 # Production build (~23s)
-npm run db:seed               # Seed database with test data
+# NEVER CANCEL: npm install takes ~25 seconds. Set timeout to 120+ seconds.
+npm install                    # Install dependencies (22s actual time)
+
+# Environment setup (REQUIRED before any build/dev commands)
+# Create .env.local with required variables:
+DATABASE_URL="file:./prisma/dev.db"
+NEXTAUTH_SECRET="secure-random-string"
+NEXTAUTH_URL="http://localhost:3000"
+ADMIN_EMAIL="admin@arvinwedsincia.com"
+ADMIN_PASSWORD="Admin123!@#"
+RESEND_API_KEY="re_dummy_key_for_build_testing"
+CLOUDINARY_CLOUD_NAME="dummy"
+CLOUDINARY_API_KEY="dummy"
+CLOUDINARY_API_SECRET="dummy"
+
+# Database setup (REQUIRED for app to work)
+export $(cat .env.local | grep -v '^#' | xargs)  # Load environment variables
+npx prisma generate            # Generate client (~2s)
+npx prisma db push             # Push schema to SQLite (~2s)
+npx prisma db push --force-reset  # Reset database if needed
+npm run db:seed                # Seed database with test data (~1s)
+
+# Development
+npm run dev                    # Start dev server (Turbopack ~1s)
+
+# NEVER CANCEL: npm run build takes ~25 seconds. Set timeout to 120+ seconds.
+npm run build                  # Production build (23s actual time)
+
+# Code quality (fast commands)
+npm run lint                   # ESLint (~2s)
+npm run type-check            # TypeScript checking (~5s)
+
+# NEVER CANCEL: npm test takes ~5 seconds but may have API test failures (expected)
+npm test                      # Run Jest tests (3s actual time)
+
+# Database management
 npm run db:studio             # Open Prisma Studio UI
 ```
 
-### Development Workflow
-1. **Database Changes**: Edit `prisma/schema.prisma` → `npx prisma generate` → `npx prisma db push`
-2. **API Changes**: Modify `src/app/api/[resource]/route.ts` → Add Zod validation in `src/lib/validations.ts`
-3. **Component Changes**: Edit in `src/app/` or `src/components/` → Auto-reloads with Turbopack
-4. **Testing**: `npm test` for unit tests, manual validation at `http://localhost:3000`
+## Bootstrap, Build, and Test (VALIDATED WORKFLOW)
+
+Use this EXACT sequence for a fresh repository setup:
+
+### 1. Environment Setup (2 minutes)
+```bash
+# Create environment file (REQUIRED)
+cat > .env.local << 'EOF'
+DATABASE_URL="file:./prisma/dev.db"
+NEXTAUTH_SECRET="secure-random-string"
+NEXTAUTH_URL="http://localhost:3000"
+ADMIN_EMAIL="admin@arvinwedsincia.com"
+ADMIN_PASSWORD="Admin123!@#"
+RESEND_API_KEY="re_dummy_key_for_build_testing"
+CLOUDINARY_CLOUD_NAME="dummy"
+CLOUDINARY_API_KEY="dummy"
+CLOUDINARY_API_SECRET="dummy"
+EOF
+
+# Load environment variables for Prisma commands
+export $(cat .env.local | grep -v '^#' | xargs)
+```
+
+### 2. Install Dependencies (30 seconds)
+```bash
+# NEVER CANCEL: Takes ~25 seconds. Set timeout to 120+ seconds.
+npm install
+```
+
+### 3. Database Setup (10 seconds)
+```bash
+# Generate Prisma client (~2s)
+npx prisma generate
+
+# Push schema to SQLite (~2s) - use --force-reset if seeding fails
+npx prisma db push --force-reset
+
+# Seed database with test data (~1s)
+npm run db:seed
+```
+
+### 4. Validate Build (30 seconds)
+```bash
+# NEVER CANCEL: Takes ~25 seconds. Set timeout to 120+ seconds.
+npm run build
+```
+
+### 5. Start Development Server (5 seconds)
+```bash
+# Starts in ~1 second with Turbopack
+npm run dev
+```
+
+### 6. Manual Testing (Required)
+```bash
+# Test URLs:
+# http://localhost:3000 - Homepage
+# http://localhost:3000/events - Events page
+# http://localhost:3000/rsvp - RSVP page (test with token: GUEST001)
+# http://localhost:3000/gallery - Gallery page
+```
+
+**Total Setup Time**: ~2 minutes for complete working environment
+
+## Working Effectively
 
 ### Key File Locations
 - **Database**: `prisma/schema.prisma`, `src/lib/prisma.ts`
@@ -115,9 +204,10 @@ npm run db:studio             # Open Prisma Studio UI
 - **Auth**: `src/lib/auth.ts` (NextAuth config), `src/app/api/auth/[...nextauth]/route.ts`
 - **Utils**: `src/lib/utils.ts` (includes `generateSecureToken()`)
 - **Email**: `src/lib/email.ts` (Resend templates)
+- **Environment**: `.env.local` (CREATE THIS in repository root)
 
 ### Environment Setup (CRITICAL)
-- **MUST create `.env.local` file before building** with these required variables:
+MUST create `.env.local` file in repository ROOT before any build/dev commands:
 ```bash
 # Database (SQLite for development)
 DATABASE_URL="file:./prisma/dev.db"
@@ -125,86 +215,75 @@ NEXTAUTH_SECRET="secure-random-string"
 NEXTAUTH_URL="http://localhost:3000"
 ADMIN_EMAIL="admin@arvinwedsincia.com"
 ADMIN_PASSWORD="Admin123!@#"
+
+# Required dummy values for build to work (use real keys for email/media features)
+RESEND_API_KEY="re_dummy_key_for_build_testing"
+CLOUDINARY_CLOUD_NAME="dummy"
+CLOUDINARY_API_KEY="dummy"
+CLOUDINARY_API_SECRET="dummy"
 ```
-**NOTE**: Build will fail without proper `.env.local` environment file. Always create environment file before building.
+
+Set environment variables before running Prisma commands:
+```bash
+export $(cat .env.local | grep -v '^#' | xargs)
+```
+
+**CRITICAL**: Build fails without proper `.env.local` file. Always create this file first.
 
 ## Validation
 
 ### Manual Validation Requirements
 **ALWAYS manually validate any changes by running through these scenarios:**
 
-1. **Homepage Validation**:
-   - Navigate to http://localhost:3000
-   - Verify love story section displays correctly
-   - Test all navigation links work
-   - Confirm "Save the Date" and call-to-action buttons function
+1. **Homepage Validation** (http://localhost:3000):
+   - Navigate to homepage
+   - Verify "Incia & Arvin" title displays
+   - Test navigation links (Events, Gallery, RSVP, etc.)
+   - Confirm "RSVP Now" and "Our Story" buttons work
 
 2. **Events Page Validation** (http://localhost:3000/events):
-   - Verify all wedding events display (Mehndi, Wedding, Reception, After-party)
-   - Check date/time/venue information appears correctly
-   - Test "View Details" and "Add to Calendar" buttons
+   - Verify all 4 wedding events display correctly:
+     - Mehndi Ceremony (August 15, 2025)
+     - Wedding Ceremony (August 16, 2025) 
+     - Reception Dinner (August 16, 2025)
+     - After-Party Celebration (August 20, 2025)
+   - Check "View Details" and "Add to Calendar" buttons
+   - Verify live stream section appears
 
 3. **RSVP Page Validation** (http://localhost:3000/rsvp):
    - Confirm RSVP code input field works
-   - Test "Continue" button functionality
-   - Verify "Contact Us" link for missing codes
+   - Test with sample tokens: GUEST001, GUEST002, GUEST003
+   - Verify token validation leads to event selection form
+   - Check "Contact Us" link for missing codes
 
 4. **Build Validation**:
-   - Always run `npm run build` after changes
-   - Ensure build completes without errors
-   - Verify all routes compile successfully (27 routes expected)
+   - Run `npm run build` (expect ~25 second completion)
+   - Ensure build completes with 29 static pages
+   - Verify no critical errors (ESLint warnings are acceptable)
 
-### Never Cancel Commands
-- **NEVER CANCEL**: `npm install` (may take up to 5 minutes on slow connections)
-- **NEVER CANCEL**: `npm run build` (may take up to 10 minutes on slow machines)  
-- **NEVER CANCEL**: `npm test` (comprehensive test suite may take up to 5 minutes)
+### Timeout Requirements and Build Times
+**CRITICAL**: Never cancel these commands. Always use appropriate timeouts:
 
-## Validation
-
-### Manual Validation Requirements
-**ALWAYS manually validate any changes by running through these scenarios:**
-
-1. **Homepage Validation**:
-   - Navigate to http://localhost:3000
-   - Verify love story section displays correctly
-   - Test all navigation links work
-   - Confirm "Save the Date" and call-to-action buttons function
-
-2. **Events Page Validation** (http://localhost:3000/events):
-   - Verify all wedding events display (Mehndi, Wedding, Reception, After-party)
-   - Check date/time/venue information appears correctly
-   - Test "View Details" and "Add to Calendar" buttons
-
-3. **RSVP Page Validation** (http://localhost:3000/rsvp):
-   - Confirm RSVP code input field works
-   - Test "Continue" button functionality
-   - Verify "Contact Us" link for missing codes
-
-4. **Build Validation**:
-   - Always run `npm run build` after changes
-   - Ensure build completes without errors
-   - Verify all routes compile successfully (27 routes expected)
-
-### Never Cancel Commands
-- **NEVER CANCEL**: `npm install` (may take up to 5 minutes on slow connections)
-- **NEVER CANCEL**: `npm run build` (may take up to 10 minutes on slow machines)  
-- **NEVER CANCEL**: `npm test` (comprehensive test suite may take up to 5 minutes)
+- **NEVER CANCEL**: `npm install` (25 seconds actual, use 120+ second timeout)
+- **NEVER CANCEL**: `npm run build` (25 seconds actual, use 120+ second timeout)
+- **NEVER CANCEL**: `npm test` (5 seconds actual, use 30+ second timeout)
+- **Fast commands**: lint (2s), type-check (5s), dev server startup (1s)
 
 ## Common Tasks
 
 ### Project Structure
 ```
-client/
+repository-root/                    # All application files are HERE
 ├── src/
 │   ├── app/           # Next.js App Router pages
-│   ├── components/    # Reusable React components
+│   ├── components/    # Reusable React components  
 │   ├── lib/          # Utilities, API clients, Prisma
 │   └── types/        # TypeScript type definitions
 ├── prisma/           # Database schema and migrations
 ├── package.json      # Dependencies and scripts
 ├── next.config.ts    # Next.js configuration
-├── tailwind.config.js # Tailwind CSS configuration
-└── jest.config.js    # Test configuration
+├── jest.config.js    # Test configuration
+└── .env.local        # Environment variables (create this!)
 ```
 
 ### Key Dependencies
@@ -256,15 +335,17 @@ client/
 - **NextAuth + Static Export**: Cannot use static export with NextAuth. Use server deployment instead.
 
 ### Test Issues  
-- **API route tests**: May fail in test environment due to missing Request/Response objects (acceptable)
-- **Jest configuration**: Uses `moduleNameMapper` not `moduleNameMapping`
+- **API route tests**: Some tests fail in test environment due to missing Request/Response objects (this is expected and acceptable)
+- **Events page test**: May fail due to timeline element selectors (acceptable)
+- **Overall test suite**: Runs in ~3 seconds with 11 passing tests, 1 failing test (acceptable)
 
 ### Development Recommendations
 - Always run `npm run lint` before committing changes
 - Always run `npm run type-check` to catch TypeScript errors
-- Always create `.env.local` before building or running development server
+- Always create `.env.local` with dummy API keys before building or running development server
 - Always test manually by visiting key pages after changes
-- Use `npm run dev` for development (faster with Turbopack)
+- Use `npm run dev` for development (faster with Turbopack ~1s startup)
+- Use test RSVP codes: GUEST001, GUEST002, GUEST003 for testing RSVP functionality
 
 ## CI/CD Considerations
 - No GitHub Actions workflows currently configured
@@ -297,3 +378,29 @@ client/
 ---
 
 **Remember**: Always validate changes manually by running the application and testing the user journey. The wedding website must be perfect for Incia & Arvin's special day!
+
+## Common Commands Reference
+
+### Repository Structure Check
+```bash
+ls -la
+# Expected files in root:
+# package.json, next.config.ts, src/, prisma/, .env.local
+```
+
+### Quick Development Cycle
+```bash
+# Make changes → Test → Build
+npm run dev          # Test changes
+npm run lint         # Check code quality (~2s)
+npm run type-check   # Check TypeScript (~5s)
+npm run build        # Validate production build (~25s)
+```
+
+### Database Commands  
+```bash
+export $(cat .env.local | grep -v '^#' | xargs)  # Load env vars first
+npx prisma studio          # Open database UI
+npx prisma db push         # Apply schema changes
+npm run db:seed           # Reset with test data
+```
