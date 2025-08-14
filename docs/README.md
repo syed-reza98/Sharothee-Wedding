@@ -1,5 +1,20 @@
 # Incia & Arvin's Wedding Website 💍
 
+## 🚨 Repository Restructure Notice
+
+**Important Update (2025-08-13)**: This repository has been restructured for improved organization:
+- **Application files**: Moved from `/client/` to repository root  
+- **Documentation**: Consolidated under `/docs/` directory
+- **Legacy files**: Reorganized under `/other_files/` and credentials folders
+
+**New Documentation Structure:**
+- [Environment Setup Guide](Environments.md) - Development and production configuration
+- [Testing Guide](Testing.md) - Testing strategy and implementation  
+- [Repository Review](REPOSITORY_REVIEW_2025-08-14.md) - Comprehensive post-restructure analysis
+- [Security Policy](../SECURITY.md) - Security guidelines and credentials handling
+
+---
+
 A comprehensive, bilingual (English & Bengali) wedding website serving as the digital hub for a multi-day wedding celebration. This modern web application provides guests with event information, RSVP management, photo galleries, live streaming, and more.
 
 ## ✨ Features
@@ -58,7 +73,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 1. **Clone the repository**
    ```bash
    git clone https://github.com/syed-reza98/Sharothee-Wedding.git
-   cd Sharothee-Wedding/client
+   cd Sharothee-Wedding
    ```
 
 2. **Install dependencies**
@@ -72,19 +87,19 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
    ```
    Configure the following variables:
    ```env
-   # Database
-   DATABASE_URL="mysql://username:password@localhost:3306/wedding_db"
+   # Database (SQLite for development, MySQL for production)
+   DATABASE_URL="file:./prisma/dev.db"
    
    # NextAuth
    NEXTAUTH_SECRET="your-secret-key"
    NEXTAUTH_URL="http://localhost:3000"
    
-   # Cloudinary
+   # Cloudinary (optional)
    CLOUDINARY_CLOUD_NAME="your-cloud-name"
    CLOUDINARY_API_KEY="your-api-key"
    CLOUDINARY_API_SECRET="your-api-secret"
    
-   # Resend
+   # Resend (optional)
    RESEND_API_KEY="your-resend-api-key"
    ```
 
@@ -154,17 +169,24 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 ## 📁 Project Structure
 
 ```
-client/
+Sharothee-Wedding/
 ├── src/
 │   ├── app/                 # Next.js app directory
 │   ├── components/          # React components
 │   ├── lib/                 # Utility functions
 │   ├── types/              # TypeScript type definitions
 │   └── styles/             # Global styles
+├── docs/                   # Documentation
+│   ├── README.md           # This file
+│   ├── Environments.md     # Environment configuration
+│   ├── Testing.md          # Testing guide
+│   └── *.md               # Other documentation
 ├── prisma/
 │   └── schema.prisma       # Database schema
 ├── public/                 # Static assets
-└── package.json
+├── .env.example           # Environment template
+├── SECURITY.md            # Security policy
+└── package.json           # Dependencies and scripts
 ```
 
 ## 🤝 Contributing
