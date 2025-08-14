@@ -93,8 +93,10 @@ async function main() {
 
   // Create sample guests
   const guests = await Promise.all([
-    prisma.guest.create({
-      data: {
+    prisma.guest.upsert({
+      where: { email: 'john@example.com' },
+      update: {},
+      create: {
         name: 'John Smith',
         email: 'john@example.com',
         token: 'GUEST001',
@@ -102,8 +104,10 @@ async function main() {
         phone: '+1-555-0123',
       },
     }),
-    prisma.guest.create({
-      data: {
+    prisma.guest.upsert({
+      where: { email: 'sarah@example.com' },
+      update: {},
+      create: {
         name: 'Sarah Johnson',
         email: 'sarah@example.com',
         token: 'GUEST002',
@@ -111,8 +115,10 @@ async function main() {
         phone: '+1-555-0124',
       },
     }),
-    prisma.guest.create({
-      data: {
+    prisma.guest.upsert({
+      where: { email: 'ahmed@example.com' },
+      update: {},
+      create: {
         name: 'Ahmed Rahman',
         email: 'ahmed@example.com',
         token: 'GUEST003',

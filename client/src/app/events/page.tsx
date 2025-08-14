@@ -82,7 +82,7 @@ export default function EventsPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8 sm:space-y-12">
             {events.map((event, index) => (
-              <div key={event.id} className="relative">
+              <div key={event.id} className="relative" data-testid="event-timeline-item">
                 {/* Timeline Line */}
                 {index < events.length - 1 && (
                   <div className="hidden lg:block absolute left-1/2 transform -translate-x-0.5 top-32 w-0.5 h-24 bg-primary/30"></div>
@@ -93,9 +93,9 @@ export default function EventsPage() {
                 }`}>
                   {/* Event Details */}
                   <div className={`${index % 2 === 0 ? '' : 'lg:col-start-2'}`}>
-                    <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1" data-testid="event-card">
                       <div className="flex flex-col sm:flex-row sm:items-center mb-4 sm:mb-6">
-                        <span className="text-3xl sm:text-4xl mr-0 sm:mr-4 mb-2 sm:mb-0">{getEventIcon(event.type)}</span>
+                        <span className="text-3xl sm:text-4xl mr-0 sm:mr-4 mb-2 sm:mb-0" data-testid="event-icon">{getEventIcon(event.type)}</span>
                         <div className="flex-1">
                           <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-semibold text-secondary mb-2">
                             {event.title}

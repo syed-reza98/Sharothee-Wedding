@@ -208,9 +208,12 @@ export default function GalleryPage() {
             >
               Share Photos
             </Link>
-            <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 text-sm sm:text-base">
+            <a
+              href="/api/media/download"
+              className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 text-sm sm:text-base"
+            >
               Download All Photos
-            </button>
+            </a>
           </div>
         </div>
       </section>

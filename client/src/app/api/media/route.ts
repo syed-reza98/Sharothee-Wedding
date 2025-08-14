@@ -3,6 +3,10 @@ import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinary"
+import fs from "fs"
+import path from "path"
+
+export const runtime = 'nodejs'
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,21 +25,66 @@ export async function GET(request: NextRequest) {
     if (album) where.album = album
     if (approved !== null) where.approved = approved === 'true'
 
-    const [media] = await Promise.all([
-      prisma.mediaItem.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: [
-          { featured: 'desc' },
-          { updatedAt: 'desc' }
-        ]
-      }),
-      prisma.mediaItem.count({ where })
-    ])
+    const media = await prisma.mediaItem.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: [
+        { featured: 'desc' },
+        { updatedAt: 'desc' }
+      ]
+    })
 
-    // Return just the media array for frontend compatibility
-    return NextResponse.json(media)
+    // Augment with local images from client/image directory (dev-friendly)
+    // These are served via /api/media/static/[...filename]
+    const imagesDir = path.join(process.cwd(), 'image')
+    let localItems: Array<{
+      id: string
+      title: string
+      description?: string
+      url: string
+      type: 'IMAGE'
+      category: string
+      order: number
+    }> = []
+
+    try {
+      const entries = fs.readdirSync(imagesDir, { withFileTypes: true })
+      const imageFiles = entries.filter(e => e.isFile())
+      localItems = imageFiles.map((e, idx) => {
+        const file = e.name
+        const title = file.replace(/\.[^.]+$/, '')
+        // Derive a simple category from filename keywords to blend with theme
+        const lower = title.toLowerCase()
+        const categoryGuess = lower.includes('mehndi') ? 'Mehndi'
+          : lower.includes('wedding') ? 'Wedding'
+          : lower.includes('reception') ? 'Reception'
+          : lower.includes('dubai') ? 'Dubai Engagement'
+          : lower.includes('tuscany') ? 'Tuscany Proposal'
+          : 'Memories'
+
+        // Build static URL ensuring we encode spaces and special chars
+        const encoded = encodeURIComponent(file)
+        const url = `/api/media/static/${encoded}`
+
+        return {
+          id: `local-${idx}-${file}`,
+          title,
+          description: undefined,
+          url,
+          type: 'IMAGE' as const,
+          category: categoryGuess,
+          order: 1000 + idx,
+        }
+      })
+    } catch {}
+
+    // Optionally filter by requested category if provided
+    const merged = category
+      ? [...media, ...localItems.filter(i => i.category === category)]
+      : [...media, ...localItems]
+
+    return NextResponse.json(merged)
 
   } catch (error) {
     console.error("Error fetching media:", error)

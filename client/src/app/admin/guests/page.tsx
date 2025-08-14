@@ -11,6 +11,23 @@ interface Guest {
   country?: string
   phone?: string
   createdAt: string
+  rsvps?: Array<{
+    id: string
+    event: {
+      id: string
+      title: string
+    }
+  }>
+}
+
+interface GuestsResponse {
+  guests: Guest[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
 }
 
 export default function AdminGuestsPage() {
@@ -18,6 +35,12 @@ export default function AdminGuestsPage() {
   const [guests, setGuests] = useState<Guest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
   useEffect(() => {
     fetchGuests()
@@ -26,11 +49,19 @@ export default function AdminGuestsPage() {
   const fetchGuests = async () => {
     try {
       const response = await fetch('/api/guests')
+      
       if (response.ok) {
-        const data = await response.json()
-        setGuests(data)
+        const data: GuestsResponse = await response.json()
+        // API returns { guests: [...], pagination: {...} }
+        setGuests(data.guests || [])
+        setPagination(data.pagination || {
+          page: 1,
+          limit: 10,
+          total: 0,
+          totalPages: 0
+        })
       } else {
-        setError('Failed to fetch guests')
+        setError(`Failed to fetch guests: ${response.status}`)
       }
     } catch (err) {
       setError('Error loading guests')
@@ -59,7 +90,14 @@ export default function AdminGuestsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Guest Management</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Guest Management</h1>
+          {pagination.total > 0 && (
+            <p className="text-sm text-gray-500 mt-1">
+              {pagination.total} total guest{pagination.total !== 1 ? 's' : ''}
+            </p>
+          )}
+        </div>
         <button className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg">
           Add Guest
         </button>
