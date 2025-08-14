@@ -109,7 +109,7 @@ CLOUDINARY_API_KEY="dummy"
 CLOUDINARY_API_SECRET="dummy"
 
 # Database setup (REQUIRED for app to work)
-export $(cat .env.local | grep -v '^#' | xargs)  # Load environment variables
+set -a; source .env.local; set +a                # Securely load environment variables
 npx prisma generate            # Generate client (~2s)
 npx prisma db push             # Push schema to SQLite (~2s)
 npx prisma db push --force-reset  # Reset database if needed
