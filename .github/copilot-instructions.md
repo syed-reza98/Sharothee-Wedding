@@ -228,6 +228,9 @@ Set environment variables before running Prisma commands:
 export $(cat .env.local | grep -v '^#' | xargs)
 ```
 
+**Recommended (Safe): Install [dotenv-cli](https://github.com/dotenv-org/dotenv-cli) globally:**
+```bash
+npm install -g dotenv-cli
 **CRITICAL**: Build fails without proper `.env.local` file. Always create this file first.
 
 ## Validation
