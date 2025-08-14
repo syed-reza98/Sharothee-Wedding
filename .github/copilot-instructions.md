@@ -399,7 +399,7 @@ npm run build        # Validate production build (~25s)
 
 ### Database Commands  
 ```bash
-export $(cat .env.local | grep -v '^#' | xargs)  # Load env vars first
+set -a; source .env.local; set +a   # Safely load env vars first
 npx prisma studio          # Open database UI
 npx prisma db push         # Apply schema changes
 npm run db:seed           # Reset with test data
