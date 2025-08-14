@@ -152,7 +152,9 @@ CLOUDINARY_API_SECRET="dummy"
 EOF
 
 # Load environment variables for Prisma commands
-export $(cat .env.local | grep -v '^#' | xargs)
+set -a
+source .env.local
+set +a
 ```
 
 ### 2. Install Dependencies (30 seconds)
