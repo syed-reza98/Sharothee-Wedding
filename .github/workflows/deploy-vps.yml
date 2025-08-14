@@ -124,21 +124,22 @@ jobs:
       - name: Create production environment file on VPS
         shell: bash
         run: |
-          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
-            "mkdir -p '${VPS_PROJECT_DIR}' && cat > '${VPS_PROJECT_DIR}/.env.local' << 'ENV_EOF'
-NODE_ENV=production
-DATABASE_URL=\"mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}\"
-NEXTAUTH_SECRET=\"qX8mK9vL2nP5sR7tY1wE3rT6uI8oP0aS9dF4gH7jK2lM5nQ8rT1wE6rY9uI3oP5aS2dF7gH0jK4lM8nQ1rT6wE9uI2oP5\"
-NEXTAUTH_URL=\"https://arvinwedsincia.com\"
-NEXT_PUBLIC_APP_URL=\"https://arvinwedsincia.com\"
-ADMIN_EMAIL=\"admin@arvinwedsincia.com\"
-ADMIN_PASSWORD=\"Admin123!@#\"
-RESEND_API_KEY=\"re_placeholder_update_with_real_resend_api_key\"
-CLOUDINARY_CLOUD_NAME=\"placeholder_cloudinary_name\"
-CLOUDINARY_API_KEY=\"placeholder_cloudinary_api_key\"
-CLOUDINARY_API_SECRET=\"placeholder_cloudinary_api_secret\"
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=\"AIza_placeholder_google_maps_api_key\"
-ENV_EOF"
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" "
+          mkdir -p '${VPS_PROJECT_DIR}' && cat > '${VPS_PROJECT_DIR}/.env.local' << 'ENV_EOF'
+          NODE_ENV=production
+          DATABASE_URL=\"mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}\"
+          NEXTAUTH_SECRET=\"qX8mK9vL2nP5sR7tY1wE3rT6uI8oP0aS9dF4gH7jK2lM5nQ8rT1wE6rY9uI3oP5aS2dF7gH0jK4lM8nQ1rT6wE9uI2oP5\"
+          NEXTAUTH_URL=\"https://arvinwedsincia.com\"
+          NEXT_PUBLIC_APP_URL=\"https://arvinwedsincia.com\"
+          ADMIN_EMAIL=\"admin@arvinwedsincia.com\"
+          ADMIN_PASSWORD=\"Admin123!@#\"
+          RESEND_API_KEY=\"re_placeholder_update_with_real_resend_api_key\"
+          CLOUDINARY_CLOUD_NAME=\"placeholder_cloudinary_name\"
+          CLOUDINARY_API_KEY=\"placeholder_cloudinary_api_key\"
+          CLOUDINARY_API_SECRET=\"placeholder_cloudinary_api_secret\"
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=\"AIza_placeholder_google_maps_api_key\"
+          ENV_EOF
+          "
 
       - name: Rsync project to VPS
         shell: bash
