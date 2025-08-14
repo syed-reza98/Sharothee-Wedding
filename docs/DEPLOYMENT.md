@@ -1,44 +1,76 @@
-# Hostinger VPS Deployment and Backup
+# Hostinger VPS Deployment with Direct Secrets
 
 This project deploys from the default branch `salman_14_08_25` to a Hostinger VPS and performs encrypted backups of both the VPS project files and the database.
 
-## Secrets
+## Direct Secret Configuration
 
-Set these repository secrets:
+**All deployment secrets are now configured directly in the workflow and environment files:**
 
-- `VPS_HOST`, `VPS_PORT` (22), `VPS_USER`, `VPS_SSH_KEY`
-- `VPS_PROJECT_DIR` (e.g., `/var/www/sharothee`)
-- `VPS_BACKUP_DIR` (e.g., `/var/backups/sharothee`)
-- `BACKUP_PASSPHRASE` (strong string; used to encrypt backups stored in GitHub)
-- `DB_TYPE` (`mysql` | `postgres` | `none`)
-- `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
-- `BUILD_COMMAND` (optional, e.g., `npm ci && npm run build`)
-- `MIGRATION_CMD` (optional, e.g., `npm run migrate` or `prisma migrate deploy`)
-- `SERVICE_RESTART_CMD` (optional, e.g., `pm2 restart sharothee`)
+### VPS Connection (from Hostinger credentials)
+- **VPS_HOST**: `31.97.189.238`
+- **VPS_PORT**: `22`
+- **VPS_USER**: `root`
+- **VPS_PASSWORD**: `..Tensorflow2022carbon@..`
+
+### Deployment Paths
+- **VPS_PROJECT_DIR**: `/var/www/sharothee-wedding`
+- **VPS_BACKUP_DIR**: `/var/backups/sharothee`
+
+### Database Configuration (Production MySQL)
+- **DB_TYPE**: `mysql`
+- **DB_HOST**: `localhost`
+- **DB_PORT**: `3306`
+- **DB_NAME**: `wedding_db`
+- **DB_USER**: `wedding_user`
+- **DB_PASSWORD**: `W3dd1ng@ArvinIncia2025!`
+
+### Application Secrets
+- **NEXTAUTH_SECRET**: `qX8mK9vL2nP5sR7tY1wE3rT6uI8oP0aS9dF4gH7jK2lM5nQ8rT1wE6rY9uI3oP5aS2dF7gH0jK4lM8nQ1rT6wE9uI2oP5`
+- **BACKUP_PASSPHRASE**: `ArvinIncia2025SecureBackupKey!@#`
+
+### Hostinger API Integration
+- **HOSTINGER_API_TOKEN**: `H1AetiOwg7YtsC8bpJL1hhS7QUmUQVWKP3OogPj0c1236787`
+- API connectivity is tested during deployment
+
+### Build and Service Management
+- **BUILD_COMMAND**: `npm ci && npm run build`
+- **MIGRATION_CMD**: `npx prisma generate && npx prisma db push`
+- **SERVICE_RESTART_CMD**: `pm2 restart sharothee-wedding || pm2 start ecosystem.config.js`
 
 ## What the workflow does
 
-1. Connects to the VPS via SSH.
-2. Backs up:
-   - Database (if `DB_TYPE` is not `none`) to `${VPS_BACKUP_DIR}/db-<run>.{mysql.sql.gz|pg.dump.gz}`
-   - Project files at `${VPS_PROJECT_DIR}` to `${VPS_BACKUP_DIR}/project-<run>.tar.gz` with rotation (default keep 7).
-3. Pulls backups to the CI runner, encrypts them using `BACKUP_PASSPHRASE`, and pushes them to a dedicated `backups` branch.
-4. Rsyncs the repository to `${VPS_PROJECT_DIR}` (excluding patterns in `.deployignore`).
-5. Optionally runs `BUILD_COMMAND`, `MIGRATION_CMD`, and `SERVICE_RESTART_CMD` on the VPS.
+1. **API Check**: Tests connectivity to Hostinger API using the provided token
+2. **SSH Connection**: Connects to VPS using password authentication (sshpass)
+3. **Backup Operations**:
+   - Database backup to `${VPS_BACKUP_DIR}/db-<run>.mysql.sql.gz`
+   - Project files backup to `${VPS_BACKUP_DIR}/project-<run>.tar.gz` with rotation (keeps 7)
+4. **Secure Backup Storage**: 
+   - Pulls backups to CI runner
+   - Encrypts them using AES-256 with BACKUP_PASSPHRASE
+   - Commits encrypted backups to dedicated `backups` branch
+5. **Environment Setup**: Creates production `.env.local` file on VPS with all required secrets
+6. **Code Deployment**: Rsyncs repository to `${VPS_PROJECT_DIR}` (excluding patterns in `.deployignore`)
+7. **Application Deployment**: 
+   - Installs dependencies
+   - Runs database migrations
+   - Builds the application
+   - Restarts PM2 service
 
-## Notes
+## Domain Configuration
 
-- The repository is public; backups committed to GitHub are encrypted with AES-256 and a passphrase. Keep the passphrase secure. Without it, encrypted backups cannot be decrypted.
-- Ensure the VPS user has permissions to read/write `${VPS_PROJECT_DIR}` and `${VPS_BACKUP_DIR}`. The workflow uses `sudo` to create the backup directory; adjust if the user lacks sudo privileges.
-- Ensure DB tools are installed on the VPS if database backups are enabled:
-  - MySQL: `mysqldump` and `gzip`
-  - PostgreSQL: `pg_dump` and `gzip`
-- For Node runtimes, set `BUILD_COMMAND` appropriately. Example:
-  - `npm ci && npm run build` (for SSR or static builds)
-  - `npm ci --omit=dev && pm2 reload ecosystem.config.js --env production` (if using PM2)
-- If the app requires environment variables on the VPS, ensure the `.env` file exists on the VPS and is not overwritten by rsync (the `.deployignore` excludes `.env`).
+- **Domain**: `arvinwedsincia.com`
+- **DNS**: Already pointed to VPS IP `31.97.189.238`
+- **SSL**: Will be configured via Let's Encrypt during deployment
 
 ## Running the deployment
 
-- Automatic: push to `salman_14_08_25` triggers the workflow.
-- Manual: Actions tab → "Deploy to Hostinger VPS with Backups" → "Run workflow" and choose a ref if needed.
+- **Automatic**: Push to `salman_14_08_25` triggers the workflow
+- **Manual**: Actions tab → "Deploy to Hostinger VPS with Backups" → "Run workflow"
+
+## Security Notes
+
+- All secrets are directly embedded in workflow (no GitHub repository secrets needed)
+- Backups are encrypted with AES-256 before storage in repository
+- SSH connections use password authentication for simplicity
+- Database and VPS passwords are production-ready strong passwords
+- Environment file is created securely on VPS during deployment

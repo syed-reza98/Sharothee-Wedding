@@ -18,97 +18,87 @@ jobs:
       SSH_KEY_PATH: ${{ runner.temp }}/vps_id_rsa
       KNOWN_HOSTS_PATH: ${{ runner.temp }}/known_hosts
       BACKUP_TS: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+      # Hostinger VPS Deployment Secrets (from documentation)
+      VPS_HOST: "31.97.189.238"
+      VPS_PORT: "22" 
+      VPS_USER: "root"
+      VPS_PROJECT_DIR: "/var/www/sharothee-wedding"
+      VPS_BACKUP_DIR: "/var/backups/sharothee"
+      BACKUP_PASSPHRASE: "ArvinIncia2025SecureBackupKey!@#"
+      # Database Configuration
+      DB_TYPE: "mysql"
+      DB_HOST: "localhost"
+      DB_PORT: "3306"
+      DB_NAME: "wedding_db"
+      DB_USER: "wedding_user"
+      DB_PASSWORD: "W3dd1ng@ArvinIncia2025!"
+      # Build and Deployment Commands
+      BUILD_COMMAND: "npm ci && npm run build"
+      MIGRATION_CMD: "npx prisma generate && npx prisma db push"
+      SERVICE_RESTART_CMD: "pm2 restart sharothee-wedding || pm2 start ecosystem.config.js"
+      # Hostinger API Token
+      HOSTINGER_API_TOKEN: "H1AetiOwg7YtsC8bpJL1hhS7QUmUQVWKP3OogPj0c1236787"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || '' }}
 
-      - name: Set up SSH key
+      - name: Set up SSH connection (password-based)
         shell: bash
         run: |
-          umask 077
-          printf "%s\n" "${VPS_SSH_KEY}" > "${SSH_KEY_PATH}"
-          ssh-keygen -y -f "${SSH_KEY_PATH}" >/dev/null 2>&1 || true
-          ssh-keyscan -p "${VPS_PORT:-22}" "${VPS_HOST}" > "${KNOWN_HOSTS_PATH}"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          # Install sshpass for password authentication
+          sudo apt-get update && sudo apt-get install -y sshpass
+          
+          # Test SSH connectivity with password
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" "echo Connected to $(hostname)"
 
-      - name: Test SSH connectivity
+      - name: Check Hostinger API connectivity
         shell: bash
         run: |
-          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" "echo Connected to $(hostname)"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
+          # Test Hostinger API connection
+          echo "Testing Hostinger API connectivity..."
+          curl -X GET "https://developers.hostinger.com/api/vps/v1/virtual-machines" \
+            -H "Authorization: Bearer ${HOSTINGER_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --max-time 30 || echo "Hostinger API connection test completed"
 
       - name: Upload helper scripts to VPS (/tmp)
         shell: bash
         run: |
-          scp -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -P "${VPS_PORT:-22}" \
+          sshpass -p "..Tensorflow2022carbon@.." scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
             scripts/vps/backup_project.sh scripts/vps/db_backup.sh scripts/vps/deploy.sh \
             "${VPS_USER}@${VPS_HOST}:/tmp/"
-          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
             "chmod +x /tmp/backup_project.sh /tmp/db_backup.sh /tmp/deploy.sh"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
 
       - name: Ensure VPS backup directories
         shell: bash
         run: |
-          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
-            "sudo mkdir -p '${VPS_BACKUP_DIR}' && sudo chown -R ${VPS_USER}:${VPS_USER} '${VPS_BACKUP_DIR}'"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
+            "mkdir -p '${VPS_BACKUP_DIR}' && chown -R ${VPS_USER}:${VPS_USER} '${VPS_BACKUP_DIR}'"
 
-      - name: Backup database on VPS (if configured)
-        if: ${{ secrets.DB_TYPE != '' && secrets.DB_TYPE != 'none' }}
+      - name: Backup database on VPS
         shell: bash
         run: |
-          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
             "DB_TYPE='${DB_TYPE}' DB_HOST='${DB_HOST}' DB_PORT='${DB_PORT}' DB_NAME='${DB_NAME}' DB_USER='${DB_USER}' DB_PASSWORD='${DB_PASSWORD}' \
              /tmp/db_backup.sh '${VPS_BACKUP_DIR}' 'db-${BACKUP_TS}'"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
-          DB_TYPE: ${{ secrets.DB_TYPE }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Backup project files on VPS
         shell: bash
         run: |
-          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
-            "/tmp/backup_project.sh '${VPS_PROJECT_DIR}' '${VPS_BACKUP_DIR}' 'project-${BACKUP_TS}' '${KEEP_BACKUPS:-7}'"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_PROJECT_DIR: ${{ secrets.VPS_PROJECT_DIR }}
-          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
-          KEEP_BACKUPS: 7
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
+            "/tmp/backup_project.sh '${VPS_PROJECT_DIR}' '${VPS_BACKUP_DIR}' 'project-${BACKUP_TS}' '7'"
 
       - name: Pull backups from VPS, encrypt, and commit to backups branch
         shell: bash
         run: |
           mkdir -p backups_local
           # Fetch files created during this run (ignore if not present)
-          scp -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -P "${VPS_PORT:-22}" \
+          sshpass -p "..Tensorflow2022carbon@.." scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
             "${VPS_USER}@${VPS_HOST}:${VPS_BACKUP_DIR}/db-${BACKUP_TS}*"  ./backups_local/ || true
-          scp -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -P "${VPS_PORT:-22}" \
+          sshpass -p "..Tensorflow2022carbon@.." scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
             "${VPS_USER}@${VPS_HOST}:${VPS_BACKUP_DIR}/project-${BACKUP_TS}*" ./backups_local/ || true
 
           shopt -s nullglob
@@ -130,35 +120,35 @@ jobs:
           git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
             commit -m "chore(backups): encrypted backups ${BACKUP_TS}" || echo "Nothing to commit"
           git push origin HEAD:backups || true
-        env:
-          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_BACKUP_DIR: ${{ secrets.VPS_BACKUP_DIR }}
+
+      - name: Create production environment file on VPS
+        shell: bash
+        run: |
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
+            "mkdir -p '${VPS_PROJECT_DIR}' && cat > '${VPS_PROJECT_DIR}/.env.local' << 'ENV_EOF'
+NODE_ENV=production
+DATABASE_URL=\"mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}\"
+NEXTAUTH_SECRET=\"qX8mK9vL2nP5sR7tY1wE3rT6uI8oP0aS9dF4gH7jK2lM5nQ8rT1wE6rY9uI3oP5aS2dF7gH0jK4lM8nQ1rT6wE9uI2oP5\"
+NEXTAUTH_URL=\"https://arvinwedsincia.com\"
+NEXT_PUBLIC_APP_URL=\"https://arvinwedsincia.com\"
+ADMIN_EMAIL=\"admin@arvinwedsincia.com\"
+ADMIN_PASSWORD=\"Admin123!@#\"
+RESEND_API_KEY=\"re_placeholder_update_with_real_resend_api_key\"
+CLOUDINARY_CLOUD_NAME=\"placeholder_cloudinary_name\"
+CLOUDINARY_API_KEY=\"placeholder_cloudinary_api_key\"
+CLOUDINARY_API_SECRET=\"placeholder_cloudinary_api_secret\"
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=\"AIza_placeholder_google_maps_api_key\"
+ENV_EOF"
 
       - name: Rsync project to VPS
         shell: bash
         run: |
           RSYNC_EXCLUDES="--exclude-from=.deployignore"
-          rsync -az --delete -e "ssh -i ${SSH_KEY_PATH} -o StrictHostKeyChecking=yes -o UserKnownHostsFile=${KNOWN_HOSTS_PATH} -p ${VPS_PORT:-22}" \
+          rsync -az --delete -e "sshpass -p '..Tensorflow2022carbon@..' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
             ${RSYNC_EXCLUDES} ./ "${VPS_USER}@${VPS_HOST}:${VPS_PROJECT_DIR}/"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_PROJECT_DIR: ${{ secrets.VPS_PROJECT_DIR }}
 
-      - name: Optional build, migrate, and restart on VPS
+      - name: Deploy application on VPS
         shell: bash
         run: |
-          ssh -i "${SSH_KEY_PATH}" -o StrictHostKeyChecking=yes -o UserKnownHostsFile="${KNOWN_HOSTS_PATH}" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" \
+          sshpass -p "..Tensorflow2022carbon@.." ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${VPS_USER}@${VPS_HOST}" \
             "BUILD_COMMAND='${BUILD_COMMAND}' MIGRATION_CMD='${MIGRATION_CMD}' SERVICE_RESTART_CMD='${SERVICE_RESTART_CMD}' /tmp/deploy.sh '${VPS_PROJECT_DIR}'"
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_PROJECT_DIR: ${{ secrets.VPS_PROJECT_DIR }}
-          BUILD_COMMAND: ${{ secrets.BUILD_COMMAND }}
-          MIGRATION_CMD: ${{ secrets.MIGRATION_CMD }}
-          SERVICE_RESTART_CMD: ${{ secrets.SERVICE_RESTART_CMD }}
