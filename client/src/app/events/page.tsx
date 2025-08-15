@@ -38,7 +38,7 @@ export default function EventsPage() {
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case 'holud': return '�';
+      case 'holud': return '🌼';
       case 'akdh': return '💍';
       case 'reception': return '🥂';
       case 'after_party': return '🏖️';
