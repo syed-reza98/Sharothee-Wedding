@@ -6,54 +6,40 @@ export default function EventsPage() {
   const events = [
     {
       id: 1,
-      title: "Mehndi Ceremony",
-      date: "2025-08-15",
-      time: "6:00 PM",
-      venue: "Private Residence",
+      title: "Holud",
+      date: "2025-12-16",
+      venue: "Dhaka Regency Hotel",
       location: "Dhaka, Bangladesh",
-      description: "Traditional mehndi ceremony with family and close friends. Join us for an evening of music, dance, and beautiful henna designs.",
-      dressCode: "Colorful traditional attire",
-      type: "mehndi"
+      description: "A vibrant Holud night with music, turmeric, and celebration with family and friends.",
+      dressCode: "Yellow/bright traditional attire",
+      type: "holud"
     },
     {
       id: 2,
-      title: "Wedding Ceremony",
-      date: "2025-08-16",
-      time: "10:00 AM",
+      title: "Akdh",
+      date: "2025-12-17",
       venue: "Dhaka Regency Hotel",
       location: "Dhaka, Bangladesh",
-      description: "The main wedding ceremony where Incia and Arvin will exchange vows surrounded by family and friends.",
+      description: "The Akdh ceremony where Incia and Arvin will be officially joined in marriage.",
       dressCode: "Formal traditional or western attire",
-      type: "wedding"
+      type: "akdh"
     },
     {
       id: 3,
-      title: "Reception Dinner",
-      date: "2025-08-16",
-      time: "7:00 PM",
+      title: "Reception",
+      date: "2025-12-18",
       venue: "Dhaka Regency Hotel",
       location: "Dhaka, Bangladesh",
-      description: "Evening reception with dinner, speeches, and dancing to celebrate the newlyweds.",
+      description: "Reception dinner and celebration with speeches, music, and dancing.",
       dressCode: "Formal attire",
       type: "reception"
-    },
-    {
-      id: 4,
-      title: "After-Party Celebration",
-      date: "2025-08-20",
-      time: "4:00 PM",
-      venue: "Private Beach Resort",
-      location: "Phu Quoc, Vietnam",
-      description: "Extended celebration on the beautiful beaches of Phu Quoc with intimate friends and family.",
-      dressCode: "Beach formal / Resort wear",
-      type: "after_party"
     }
   ];
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case 'mehndi': return '🎨';
-      case 'wedding': return '💍';
+      case 'holud': return '�';
+      case 'akdh': return '💍';
       case 'reception': return '🥂';
       case 'after_party': return '🏖️';
       default: return '🎉';
@@ -76,6 +62,7 @@ export default function EventsPage() {
           </p>
         </div>
       </section>
+
 
       {/* Events Timeline */}
       <section className="pb-16 sm:pb-20">
@@ -109,7 +96,6 @@ export default function EventsPage() {
                                 day: 'numeric' 
                               })}
                             </span>
-                            <span className="flex items-center">🕐 {event.time}</span>
                           </div>
                         </div>
                       </div>
