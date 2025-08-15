@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Wedding Website Support
+    url: mailto:hello@inciaandarvins.wedding
+    about: Get direct support for wedding-related questions
+  - name: 📚 Project Documentation
+    url: https://github.com/syed-reza98/Sharothee-Wedding/blob/main/README.md
+    about: View comprehensive project documentation
+  - name: 🚀 Deployment Guide
+    url: https://github.com/syed-reza98/Sharothee-Wedding/blob/main/HOSTINGER_VPS_DEPLOYMENT_PLAN.md
+    about: Complete deployment guide for Hostinger VPS
+  - name: 🎯 Current Project Status
+    url: https://github.com/syed-reza98/Sharothee-Wedding/projects
+    about: View active project boards and sprint progress
