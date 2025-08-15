@@ -206,6 +206,5 @@ export default function RSVPPage() {
       <Footer />
     </div>
   );
-// Removed duplicate and extra closing tags
 
 }
