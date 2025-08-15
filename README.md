@@ -133,7 +133,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
    # Set production environment variables
    export NODE_ENV=production
    export DATABASE_URL="mysql://username:password@hostname:3306/wedding_db"
-   export NEXTAUTH_URL="https://yourdomain.com"
+   export NEXTAUTH_URL="https://arvinwedsincia.com"
    ```
 
 3. **Build and Deploy**
