@@ -12,7 +12,10 @@ export default function RSVPPage() {
     setStep(3);
   };
   // Start directly at RSVP form (step 2), no code required
-  const [step, setStep] = useState(2);
+  // Use environment variable to control whether to skip RSVP code step (demo vs production)
+  const [step, setStep] = useState(
+    typeof process !== "undefined" && process.env.NEXT_PUBLIC_SKIP_RSVP_CODE === "true" ? 2 : 1
+  );
   // Demo guest info and events for visibility (replace with real fetch in production)
   const [guestInfo] = useState({
     id: 'demo',
