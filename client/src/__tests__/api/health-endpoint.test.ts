@@ -1,3 +1,7 @@
+/** @jest-environment node */
+
+jest.mock('@/lib/prisma')
+
 import { GET } from '@/app/api/health/route'
 
 describe('Health API Endpoint', () => {

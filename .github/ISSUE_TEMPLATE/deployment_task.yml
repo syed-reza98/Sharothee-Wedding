@@ -1,0 +1,183 @@
+name: 🚀 Deployment Task
+description: Track deployment activities and releases
+title: '[DEPLOY] '
+labels: ['deployment', 'high-priority']
+assignees:
+  - syed-reza98
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Track deployment activities and releases for the wedding website. Please provide comprehensive deployment information.
+
+  - type: dropdown
+    id: deployment-type
+    attributes:
+      label: 🚀 Deployment Type
+      description: What type of deployment is this?
+      options:
+        - Production Release
+        - Staging Deployment
+        - Hotfix Deployment
+        - Feature Deployment
+        - Database Migration
+        - Security Update
+        - Performance Update
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 🌍 Target Environment
+      description: Which environment is being deployed to?
+      options:
+        - Production (Hostinger VPS)
+        - Staging
+        - Development
+        - Testing
+    validations:
+      required: true
+
+  - type: textarea
+    id: deployment-description
+    attributes:
+      label: 📋 Deployment Description
+      description: What changes are being deployed?
+      placeholder: Describe what's being deployed...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: components
+    attributes:
+      label: 🔧 Components Affected
+      description: Which components are being deployed/updated?
+      options:
+        - label: Frontend (Next.js)
+        - label: Database (MySQL/Prisma)
+        - label: API Routes
+        - label: Authentication (NextAuth)
+        - label: Email System (Resend)
+        - label: Media Uploads (Cloudinary)
+        - label: Admin Dashboard
+        - label: RSVP System
+        - label: Event Management
+        - label: Photo Gallery
+
+  - type: textarea
+    id: related-issues
+    attributes:
+      label: 🔗 Related Issues
+      description: Link any related issues or pull requests
+      placeholder: |
+        Fixes #123
+        Implements #456
+        Related to #789
+
+  - type: checkboxes
+    id: pre-deployment-checklist
+    attributes:
+      label: ✅ Pre-Deployment Checklist
+      description: Complete these steps before deployment
+      options:
+        - label: Code reviewed and approved
+        - label: Tests passing locally
+        - label: Environment variables updated
+        - label: Database backup created
+        - label: SSL certificates validated
+        - label: Domain DNS verified
+        - label: Nginx configuration updated
+        - label: PM2 process configuration ready
+
+  - type: textarea
+    id: deployment-commands
+    attributes:
+      label: ⚡ Deployment Commands
+      description: List the deployment commands to run
+      placeholder: |
+        npm run build
+        npm run db:migrate
+        pm2 restart all
+      render: bash
+
+  - type: checkboxes
+    id: post-deployment-checklist
+    attributes:
+      label: ✅ Post-Deployment Checklist
+      description: Verify these after deployment
+      options:
+        - label: Website loads correctly
+        - label: RSVP system functional
+        - label: Admin login working
+        - label: Email notifications working
+        - label: Database connections stable
+        - label: SSL certificate active
+        - label: All critical pages accessible
+        - label: Mobile responsiveness verified
+
+  - type: dropdown
+    id: rollback-plan
+    attributes:
+      label: 🔄 Rollback Plan
+      description: What's the rollback strategy if deployment fails?
+      options:
+        - label: Git revert to previous commit
+        - label: Restore database backup
+        - label: Switch to previous PM2 config
+        - label: Restore entire VPS snapshot
+        - label: Manual rollback steps documented
+    validations:
+      required: true
+
+  - type: textarea
+    id: testing-notes
+    attributes:
+      label: 🧪 Testing Notes
+      description: How was this deployment tested?
+      placeholder: |
+        - Local testing completed
+        - Staging environment verified
+        - Browser compatibility checked
+        - Mobile testing completed
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: 🔴 Urgency Level
+      description: How urgent is this deployment?
+      options:
+        - Critical (Must deploy immediately)
+        - High (Deploy within 24 hours)
+        - Medium (Deploy within week)
+        - Low (Can wait for next sprint)
+    validations:
+      required: true
+
+  - type: textarea
+    id: monitoring
+    attributes:
+      label: 📊 Monitoring & Validation
+      description: How will you monitor the deployment success?
+      placeholder: |
+        - Check application logs
+        - Monitor response times
+        - Verify user flows
+        - Check error rates
+
+  - type: textarea
+    id: communication
+    attributes:
+      label: 📢 Communication Plan
+      description: Who needs to be notified about this deployment?
+      placeholder: |
+        - Notify couple about changes
+        - Update wedding party
+        - Social media announcement
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: 📝 Additional Notes
+      description: Any additional deployment considerations
+      placeholder: Special considerations, dependencies, timing constraints...

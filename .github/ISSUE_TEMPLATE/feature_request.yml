@@ -1,0 +1,135 @@
+name: ✨ Feature Request
+description: Suggest a new feature for the wedding website
+title: '[FEATURE] '
+labels: ['enhancement', 'needs-review']
+assignees:
+  - syed-reza98
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature! Please provide as much detail as possible to help us understand your request.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: ✨ Feature Description
+      description: A clear and concise description of the feature you'd like to see.
+      placeholder: Describe the feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-solving
+    attributes:
+      label: 🎯 Problem It Solves
+      description: What problem does this feature solve? What need does it address?
+      placeholder: This feature would help with...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: 💡 Proposed Solution
+      description: How would you like this feature to work?
+      placeholder: The feature should work like...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: 🏷️ Feature Category
+      description: What category does this feature fall into?
+      options:
+        - RSVP Management
+        - Event Information
+        - Photo Gallery
+        - Admin Dashboard
+        - Guest Experience
+        - Mobile Responsiveness
+        - Performance
+        - Security
+        - Integration
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: 👤 Primary User
+      description: Who would primarily benefit from this feature?
+      options:
+        - Wedding Guests
+        - Admin/Couple
+        - Both
+        - Vendors/Third Parties
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 🔴 Priority
+      description: How important is this feature?
+      options:
+        - Must Have (Essential for wedding)
+        - Should Have (Important for user experience)
+        - Could Have (Nice to have)
+        - Won't Have (Future consideration)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: timeline
+    attributes:
+      label: ⏰ Preferred Timeline
+      description: When would you like this feature implemented?
+      options:
+        - ASAP (Before next deployment)
+        - Before Wedding Day
+        - Post-Wedding Enhancement
+        - Future Release
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: device-support
+    attributes:
+      label: 📱 Device Support Needed
+      description: Which devices should support this feature?
+      options:
+        - label: Mobile phones
+        - label: Tablets
+        - label: Desktop computers
+        - label: All devices
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔄 Alternatives Considered
+      description: Have you considered any alternative solutions?
+      placeholder: Other ways this could be implemented...
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: ⚙️ Technical Considerations
+      description: Any technical aspects or constraints to consider?
+      placeholder: Database changes, API integrations, performance impacts...
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: 🎨 Mockups/Examples
+      description: If you have mockups, wireframes, or examples, please share them here.
+      placeholder: Paste images or links here...
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 🔗 Additional Context
+      description: Add any other context or screenshots about the feature request here.
+      placeholder: Any additional information...

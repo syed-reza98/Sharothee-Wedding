@@ -1,96 +1,245 @@
-'use client'
+'use client';
 
-import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+
+interface DashboardStats {
+  totalGuests: number
+  totalRSVPs: number
+  attendingCount: number
+  pendingCount: number
+  mediaCount: number
+  contactRequests: number
+}
 
 export default function AdminDashboard() {
-  const { data: session } = useSession()
+  const [stats, setStats] = useState<DashboardStats>({
+    totalGuests: 0,
+    totalRSVPs: 0,
+    attendingCount: 0,
+    pendingCount: 0,
+    mediaCount: 0,
+    contactRequests: 0
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Fetch dashboard statistics
+    const fetchStats = async () => {
+      try {
+        // This would typically fetch from multiple API endpoints
+        // For now, using placeholder data
+        setStats({
+          totalGuests: 150,
+          totalRSVPs: 120,
+          attendingCount: 95,
+          pendingCount: 25,
+          mediaCount: 45,
+          contactRequests: 8
+        })
+      } catch (error) {
+        console.error('Error fetching stats:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStats()
+  }, [])
+
+  const quickStats = [
+    {
+      title: 'Total Guests',
+      value: stats.totalGuests,
+      icon: '👥',
+      href: '/admin/guests',
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'RSVPs Received',
+      value: stats.totalRSVPs,
+      icon: '✉️',
+      href: '/admin/guests',
+      color: 'bg-green-500'
+    },
+    {
+      title: 'Attending',
+      value: stats.attendingCount,
+      icon: '✅',
+      href: '/admin/guests',
+      color: 'bg-emerald-500'
+    },
+    {
+      title: 'Pending RSVPs',
+      value: stats.pendingCount,
+      icon: '⏳',
+      href: '/admin/guests',
+      color: 'bg-yellow-500'
+    },
+    {
+      title: 'Media Items',
+      value: stats.mediaCount,
+      icon: '📸',
+      href: '/admin/media',
+      color: 'bg-purple-500'
+    },
+    {
+      title: 'Contact Requests',
+      value: stats.contactRequests,
+      icon: '📧',
+      href: '/admin/contacts',
+      color: 'bg-red-500'
+    }
+  ]
+
+  const quickActions = [
+    {
+      title: 'Add New Guest',
+      description: 'Invite a new guest to the wedding',
+      href: '/admin/guests',
+      icon: '👥',
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'Upload Media',
+      description: 'Add photos or videos to the gallery',
+      href: '/admin/media',
+      icon: '📸',
+      color: 'bg-purple-500'
+    },
+    {
+      title: 'Create Event',
+      description: 'Add a new wedding event',
+      href: '/admin/events',
+      icon: '📅',
+      color: 'bg-green-500'
+    },
+    {
+      title: 'Manage Streams',
+      description: 'Set up live streaming for events',
+      href: '/admin/streams',
+      icon: '📺',
+      color: 'bg-red-500'
+    }
+  ]
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Welcome to the wedding administration panel
+        <h1 className="text-3xl font-serif font-light text-secondary mb-2">
+          Dashboard
+        </h1>
+        <p className="text-muted">
+          Welcome back! Here&apos;s what&apos;s happening with Incia & Arvin&apos;s wedding.
         </p>
       </div>
 
-      <div className="bg-white overflow-hidden shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <div className="sm:flex sm:items-center sm:justify-between">
-            <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Welcome back, {session?.user?.name}!
-              </h3>
-              <div className="mt-2 max-w-xl text-sm text-gray-500">
-                <p>
-                  You are logged in as an administrator. Use the navigation menu to manage
-                  guests, events, media, and other wedding-related content.
-                </p>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {quickStats.map((stat, index) => (
+          <Link
+            key={index}
+            href={stat.href}
+            className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className={`${stat.color} rounded-lg p-3 mr-4`}>
+                <span className="text-white text-xl">{stat.icon}</span>
+              </div>
+              <div>
+                <p className="text-sm text-muted">{stat.title}</p>
+                <p className="text-2xl font-semibold text-foreground">{stat.value}</p>
               </div>
             </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* RSVP Overview */}
+      <div className="bg-white rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-secondary mb-4">RSVP Overview</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-green-600">{stats.attendingCount}</div>
+            <div className="text-sm text-muted">Attending</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-yellow-600">{stats.pendingCount}</div>
+            <div className="text-sm text-muted">Pending</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-red-600">
+              {stats.totalGuests - stats.totalRSVPs}
+            </div>
+            <div className="text-sm text-muted">No Response</div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Dashboard cards will be added here */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <span className="text-2xl">👥</span>
+      {/* Quick Actions */}
+      <div>
+        <h2 className="text-xl font-semibold text-secondary mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {quickActions.map((action, index) => (
+            <Link
+              key={index}
+              href={action.href}
+              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className={`${action.color} rounded-lg p-3 mb-3`}>
+                  <span className="text-white text-xl">{action.icon}</span>
+                </div>
+                <h3 className="font-semibold text-foreground mb-2">{action.title}</h3>
+                <p className="text-sm text-muted">{action.description}</p>
               </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Guests
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    Loading...
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
+            </Link>
+          ))}
         </div>
+      </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <span className="text-2xl">📅</span>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Events
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    Loading...
-                  </dd>
-                </dl>
-              </div>
+      {/* Recent Activity */}
+      <div className="bg-white rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-secondary mb-4">Recent Activity</h2>
+        <div className="space-y-3">
+          <div className="flex items-center py-2">
+            <div className="bg-green-100 rounded-full p-2 mr-3">
+              <span className="text-green-600">✅</span>
             </div>
+            <div>
+              <p className="font-medium">New RSVP received</p>
+              <p className="text-sm text-muted">John & Jane Doe confirmed attendance</p>
+            </div>
+            <div className="ml-auto text-sm text-muted">2 hours ago</div>
           </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <span className="text-2xl">📸</span>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Media Items
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    Loading...
-                  </dd>
-                </dl>
-              </div>
+          <div className="flex items-center py-2">
+            <div className="bg-blue-100 rounded-full p-2 mr-3">
+              <span className="text-blue-600">📸</span>
             </div>
+            <div>
+              <p className="font-medium">New media uploaded</p>
+              <p className="text-sm text-muted">3 photos added to engagement album</p>
+            </div>
+            <div className="ml-auto text-sm text-muted">5 hours ago</div>
+          </div>
+          <div className="flex items-center py-2">
+            <div className="bg-purple-100 rounded-full p-2 mr-3">
+              <span className="text-purple-600">📧</span>
+            </div>
+            <div>
+              <p className="font-medium">Contact form submission</p>
+              <p className="text-sm text-muted">Question about dietary preferences</p>
+            </div>
+            <div className="ml-auto text-sm text-muted">1 day ago</div>
           </div>
         </div>
       </div>

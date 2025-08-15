@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
 interface MediaItem {
   id: string
@@ -19,7 +19,6 @@ interface MediaItem {
 }
 
 export default function AdminMediaPage() {
-  const { data: session } = useSession()
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -37,7 +36,8 @@ export default function AdminMediaPage() {
       } else {
         setError('Failed to fetch media')
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Error loading media:', error)
       setError('Error loading media')
     } finally {
       setLoading(false)
@@ -59,7 +59,8 @@ export default function AdminMediaPage() {
       } else {
         setError('Failed to update media item')
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Error updating media item:', error)
       setError('Error updating media item')
     }
   }
@@ -77,7 +78,8 @@ export default function AdminMediaPage() {
       } else {
         setError('Failed to delete media item')
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Error deleting media item:', error)
       setError('Error deleting media item')
     }
   }
@@ -134,9 +136,11 @@ export default function AdminMediaPage() {
             <div key={item.id} className="bg-white border rounded-lg overflow-hidden shadow-sm">
               <div className="aspect-video bg-gray-100 flex items-center justify-center">
                 {item.type === 'IMAGE' ? (
-                  <img
+                  <Image
                     src={item.url}
                     alt={item.title || 'Wedding photo'}
+                    width={400}
+                    height={300}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement

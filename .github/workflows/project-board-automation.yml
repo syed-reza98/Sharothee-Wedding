@@ -1,0 +1,79 @@
+name: 📋 Project Board Automation
+
+on:
+  issues:
+    types: [opened, closed, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  move-to-boards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move Bug Reports to Bug Triage
+        if: contains(github.event.issue.title, '[BUG]') && github.event.action == 'opened'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Add to Bug Tracking Board - New column
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🐛 **Bug Report Received**\n\nThis bug has been added to the Bug Tracking board for triage.\n\n**Next Steps:**\n1. Technical investigation\n2. Impact assessment\n3. Priority assignment\n4. Resolution planning\n\n*Automated by Sharothee Wedding Project Management*'
+            })
+
+      - name: Move Feature Requests to Backlog
+        if: contains(github.event.issue.title, '[FEATURE]') && github.event.action == 'opened'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✨ **Feature Request Received**\n\nThis feature request has been added to the Product Backlog for review.\n\n**Next Steps:**\n1. Requirements analysis\n2. Technical feasibility review\n3. Priority assessment\n4. Sprint planning consideration\n\n*Automated by Sharothee Wedding Project Management*'
+            })
+
+      - name: Move Deployment Tasks to Pipeline
+        if: contains(github.event.issue.title, '[DEPLOY]') && github.event.action == 'opened'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 **Deployment Task Created**\n\nThis deployment has been added to the Deployment Pipeline board.\n\n**Pre-Deployment Checklist:**\n- [ ] Code review complete\n- [ ] Tests passing\n- [ ] Environment variables ready\n- [ ] Database backup created\n- [ ] Rollback plan confirmed\n\n*Automated by Sharothee Wedding Project Management*'
+            })
+
+      - name: Celebrate Issue Completion
+        if: github.event.action == 'closed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.issue.title;
+            let message = '🎉 **Issue Completed!**\n\n';
+            
+            if (title.includes('[BUG]')) {
+              message += 'Bug has been resolved and verified. Thank you for reporting this issue!';
+            } else if (title.includes('[FEATURE]')) {
+              message += 'Feature has been implemented and deployed. Enjoy the new functionality!';
+            } else if (title.includes('[DEPLOY]')) {
+              message += 'Deployment completed successfully. All systems are operational!';
+            } else {
+              message += 'Task completed successfully!';
+            }
+            
+            message += '\n\n*Automated by Sharothee Wedding Project Management*';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            })
