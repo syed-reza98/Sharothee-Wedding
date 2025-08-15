@@ -10,7 +10,6 @@ export default function RSVPPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStep(3);
-  };
   // Start directly at RSVP form (step 2), no code required
   // Use environment variable to control whether to skip RSVP code step (demo vs production)
   const [step, setStep] = useState(
