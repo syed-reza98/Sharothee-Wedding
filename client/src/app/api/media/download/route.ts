@@ -6,7 +6,8 @@ import JSZip from "jszip";
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function GET(_req: NextRequest) {
+export async function GET(req: NextRequest) {
+  console.log('Download request from:', req.url)
   try {
     const imagesDir = path.join(process.cwd(), 'image');
     const zip = new JSZip();
@@ -21,7 +22,8 @@ export async function GET(_req: NextRequest) {
         zip.file(ent.name, data);
         count++;
       }
-    } catch (e) {
+    } catch (error) {
+      console.error('Directory read error:', error)
       // If directory missing or read fails, proceed with empty zip
     }
 
@@ -40,7 +42,8 @@ export async function GET(_req: NextRequest) {
         'X-Photo-Count': String(count),
       },
     });
-  } catch (err) {
+  } catch (error) {
+    console.error('Archive creation failed:', error)
     return NextResponse.json({ error: 'Failed to create archive' }, { status: 500 });
   }
 }

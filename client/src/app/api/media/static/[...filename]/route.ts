@@ -13,7 +13,8 @@ function listLocalImages(): string[] {
     return files
       .filter((f) => f.isFile())
       .map((f) => f.name);
-  } catch (e) {
+  } catch (error) {
+    console.error('Error reading images directory:', error)
     return [];
   }
 }
@@ -37,7 +38,7 @@ function getContentType(fileName: string): string {
 
 export async function GET(
   _req: Request,
-  context: { params: Promise<{ filename: string[] }> } | any
+  context: { params: Promise<{ filename: string[] }> }
 ) {
   const params = await context.params;
   const requested = Array.isArray(params?.filename)
@@ -66,7 +67,8 @@ export async function GET(
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
-  } catch (err) {
+  } catch (error) {
+    console.error('File read error:', error)
     return NextResponse.json({ error: "Failed to read file" }, { status: 500 });
   }
 }

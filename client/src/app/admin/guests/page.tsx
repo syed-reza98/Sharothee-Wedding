@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 
 interface Guest {
   id: string
@@ -31,7 +30,6 @@ interface GuestsResponse {
 }
 
 export default function AdminGuestsPage() {
-  const { data: session } = useSession()
   const [guests, setGuests] = useState<Guest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -63,7 +61,8 @@ export default function AdminGuestsPage() {
       } else {
         setError(`Failed to fetch guests: ${response.status}`)
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Error loading guests:', error)
       setError('Error loading guests')
     } finally {
       setLoading(false)
