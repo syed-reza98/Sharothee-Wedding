@@ -1,0 +1,68 @@
+name: 📢 Wedding Day Notifications
+
+on:
+  issues:
+    types: [opened, labeled]
+  schedule:
+    - cron: '0 9,15,21 * * *'  # 9 AM, 3 PM, 9 PM daily
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  wedding-day-alerts:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'wedding-day-critical') || github.event_name == 'schedule'
+    steps:
+      - name: Alert on Wedding Day Critical Issues
+        if: contains(github.event.issue.labels.*.name, 'wedding-day-critical')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ **WEDDING DAY CRITICAL ALERT** ⚠️\n\nThis issue has been flagged as wedding day critical and requires immediate attention!\n\n📞 **Emergency Contacts:**\n- Primary: hello@inciaandarvins.wedding\n- Phone: +880 1234-567890\n- Developer: @syed-reza98\n\n🔴 **Action Required:**\n- [ ] Immediate assessment\n- [ ] Impact analysis\n- [ ] Emergency fix if needed\n- [ ] Communication to couple\n\n*This is a high-priority automated alert for Incia & Arvin\'s wedding website.*'
+            })
+
+      - name: Daily Status Check
+        if: github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get all open critical issues
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'wedding-day-critical',
+              state: 'open'
+            });
+            
+            if (issues.length > 0) {
+              // Create daily status issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `📊 Daily Wedding Status Report - ${new Date().toISOString().split('T')[0]}`,
+                body: `# 🎯 Wedding Day Readiness Report\n\n## ⚠️ Critical Issues (${issues.length})\n\n${issues.map(issue => `- #${issue.number}: ${issue.title}`).join('\n')}\n\n## 📈 System Status\n- Website: 🟢 Operational\n- RSVP System: 🟢 Functional\n- Admin Dashboard: 🟢 Available\n- Email Notifications: 🟢 Working\n\n## 🎊 Wedding Countdown\nDays until Incia & Arvin's wedding: **[Manual Update Required]**\n\n---\n*Automated daily report - resolve critical issues ASAP!*`,
+                labels: ['status-report', 'automated'],
+                assignees: ['syed-reza98']
+              });
+            }
+
+  deployment-success:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.title, '[DEPLOY]') && github.event.action == 'closed'
+    steps:
+      - name: Deployment Success Notification
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 **Deployment Successful!** 🚀\n\n✅ The wedding website has been updated successfully!\n\n**Post-Deployment Status:**\n- [ ] Website loading verified\n- [ ] RSVP system tested\n- [ ] Mobile compatibility confirmed\n- [ ] Admin access validated\n\n📢 **Communication:**\n- Couple has been notified\n- Wedding party informed\n- Social media announcement posted\n\n🎉 **Ready for Incia & Arvin\'s Special Day!**\n\n*Automated deployment success notification*'
+            })

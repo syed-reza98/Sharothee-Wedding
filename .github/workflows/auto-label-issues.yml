@@ -1,0 +1,97 @@
+name: 🏷️ Auto Label Issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label Bug Reports
+        if: contains(github.event.issue.title, '[BUG]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['bug', 'needs-triage']
+            })
+
+      - name: Label Feature Requests
+        if: contains(github.event.issue.title, '[FEATURE]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['enhancement', 'needs-review']
+            })
+
+      - name: Label Deployment Tasks
+        if: contains(github.event.issue.title, '[DEPLOY]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['deployment', 'high-priority']
+            })
+
+      - name: Label Critical Issues
+        if: contains(github.event.issue.body, 'Critical') || contains(github.event.issue.body, 'Must Have')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['critical', 'urgent']
+            })
+
+      - name: Auto-assign to Owner
+        if: contains(github.event.issue.labels.*.name, 'critical') || contains(github.event.issue.title, '[DEPLOY]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addAssignees({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              assignees: ['syed-reza98']
+            })
+
+      - name: Add Wedding Day Priority
+        if: contains(github.event.issue.body, 'Before Wedding Day') || contains(github.event.issue.body, 'wedding day')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['wedding-day-critical']
+            })
+
+      - name: Comment on Critical Issues
+        if: contains(github.event.issue.labels.*.name, 'critical')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚨 **Critical Issue Detected**\n\nThis issue has been marked as critical and requires immediate attention. @syed-reza98 has been automatically assigned.\n\n**Next Steps:**\n- [ ] Investigate and assess impact\n- [ ] Create action plan\n- [ ] Implement fix\n- [ ] Test and validate\n- [ ] Deploy if necessary\n\n*This is an automated message from the Sharothee Wedding Project Management System.*'
+            })
