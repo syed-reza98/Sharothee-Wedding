@@ -1,2 +1,2 @@
-*Hotels**
+**Hotels**
   - name, address, phone(location)
