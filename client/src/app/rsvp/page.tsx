@@ -16,7 +16,7 @@ export default function RSVPPage() {
   const [step, setStep] = useState(
     typeof process !== "undefined" && process.env.NEXT_PUBLIC_SKIP_RSVP_CODE === "true" ? 2 : 1
   );
-  // Demo guest info and events for visibility (replace with real fetch in production)
+  // TODO: Replace demo guest info and events with real fetch in production
   const [guestInfo] = useState({
     id: 'demo',
     name: 'Guest',
