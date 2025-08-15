@@ -183,19 +183,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions or support, please contact the development team or create an issue in the repository.
 
-<!-- 
-
-BACKUP_DIR="/backups"
-DATE=$(date +%Y%m%d_%H%M%S)
-APP_DIR="/var/www/sharothee-wedding"
-
-mkdir -p $BACKUP_DIR
-
-# Database backup
-mysqldump -u root -p wedding_db > /var/www/db_backup.sql
-
-mysqldump -u username -p database_name > data-dump.sql
-
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'W3dd1ng@ArvinIncia2025!Secure';
-
-use wedding_db; -->

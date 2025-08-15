@@ -29,8 +29,52 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Backup Script
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Variables (adjust if you like)
+DATE=$(date +%F_%H%M%S)
+PROJECT_DIR="/var/www/wedding/"
+BACKUP_DIR="/var/backups/wedding/"
+
+# Create backup directory
+sudo mkdir -p "$BACKUP_DIR"
+
+# Create a gzipped tarball
+sudo tar -czf "/var/backups/wedding/Sharothee-Wedding.tar.gz" \ -C "$(dirname "$PROJECT_DIR")" "$(basename "$PROJECT_DIR")"
+
+# Verify
+ls -lh "$BACKUP_DIR"/Sharothee-Wedding_${DATE}.tar.gz
+
+# Install zip if needed (Ubuntu/Debian)
+# sudo apt-get update && sudo apt-get install -y zip
+
+DATE=$(date +%F_%H%M%S)
+PROJECT_DIR="/var/www/wedding/"
+BACKUP_DIR="/var/backups/wedding/"
+sudo mkdir -p "$BACKUP_DIR"
+
+# Create a recursive zip
+sudo zip -r "/var/backups/wedding/Sharothee-Wedding.zip" "/var/www/wedding/client/"
+
+
+# Remove the zip file
+sudo rm -f "/var/backups/wedding/Sharothee-Wedding.zip"
+
+# Verify
+ls -lh "$BACKUP_DIR"/Sharothee-Wedding_${DATE}.zip
+
+
+
+# Database backup
+mysqldump -u root -p wedding_db > /var/www/db_backup.sql
+
+mysqldump -u username -p database_name > data-dump.sql
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'W3dd1ng@ArvinIncia2025!Secure';
+
+use wedding_db;
+
+
+
+mysqldump -u wedding_user -p'W3dd1ng@ArvinIncia2025!Secure' wedding_db > $BACKUP_DIR/wedding_db_$DATE.sql
