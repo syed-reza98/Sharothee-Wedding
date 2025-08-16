@@ -3,13 +3,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 
 export default function TravelPage() {
-  const accommodations = [
-    { name: "The Way Dhaka, Gulshan" },
-    { name: "Royal Park Residence Hotel" },
-    { name: "Lakeshore Suite" },
-    { name: "Space Apartments" },
-    { name: "Lakeshore Hotel" }
-  ];
+  // No longer using old accommodations array
 
   const transportation = [
     {
@@ -71,7 +65,7 @@ export default function TravelPage() {
     {
       title: "Weather",
       icon: "🌤️",
-      content: "August in Dhaka: Warm and humid (25-32°C). Pack light, breathable clothing. Occasional rain showers expected."
+      content: "December in Dhaka: Pleasant and cool (15-25°C). Expect dry weather, low humidity, and lots of sunshine. Light sweaters or shawls are recommended for evenings."
     },
     {
       title: "Currency",
@@ -119,22 +113,31 @@ export default function TravelPage() {
 
       {/* Accommodations */}
       <section className="pb-12 sm:pb-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-              Where to Stay
+              Accommodations
             </h2>
-            <p className="text-muted max-w-2xl mx-auto text-sm sm:text-base">
-              We&apos;ve arranged special rates at select hotels for your convenience.
-            </p>
           </div>
-
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-            {accommodations.map((hotel, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-xl p-6 flex items-center justify-center text-center text-lg font-semibold text-secondary hover:scale-105 transition-all duration-300 min-h-[100px]">
-                <span className="text-2xl mr-2" role="img" aria-label="hotel">🏨</span> {hotel.name}
-              </div>
-            ))}
+          <div className="grid sm:grid-cols-2 gap-8 mb-10">
+            {/* Lakeshore Grand Card */}
+            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Grand, Gulshan</h3>
+              <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps?q=Lakeshore+Grand+Gulshan+Dhaka&output=embed" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
+              <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
+            </div>
+            {/* Lakeshore Heights Card */}
+            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Heights, Gulshan</h3>
+              <iframe title="Lakeshore Heights Gulshan Map" src="https://www.google.com/maps?q=Lakeshore+Heights+Gulshan+Dhaka&output=embed" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
+              <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
+            </div>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-primary mb-2">Vietnam</h3>
+              <p className="text-gray-900 text-sm">The reservations for Accommodations will be made for all guests traveling from abroad by the Bride’s Family and Wedding Team.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -200,11 +203,6 @@ export default function TravelPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="bg-primary/10 rounded-lg p-3">
-                  <p className="text-sm text-primary font-medium">
-                    📋 {visa.assistance}
-                  </p>
-                </div>
               </div>
             ))}
           </div>
@@ -263,7 +261,12 @@ export default function TravelPage() {
           <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl max-w-sm sm:max-w-md mx-auto transform hover:scale-105 transition-transform duration-300">
             <div className="text-4xl sm:text-5xl mb-3 sm:mb-4">📞</div>
             <h3 className="font-semibold text-foreground mb-2 sm:mb-3 text-lg sm:text-xl">Emergency Travel Hotline</h3>
-            <p className="text-primary font-medium mb-1 sm:mb-2 text-lg sm:text-xl">+880 1234-911911</p>
+            <ul className="space-y-1 mb-4 sm:mb-6">
+              <li className="text-primary font-medium text-lg sm:text-xl">Rana: <a href="tel:+8801793403767" className="hover:underline">+880 17 9340 3767</a></li>
+              <li className="text-primary font-medium text-lg sm:text-xl">Tahamina: <a href="tel:+8801799997024" className="hover:underline">+880 17 9999 7024</a></li>
+              <li className="text-primary font-medium text-lg sm:text-xl">Fazlu: <a href="tel:+8801713302987" className="hover:underline">+880 17 1330 2987</a></li>
+              <li className="text-primary font-medium text-lg sm:text-xl">Lalin: <a href="tel:+8801730012090" className="hover:underline">+880 17 3001 2090</a></li>
+            </ul>
             <p className="text-xs sm:text-sm text-muted mb-4 sm:mb-6">Available 24/7 for urgent travel assistance</p>
             <Link
               href="/contact"

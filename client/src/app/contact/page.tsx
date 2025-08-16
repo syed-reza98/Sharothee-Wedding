@@ -53,17 +53,13 @@ export default function ContactPage() {
 
   const contacts = [
     {
-      title: "Wedding Coordinators",
-      people: [
-        { name: "Sarah Johnson", role: "Lead Coordinator", phone: "+880 1234-567890", email: "sarah@weddingplanner.com" },
-        { name: "Michael Chen", role: "Assistant Coordinator", phone: "+880 1234-567891", email: "michael@weddingplanner.com" }
-      ]
-    },
-    {
       title: "Emergency Contacts",
       people: [
-        { name: "Emergency Hotline", role: "24/7 Support", phone: "+880 1234-911911", email: "emergency@inciaandarvins.wedding" },
-        { name: "Hotel Concierge", role: "Guest Services", phone: "+880 1234-567892", email: "concierge@dhakaregency.com" }
+        { name: "Rana", role: "24/7 Support", phone: "+880 17 9340 3767" },
+        { name: "Tahamina", role: "24/7 Support", phone: "+880 17 9999 7024" },
+        { name: "Fazlu", role: "24/7 Support", phone: "+880 17 1330 2987" },
+        { name: "Lalin", role: "24/7 Support", phone: "+880 17 3001 2090" },
+  // ...existing code...
       ]
     }
   ];
@@ -215,135 +211,38 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div className="space-y-6 sm:space-y-8">
-              {/* Quick Contact */}
-              <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl">
-                <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-                  Quick Contact
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary">📧</span>
+
+              {/* Wedding Team Contacts */}
+              {/* Emergency Contacts Only */}
+              <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl border-2 border-primary">
+                <h3 className="text-xl sm:text-2xl font-serif font-semibold text-primary mb-4 sm:mb-6 text-center">Emergency Contacts</h3>
+                <div className="flex flex-col gap-4 items-center">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-md">
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Rana</span>
+                      <a href="tel:+8801793403767" className="text-primary hover:underline font-semibold text-base">+880 17 9340 3767</a>
                     </div>
-                    <div>
-                      <p className="font-medium text-foreground">Email</p>
-                      <p className="text-muted text-sm">contact@inciaandarvins.wedding</p>
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Tahamina</span>
+                      <a href="tel:+8801799997024" className="text-primary hover:underline font-semibold text-base">+880 17 9999 7024</a>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary">📱</span>
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Fazlu</span>
+                      <a href="tel:+8801713302987" className="text-primary hover:underline font-semibold text-base">+880 17 1330 2987</a>
                     </div>
-                    <div>
-                      <p className="font-medium text-foreground">WhatsApp</p>
-                      <p className="text-muted text-sm">+880 1234-567890</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary">📍</span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">Wedding Location</p>
-                      <p className="text-muted text-sm">Dhaka, Bangladesh</p>
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Lalin</span>
+                      <a href="tel:+8801730012090" className="text-primary hover:underline font-semibold text-base">+880 17 3001 2090</a>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Wedding Team Contacts */}
-              {contacts.map((contactGroup, groupIndex) => (
-                <div key={groupIndex} className="bg-white rounded-xl p-6 sm:p-8 shadow-xl">
-                  <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-                    {contactGroup.title}
-                  </h3>
-                  <div className="space-y-4">
-                    {contactGroup.people.map((person, personIndex) => (
-                      <div key={personIndex} className="border-b border-cream-100 pb-4 last:border-b-0 last:pb-0">
-                        <p className="font-medium text-foreground">{person.name}</p>
-                        <p className="text-sm text-muted mb-2">{person.role}</p>
-                        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-1 sm:space-y-0 text-sm">
-                          <a 
-                            href={`tel:${person.phone}`}
-                            className="text-primary hover:underline"
-                          >
-                            {person.phone}
-                          </a>
-                          <a 
-                            href={`mailto:${person.email}`}
-                            className="text-primary hover:underline"
-                          >
-                            {person.email}
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 sm:py-20 bg-white/50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-semibold text-primary mb-4 sm:mb-6 tracking-tight">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-muted text-base sm:text-lg font-normal">
-              Here are some common questions we receive. Don&apos;t see your question? Feel free to contact us!
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-8 sm:gap-10">
-            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
-              <div className="flex items-center mb-3">
-                <span className="text-primary text-2xl mr-2">❓</span>
-                <h3 className="font-serif font-semibold text-secondary text-lg">When should I RSVP?</h3>
-              </div>
-              <p className="text-gray-800 text-base font-normal">
-                Please RSVP as soon as possible, but no later than July 15, 2025. 
-                This helps us finalize catering and seating arrangements.
-              </p>
-            </div>
-            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
-              <div className="flex items-center mb-3">
-                <span className="text-primary text-2xl mr-2">👗</span>
-                <h3 className="font-serif font-semibold text-secondary text-lg">What&apos;s the dress code?</h3>
-              </div>
-              <p className="text-gray-800 text-base font-normal">
-                We&apos;ll have different dress codes for each event. Detailed information 
-                will be sent with your invitation and is available on our Events page.
-              </p>
-            </div>
-            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
-              <div className="flex items-center mb-3">
-                <span className="text-primary text-2xl mr-2">➕</span>
-                <h3 className="font-serif font-semibold text-secondary text-lg">Can I bring a plus-one?</h3>
-              </div>
-              <p className="text-gray-800 text-base font-normal">
-                Plus-one information is specified on your invitation. If you have 
-                questions about your invitation, please contact us directly.
-              </p>
-            </div>
-            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
-              <div className="flex items-center mb-3">
-                <span className="text-primary text-2xl mr-2">🥗</span>
-                <h3 className="font-serif font-semibold text-secondary text-lg">Will there be vegetarian/vegan options?</h3>
-              </div>
-              <p className="text-gray-800 text-base font-normal">
-                Yes! We&apos;ll have various dietary options available. Please let us know 
-                about any specific dietary requirements when you RSVP.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-16 sm:py-20 gradient-hero">
