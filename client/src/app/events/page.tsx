@@ -8,30 +8,30 @@ export default function EventsPage() {
       id: 1,
       title: "Holud",
       date: "2025-12-16",
-      venue: "Dhaka Regency Hotel",
+      venue: "Fourtis Platinum Ground",
       location: "Dhaka, Bangladesh",
-      description: "A vibrant Holud night with music, turmeric, and celebration with family and friends.",
-      dressCode: "Yellow/bright traditional attire",
+      description: "",
+      dressCode: "",
       type: "holud"
     },
     {
       id: 2,
       title: "Akdh",
       date: "2025-12-17",
-      venue: "Dhaka Regency Hotel",
+      venue: "Seraton Hotel",
       location: "Dhaka, Bangladesh",
-      description: "The Akdh ceremony where Incia and Arvin will be officially joined in marriage.",
-      dressCode: "Formal traditional or western attire",
+      description: "",
+      dressCode: "",
       type: "akdh"
     },
     {
       id: 3,
       title: "Reception",
       date: "2025-12-18",
-      venue: "Dhaka Regency Hotel",
+      venue: "BCFCC",
       location: "Dhaka, Bangladesh",
-      description: "Reception dinner and celebration with speeches, music, and dancing.",
-      dressCode: "Formal attire",
+      description: "",
+      dressCode: "",
       type: "reception"
     }
   ];
@@ -104,19 +104,18 @@ export default function EventsPage() {
                         <div className="flex items-start">
                           <span className="text-primary mr-3 text-lg flex-shrink-0">📍</span>
                           <div>
-                            <p className="font-medium text-foreground text-sm sm:text-base">{event.venue}</p>
-                            <p className="text-muted text-xs sm:text-sm">{event.location}</p>
+                            <p className="font-bold text-gray-900 text-base sm:text-lg">{event.venue}</p>
+                            <p className="text-gray-900 text-sm sm:text-base">{event.location}</p>
                           </div>
                         </div>
                         
                         <div className="flex items-start">
-                          <span className="text-primary mr-3 text-lg flex-shrink-0">👗</span>
-                          <p className="text-muted text-xs sm:text-sm">{event.dressCode}</p>
+                          {/* Dress code removed as requested */}
                         </div>
                       </div>
                       
                       <p className="text-muted leading-relaxed mb-6 text-sm sm:text-base">
-                        {event.description}
+                        {/* Description removed as requested */}
                       </p>
                       
                       <div className="flex flex-col sm:flex-row gap-3">
