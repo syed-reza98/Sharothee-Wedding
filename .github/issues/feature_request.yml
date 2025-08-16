@@ -1,0 +1,49 @@
+---
+title: "[FEATURE] Home Page UI/UX Comprehensive Review and Recommendations"
+labels:
+  - enhancement
+  - needs-review
+---
+
+## 🔗 Additional Context
+Review is based on heuristics and industry best practices for wedding/event websites. See also related deployment, documentation, and guest-experience issues in the repo.
+
+## 🔄 Alternatives Considered
+Reference other top wedding website templates and Next.js best practices. Consider external audits or automated Lighthouse/axe CI scans for objective measures.
+
+## 📱 Device Support Needed
+true,true,true,true
+
+## 🏷️ Feature Category
+Guest Experience
+
+## ✨ Feature Description
+Comprehensive UI/UX review of the Home page for arvinwedsincia.com, focusing on clarity, accessibility, design consistency, navigation, responsiveness, performance, and best practices. This includes actionable feedback on hero section, navigation, content hierarchy, RSVP flow, image optimization, mobile experience, accessibility, and microcopy.
+
+## 🎨 Mockups/Examples
+Refer to popular wedding site designs and Figma community templates for hero layout, navigation, and CTA placement. Consider adding screenshots of current and proposed Home page layouts.
+
+## 🔴 Priority
+Must Have (Essential for wedding)
+
+## 🎯 Problem It Solves
+The current Home page may not fully meet modern wedding website standards for clarity, conversion, accessibility, and mobile experience. Potential issues include unclear hero messaging, insufficient CTAs, inconsistent navigation, poor image optimization, low accessibility (contrast, headings, keyboard), missing structured data for SEO, and lack of content hierarchy.
+
+## 💡 Proposed Solution
+- Refactor the hero section for immediate clarity: couple names, date, location, contrast, and visible CTAs (RSVP/Directions).
+- Improve navigation with persistent and keyboard-accessible menus.
+- Implement a clear content hierarchy: countdown, event previews, venue/map, RSVP quick start, gallery teaser, registry, and contact blocks.
+- Optimize all images (next/image, srcset, compression, priority for LCP).
+- Enhance accessibility: semantic headings, ARIA landmarks, skip links, alt text, visible focus states.
+- Add structured data and metadata for SEO/social sharing.
+- Refine microcopy for warmth and clarity (timezone, attire, parking, guest support).
+- Ensure full mobile responsiveness and test across device breakpoints.
+
+## ⚙️ Technical Considerations
+Requires updates to Next.js components (src/app/page.tsx, shared components), Tailwind CSS config, next/image setup, next.config.ts (image domains), and updates to navigation and accessibility logic. May require new structured data and metadata in the Home page component.
+
+## ⏰ Preferred Timeline
+ASAP (Before next deployment)
+
+## 👤 Primary User
+Wedding Guests

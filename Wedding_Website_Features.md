@@ -8,7 +8,6 @@
 ## ✉️ RSVP System
 - 📝 RSVP form for guests (name, country, attendance, dietary preferences)
 - 📊 RSVP status tracking (Confirmed, Pending, Not Attending)
-- 🔒 Secure token-based RSVP for invited guests
 
 ## 📸 Media Gallery
 - 🖼️ Photo gallery (categorized by event)
