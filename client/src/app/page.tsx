@@ -7,10 +7,22 @@ import Countdown from "@/components/Countdown";
 export default function HomePage() {
   return (
     <div className="min-h-screen">
+      {/* Skip Links for Accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md z-50 focus:z-50"
+      >
+        Skip to main content
+      </a>
       <Navigation />
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center gradient-hero pt-16">
+      <main id="main-content">
+        <section 
+          id="home" 
+          className="min-h-screen flex items-center justify-center gradient-hero pt-16"
+          aria-label="Wedding announcement and save the date"
+        >
         <div className="text-center px-4 sm:px-6 lg:px-8 w-full max-w-6xl">
           <div className="animate-fadeInUp">
             <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight">
@@ -29,18 +41,21 @@ export default function HomePage() {
               <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-4">
                 Save the Date
               </h3>
-              <p className="text-lg sm:text-xl font-light text-foreground mb-4">
+              <p className="text-lg sm:text-xl font-light text-foreground mb-2">
                 December 16, 2025
+              </p>
+              <p className="text-sm text-muted mb-4">
+                6:00 PM Bangladesh Standard Time (GMT+6)
               </p>
               
               {/* Countdown Timer */}
               <Countdown 
-                targetDate="2025-12-16T00:00:00+06:00" 
+                targetDate="2025-12-16T18:00:00+06:00" 
                 className="mb-4"
               />
               
               <p className="text-muted font-medium">
-                Dhaka, Bangladesh
+                📍 Dhaka, Bangladesh
               </p>
               <p className="text-sm text-muted mt-2">
                 After-party in Phu Quoc, Vietnam
@@ -51,13 +66,15 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md mx-auto">
               <Link
                 href="/rsvp"
-                className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                aria-label="RSVP for Incia and Arvin's wedding"
               >
                 RSVP Now
               </Link>
               <Link
                 href="#story"
-                className="w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300"
+                className="w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                aria-label="Read about our love story"
               >
                 Our Story
               </Link>
@@ -67,7 +84,7 @@ export default function HomePage() {
       </section>
 
       {/* Our Story Section */}
-      <section id="story" className="py-20 bg-white">
+      <section id="story" className="py-20 bg-white" aria-label="Our love story timeline">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
@@ -77,7 +94,7 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-12">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+            <article className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <h3 className="text-2xl font-serif font-semibold text-secondary mb-4">
                   Where It All Began
@@ -92,19 +109,20 @@ export default function HomePage() {
               <div className="relative h-64 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-accent">
                 <Image
                   src="/images/story/aisd-memories.jpg"
-                  alt="AISD memories of Incia & Arvin"
+                  alt="Incia and Arvin as students at American International School of Dhaka, sharing happy moments during their school years"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
                 />
               </div>
-            </div>
+            </article>
 
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+            <article className="grid md:grid-cols-2 gap-8 items-center">
               <div className="order-2 md:order-1 relative h-64 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-accent">
                 <Image
                   src="/images/story/university-years.jpg"
-                  alt="University years across continents"
+                  alt="Incia and Arvin during their university years, maintaining their relationship across different continents"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -121,9 +139,9 @@ export default function HomePage() {
                   support, we proved that love knows no borders.
                 </p>
               </div>
-            </div>
+            </article>
 
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+            <article className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <h3 className="text-2xl font-serif font-semibold text-secondary mb-4">
                   The Proposal in Tuscany
@@ -138,19 +156,19 @@ export default function HomePage() {
               <div className="relative h-64 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-accent">
                 <Image
                   src="/images/story/tuscany-proposal.jpg"
-                  alt="The Tuscany proposal"
+                  alt="Arvin proposing to Incia in the scenic countryside of Tuscany, Italy, with family members celebrating in the background"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-            </div>
+            </article>
 
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+            <article className="grid md:grid-cols-2 gap-8 items-center">
               <div className="order-2 md:order-1 relative h-64 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-accent">
                 <Image
                   src="/images/story/engagement-celebration.jpg"
-                  alt="Engagement celebration with family and friends"
+                  alt="Incia and Arvin celebrating their engagement with family and friends in Dubai"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -167,9 +185,9 @@ export default function HomePage() {
                   and made us more excited for this next chapter.
                 </p>
               </div>
-            </div>
+            </article>
 
-            <div className="text-center bg-cream-50 rounded-lg p-8">
+            <article className="text-center bg-cream-50 rounded-lg p-8">
               <h3 className="text-2xl font-serif font-semibold text-secondary mb-4">
                 Our Celebration Journey
               </h3>
@@ -179,13 +197,13 @@ export default function HomePage() {
                 a stunning island in Phu Quoc, Vietnam—we&apos;re celebrating our love 
                 with those who matter most across the places that shaped our story.
               </p>
-            </div>
+            </article>
           </div>
         </div>
       </section>
 
       {/* Gallery Preview Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50" aria-label="Photo gallery preview">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
@@ -202,73 +220,81 @@ export default function HomePage() {
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-1.jpg"
-                alt="Our memories together"
+                alt="Incia and Arvin sharing a romantic moment during their engagement photoshoot"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-2.jpg"
-                alt="Our memories together"
+                alt="Beautiful candid photo of the couple during their travels together"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-3.jpg"
-                alt="Our memories together"
+                alt="Incia and Arvin celebrating a special milestone in their relationship"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-4.jpg"
-                alt="Our memories together"
+                alt="The couple enjoying quality time together during a vacation"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-5.jpg"
-                alt="Our memories together"
+                alt="Incia and Arvin at a family gathering or special event"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-6.jpg"
-                alt="Our memories together"
+                alt="A beautiful portrait of the couple showcasing their love and connection"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-7.jpg"
-                alt="Our memories together"
+                alt="Fun and playful moment captured between Incia and Arvin"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-8.jpg"
-                alt="Our memories together"
+                alt="Intimate photo of the couple sharing a tender moment together"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
             </div>
           </div>
@@ -277,17 +303,18 @@ export default function HomePage() {
           <div className="text-center">
             <Link
               href="/gallery"
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              aria-label="View complete photo gallery with all our memories"
             >
               View Full Gallery
-              <span className="text-lg">→</span>
+              <span className="text-lg" aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
       </section>
 
       {/* Quick Links Section */}
-      <section className="py-20 gradient-wedding">
+      <section className="py-20 gradient-wedding" aria-label="Wedding information and quick links">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
@@ -297,10 +324,10 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Link href="/events" className="group">
+            <Link href="/events" className="group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg">
               <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                  <span className="text-2xl">📅</span>
+                  <span className="text-2xl" aria-hidden="true">📅</span>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-secondary mb-2">
                   Events
@@ -311,10 +338,10 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="/gallery" className="group">
+            <Link href="/gallery" className="group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg">
               <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                  <span className="text-2xl">📸</span>
+                  <span className="text-2xl" aria-hidden="true">📸</span>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-secondary mb-2">
                   Gallery
@@ -325,10 +352,10 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="/travel" className="group">
+            <Link href="/travel" className="group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg">
               <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                  <span className="text-2xl">✈️</span>
+                  <span className="text-2xl" aria-hidden="true">✈️</span>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-secondary mb-2">
                   Travel
@@ -339,10 +366,10 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="/rsvp" className="group">
+            <Link href="/rsvp" className="group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg">
               <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                  <span className="text-2xl">💌</span>
+                  <span className="text-2xl" aria-hidden="true">💌</span>
                 </div>
                 <h3 className="text-xl font-serif font-semibold text-secondary mb-2">
                   RSVP
@@ -355,8 +382,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+    </main>
 
-      <Footer />
-    </div>
-  );
+    <Footer />
+  </div>
+);
 }
