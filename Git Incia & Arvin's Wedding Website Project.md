@@ -2,17 +2,20 @@
 
 ## 📝 Love Story Summary
 
+FROM SCHOOLMATES TO SOULMATES
+
 Incia & Arvin’s journey began in the hallways of the American International School of Dhaka (AISD), where what started as innocent friendship in middle school blossomed into something truly magical.
 
 Life took them to different corners of the world—Arvin to UCLA and Incia to the University of Toronto—but distance only made their bond stronger. Through late-night calls, surprise visits and unwavering support, they proved that love knows no borders.
 
-In 2024, Arvin planned the most beautiful surprise in Tuscany, where he got down on one knee surrounded by the breathtaking Italian landscape—and even more special, with both their families secretly flown in to witness the moment.
+In 2024, Arvin planned the most beautiful surprise in Tuscany, where he got down on one knee surrounded by the breathtaking Italian landscape—and even more special, with both their families secretly flown in to witness the moment. 
 
 Their love story continued with an elegant engagement celebration in Dubai, bringing together all those who’ve been part of their incredible journey.
 
-Now, Incia & Arvin are all set to tie the knot in their hometown of Dhaka, surrounded by love, tradition and cherished memories. And the celebration continues—they’re hosting an unforgettable after-party on a stunning island in Phu Quoc, Vietnam, to celebrate their love with those who matter most.
 
-From classmates to forever partners, Incia & Arvin’s story is one of love that grew, endured and shined across continents.
+Now, Incia & Arvin are all set to tie the knot in their hometown of Dhaka, surrounded by love, tradition and cherished memories. And the celebration continues—they’re hosting an unforgettable after-party on a stunning island in Phu Quoc, Vietnam, to celebrate their love with those who matter most. 
+
+From classmates to forever partners, Incia & Arvin’s story is one of love that grew, endured and shined across continents. 
 
 ---
 
