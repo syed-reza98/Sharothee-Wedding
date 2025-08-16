@@ -119,7 +119,7 @@ export default function ContactPage() {
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                        <label htmlFor="name" className="block text-sm font-bold text-gray-900 mb-2">
                           Name *
                         </label>
                         <input
@@ -128,13 +128,12 @@ export default function ContactPage() {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
                           required
                         />
                       </div>
-                      
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                        <label htmlFor="email" className="block text-sm font-bold text-gray-900 mb-2">
                           Email *
                         </label>
                         <input
@@ -143,14 +142,14 @@ export default function ContactPage() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
                           required
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="phone" className="block text-sm font-bold text-gray-900 mb-2">
                         Phone Number
                       </label>
                       <input
@@ -159,12 +158,12 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="subject" className="block text-sm font-bold text-gray-900 mb-2">
                         Subject *
                       </label>
                       <select
@@ -172,7 +171,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold transition-all"
                         required
                       >
                         <option value="">Please select a subject</option>
@@ -187,7 +186,7 @@ export default function ContactPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="message" className="block text-sm font-bold text-gray-900 mb-2">
                         Message *
                       </label>
                       <textarea
@@ -196,7 +195,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
-                        className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-vertical"
+                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all resize-vertical"
                         placeholder="Tell us how we can help you..."
                         required
                       />
@@ -293,42 +292,51 @@ export default function ContactPage() {
       <section className="py-16 sm:py-20 bg-white/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
+            <h2 className="text-3xl sm:text-4xl font-serif font-semibold text-primary mb-4 sm:mb-6 tracking-tight">
               Frequently Asked Questions
             </h2>
-            <p className="text-muted text-sm sm:text-base">
+            <p className="text-muted text-base sm:text-lg font-normal">
               Here are some common questions we receive. Don&apos;t see your question? Feel free to contact us!
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8">
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">When should I RSVP?</h3>
-              <p className="text-muted text-sm sm:text-base">
+          <div className="grid sm:grid-cols-2 gap-8 sm:gap-10">
+            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
+              <div className="flex items-center mb-3">
+                <span className="text-primary text-2xl mr-2">❓</span>
+                <h3 className="font-serif font-semibold text-secondary text-lg">When should I RSVP?</h3>
+              </div>
+              <p className="text-gray-800 text-base font-normal">
                 Please RSVP as soon as possible, but no later than July 15, 2025. 
                 This helps us finalize catering and seating arrangements.
               </p>
             </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">What&apos;s the dress code?</h3>
-              <p className="text-muted text-sm sm:text-base">
+            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
+              <div className="flex items-center mb-3">
+                <span className="text-primary text-2xl mr-2">👗</span>
+                <h3 className="font-serif font-semibold text-secondary text-lg">What&apos;s the dress code?</h3>
+              </div>
+              <p className="text-gray-800 text-base font-normal">
                 We&apos;ll have different dress codes for each event. Detailed information 
                 will be sent with your invitation and is available on our Events page.
               </p>
             </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">Can I bring a plus-one?</h3>
-              <p className="text-muted text-sm sm:text-base">
+            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
+              <div className="flex items-center mb-3">
+                <span className="text-primary text-2xl mr-2">➕</span>
+                <h3 className="font-serif font-semibold text-secondary text-lg">Can I bring a plus-one?</h3>
+              </div>
+              <p className="text-gray-800 text-base font-normal">
                 Plus-one information is specified on your invitation. If you have 
                 questions about your invitation, please contact us directly.
               </p>
             </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">Will there be vegetarian/vegan options?</h3>
-              <p className="text-muted text-sm sm:text-base">
+            <div className="bg-gray-50 rounded-2xl p-7 shadow-lg border border-gray-200 flex flex-col items-start transition-all hover:shadow-2xl">
+              <div className="flex items-center mb-3">
+                <span className="text-primary text-2xl mr-2">🥗</span>
+                <h3 className="font-serif font-semibold text-secondary text-lg">Will there be vegetarian/vegan options?</h3>
+              </div>
+              <p className="text-gray-800 text-base font-normal">
                 Yes! We&apos;ll have various dietary options available. Please let us know 
                 about any specific dietary requirements when you RSVP.
               </p>
