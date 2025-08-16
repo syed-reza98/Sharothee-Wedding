@@ -4,57 +4,11 @@ import Footer from "@/components/layout/Footer";
 
 export default function TravelPage() {
   const accommodations = [
-    {
-      name: "Dhaka Regency Hotel & Resort",
-      type: "Main Wedding Venue",
-      location: "Dhaka, Bangladesh",
-      description: "Our main wedding venue with special rates for guests",
-      amenities: ["Pool", "Spa", "Restaurant", "Airport Shuttle"],
-      contact: {
-        phone: "+880 2-8836500",
-        email: "reservations@dhakaregency.com",
-        website: "www.dhakaregency.com"
-      },
-      booking: {
-        code: "INCIA-ARVIN2025",
-        deadline: "2025-07-15",
-        discount: "20% off standard rates"
-      }
-    },
-    {
-      name: "The Westin Dhaka",
-      type: "Luxury Option",
-      location: "Dhaka, Bangladesh",
-      description: "Premium accommodation near the wedding venue",
-      amenities: ["Luxury Spa", "Fine Dining", "Business Center", "Concierge"],
-      contact: {
-        phone: "+880 2-222-71100",
-        email: "reservations.dhaka@westin.com",
-        website: "www.marriott.com/dhaka"
-      },
-      booking: {
-        code: "WEDDING2025",
-        deadline: "2025-07-20",
-        discount: "15% off best available rate"
-      }
-    },
-    {
-      name: "Six Senses Ninh Van Bay",
-      type: "Vietnam After-Party",
-      location: "Phu Quoc, Vietnam",
-      description: "Beachfront resort for our Vietnam celebration",
-      amenities: ["Private Beach", "Water Sports", "Spa", "Fine Dining"],
-      contact: {
-        phone: "+84 28 3823 6888",
-        email: "reservations-ninhvanbay@sixsenses.com",
-        website: "www.sixsenses.com/resorts/ninh-van-bay"
-      },
-      booking: {
-        code: "INCIAANDARVINS",
-        deadline: "2025-07-30",
-        discount: "Group rates available"
-      }
-    }
+    { name: "The Way Dhaka, Gulshan" },
+    { name: "Royal Park Residence Hotel" },
+    { name: "Lakeshore Suite" },
+    { name: "Space Apartments" },
+    { name: "Lakeshore Hotel" }
   ];
 
   const transportation = [
@@ -177,53 +131,8 @@ export default function TravelPage() {
 
           <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
             {accommodations.map((hotel, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300">
-                <div className="p-6 sm:p-8">
-                  <div className="flex flex-col mb-4 sm:mb-6">
-                    <div>
-                      <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary mb-1 sm:mb-2">
-                        {hotel.name}
-                      </h3>
-                      <p className="text-primary text-sm sm:text-base font-medium">{hotel.type}</p>
-                      <p className="text-muted text-xs sm:text-sm">{hotel.location}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-muted text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">{hotel.description}</p>
-
-                  <div className="mb-4 sm:mb-6">
-                    <h4 className="font-semibold text-foreground mb-2 sm:mb-3 text-sm sm:text-base">Amenities</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {hotel.amenities.map((amenity, amenityIndex) => (
-                        <span
-                          key={amenityIndex}
-                          className="bg-cream-100 text-muted px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
-                        >
-                          {amenity}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-4 sm:pt-6">
-                    <div className="bg-primary/10 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-                      <h4 className="font-semibold text-primary mb-1 sm:mb-2 text-sm sm:text-base">Special Offer</h4>
-                      <p className="text-sm sm:text-base text-primary mb-1 sm:mb-2">{hotel.booking.discount}</p>
-                      <p className="text-xs sm:text-sm text-muted mb-1">
-                        Code: <strong>{hotel.booking.code}</strong>
-                      </p>
-                      <p className="text-xs sm:text-sm text-muted">
-                        Book by: {new Date(hotel.booking.deadline).toLocaleDateString()}
-                      </p>
-                    </div>
-
-                    <div className="space-y-2 text-sm sm:text-base">
-                      <p className="flex items-center"><span className="mr-2">📞</span> {hotel.contact.phone}</p>
-                      <p className="flex items-center"><span className="mr-2">✉️</span> {hotel.contact.email}</p>
-                      <p className="flex items-center"><span className="mr-2">🌐</span> {hotel.contact.website}</p>
-                    </div>
-                  </div>
-                </div>
+              <div key={index} className="bg-white rounded-xl shadow-xl p-6 flex items-center justify-center text-center text-lg font-semibold text-secondary hover:scale-105 transition-all duration-300 min-h-[100px]">
+                <span className="text-2xl mr-2" role="img" aria-label="hotel">🏨</span> {hotel.name}
               </div>
             ))}
           </div>
