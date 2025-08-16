@@ -50,8 +50,44 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Incia & Arvin's Wedding",
+    "description": "Join us in celebrating the love story of Incia & Arvin - from childhood friends to forever partners.",
+    "startDate": "2025-12-16T18:00:00+06:00",
+    "endDate": "2025-12-16T23:00:00+06:00",
+    "eventStatus": "EventScheduled",
+    "eventAttendanceMode": "OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": "Wedding Venue",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dhaka",
+        "addressCountry": "Bangladesh"
+      }
+    },
+    "organizer": {
+      "@type": "Person",
+      "name": "Incia & Arvin"
+    },
+    "offers": {
+      "@type": "Offer",
+      "availability": "InviteOnly",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
+
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className="font-sans antialiased bg-cream-50 text-gray-800">
         <Providers>
           <ErrorBoundary>
