@@ -1,0 +1,62 @@
+[
+  {
+    "filename": "Love Across Continents 1.jpeg",
+    "title": "Love Across Continents — Collage 1",
+    "caption": "A collage highlighting key moments across different countries.",
+    "alt": "Collage of couple photos from travels and celebrations",
+    "tags": ["collage", "story", "timeline"],
+    "bestUse": ["about", "story-section", "gallery-feature"],
+    "editNotes": "Ensure readable text if any; export in WebP plus original JPEG; width 1920px + 960px variant."
+  },
+  {
+    "filename": "Love Across Continents 2.jpeg",
+    "title": "Love Across Continents — Collage 2",
+    "caption": "Continuation of the cross‑country story in images.",
+    "alt": "Collage of couple portraits and travel scenes",
+    "tags": ["collage", "story", "timeline"],
+    "bestUse": ["about", "story-section", "gallery-feature"],
+    "editNotes": "Match color grading with Collage 1 for consistency."
+  },
+
+  {"filename":"PHOTO-2025-04-10-01-25-39.JPG","title":"Wedding Stage — Portrait A","caption":"Full-length portrait beneath a floral arch.","alt":"Couple standing under a white floral arch at night","tags":["wedding-stage","formal","night","ceremony"],"bestUse":["home-hero","event-hero","gallery-feature"],"editNotes":"Slight highlight roll-off on sequins; export 2560w/1920w/1280w WebP."},
+  {"filename":"PHOTO-2025-04-10-01-35-02.JPG","title":"Wedding Stage — Portrait B","caption":"Pose with gentle eye contact under floral canopy.","alt":"Couple facing each other under floral canopy at night","tags":["wedding-stage","formal","night"],"bestUse":["event-hero","gallery"],"editNotes":"Crop to 3:4 for mobile hero; reduce green tint from stage lights."},
+  {"filename":"PHOTO-2025-04-10-01-35-03 2.JPG","title":"Wedding Stage — Portrait C (Alt)","caption":"Alternate framing with similar pose.","alt":"Couple smiling on decorated wedding stage","tags":["wedding-stage","formal","night"],"bestUse":["gallery","alt-hero"],"editNotes":"Pick sharpest frame; unify white balance across set."},
+  {"filename":"PHOTO-2025-04-10-01-35-03.JPG","title":"Wedding Stage — Portrait C","caption":"Slightly different angle showing attire details.","alt":"Couple in traditional attire under floral arch","tags":["wedding-stage","formal","night"],"bestUse":["gallery"],"editNotes":"Tone down specular highlights; noise reduction on shadows."},
+  {"filename":"PHOTO-2025-04-10-01-35-04 2.JPG","title":"Wedding Stage — Portrait D","caption":"Closer stance with ornate backdrop.","alt":"Couple posing on brightly lit stage with flowers","tags":["wedding-stage","formal","night"],"bestUse":["gallery"],"editNotes":"Mind slight motion blur; keep as alternate."},
+  {"filename":"PHOTO-2025-04-10-01-35-05 2.JPG","title":"Wedding Stage — Portrait E (Alt)","caption":"Alternate take with subtle posture change.","alt":"Couple gazing at each other before floral arch","tags":["wedding-stage","formal","night"],"bestUse":["gallery"],"editNotes":"Crop bottom to reduce empty floor; recover highlights."},
+  {"filename":"PHOTO-2025-04-10-01-35-05.JPG","title":"Wedding Stage — Portrait E","caption":"Calm moment with flattering light.","alt":"Couple smiling on wedding stage decorated with white flowers","tags":["wedding-stage","formal","night"],"bestUse":["gallery-feature","event-hero"],"editNotes":"Good expression; prefer as hero candidate after highlight control."},
+  {"filename":"PHOTO-2025-04-10-01-35-06.JPG","title":"Wedding Stage — Portrait F","caption":"Full outfit details captured front-on.","alt":"Couple in traditional outfits on illuminated stage","tags":["wedding-stage","formal","night"],"bestUse":["gallery"],"editNotes":"Slight warm temperature; balance to neutral."},
+  {"filename":"PHOTO-2025-04-10-01-39-29.JPG","title":"Wedding Stage — Portrait G","caption":"Wide frame emphasizing arch symmetry.","alt":"Couple under symmetrical floral arch with feather decor","tags":["wedding-stage","formal","night","wide"],"bestUse":["home-hero","section-banner"],"editNotes":"Great symmetry; crop to 16:9 for banners."},
+  {"filename":"PHOTO-2025-04-10-01-39-30 2.JPG","title":"Wedding Stage — Portrait H (Alt)","caption":"Similar to Portrait H with minor variation.","alt":"Couple posing beneath ornate arch at night","tags":["wedding-stage","formal","night"],"bestUse":["gallery"],"editNotes":"Keep as supporting frame."},
+  {"filename":"PHOTO-2025-04-10-01-39-31 2.JPG","title":"Wedding Stage — Portrait I (Alt)","caption":"Alternate expression with stage decor prominent.","alt":"Couple smiling on stage with floral arrangement","tags":["wedding-stage","formal","night"],"bestUse":["gallery"],"editNotes":"Unify exposure with set; minor noise reduction."},
+
+  {"filename":"WhatsApp Image 2025-08-13 at 12.00.40 PM.jpeg","title":"Street Stroll — Frame A","caption":"Daylight street portrait outside a luxury storefront.","alt":"Couple on a city sidewalk near a reflective glass boutique","tags":["street","daylight","casual"],"bestUse":["about","gallery-hero"],"editNotes":"Crop for symmetry; slight highlight control on pavement."},
+  {"filename":"WhatsApp Image 2025-08-13 at 12.00.41 PM.jpeg","title":"Street Stroll — Frame B","caption":"Alternate angle from the same location.","alt":"Couple smiling outside a boutique with palm reflections","tags":["street","daylight","casual"],"bestUse":["gallery"],"editNotes":"Choose one as primary; keep as alternate."},
+
+  {"filename":"WhatsApp Image 2025-08-13 at 12.05.04 PM.jpeg","title":"Rooftop at Dusk — Portrait A","caption":"Close portrait on a rooftop at golden hour.","alt":"Couple seated together on a rooftop at dusk with city in background","tags":["rooftop","dusk","portrait","romantic"],"bestUse":["about","story","gallery-feature"],"editNotes":"Warm tone is pleasant; minimal edits."},
+  {"filename":"WhatsApp Image 2025-08-13 at 12.05.32 PM.jpeg","title":"Rooftop at Dusk — Portrait B","caption":"Alternate framing from the same rooftop setting.","alt":"Couple leaning together with soft evening light on a rooftop","tags":["rooftop","dusk","portrait"],"bestUse":["gallery"],"editNotes":"Match color with Portrait A."},
+
+  {"filename":"WhatsApp Image 2025-08-13 at 12.13.42 PM.jpeg","title":"Candid Indoors — Playful","caption":"Playful indoor piggyback candid.","alt":"One person giving another a piggyback indoors, candid moment","tags":["candid","indoor","playful"],"bestUse":["story","about-sidebar","gallery"],"editNotes":"Lift exposure slightly; reduce yellow cast; crop distractions."},
+
+  {"filename":"WhatsApp Image 2025-08-13 at 12.14.11 PM.jpeg","title":"Scenic Hike — Overlook","caption":"Daylight hike with sweeping valley and city backdrop.","alt":"Couple at a trail overlook with hills and city in distance","tags":["hike","scenic","daylight","travel"],"bestUse":["travel","gallery-hero","about"],"editNotes":"Add gentle dehaze; protect highlights."},
+
+  {"filename":"WhatsApp Image 2025-08-13 at 8.57.20 PM (1).jpeg","title":"City Skyline — Black Tie A","caption":"Formal portrait with dramatic skyline at night.","alt":"Couple in formal wear with city skyscrapers at night behind them","tags":["city-skyline","night","formal"],"bestUse":["reception","gallery-feature","banner-16x9"],"editNotes":"Lift shadows slightly; mild noise reduction."},
+  {"filename":"WhatsApp Image 2025-08-13 at 8.57.20 PM (2).jpeg","title":"City Skyline — Black Tie B","caption":"Alternate stance with skyline and candles.","alt":"Formal couple by pool with skyline lights at night","tags":["city-skyline","night","formal"],"bestUse":["reception","gallery"],"editNotes":"Choose sharpest of the skyline set as feature."},
+  {"filename":"WhatsApp Image 2025-08-13 at 8.57.21 PM (1).jpeg","title":"City Skyline — Black Tie C","caption":"Variation with slight repositioning.","alt":"Formal couple on rooftop deck with skyscrapers at night","tags":["city-skyline","night","formal"],"bestUse":["gallery"],"editNotes":"Color-balance mixed lighting; reduce magenta cast."},
+  {"filename":"WhatsApp Image 2025-08-13 at 8.57.21 PM.jpeg","title":"City Skyline — Black Tie D","caption":"Wider frame showcasing skyline context.","alt":"Couple posing on rooftop with city skyline and pool reflections","tags":["city-skyline","night","formal","wide"],"bestUse":["banner-16x9","gallery-hero"],"editNotes":"Great as banner after subtle denoise."},
+
+  {"filename":"WhatsApp Image 2025-08-13 at 9.56.07 PM.jpeg","title":"Cake Cutting — Moment A","caption":"Action moment during cake cutting surrounded by guests.","alt":"Couple cutting a tiered cake at a nighttime celebration","tags":["cake-cutting","event","night","candid"],"bestUse":["reception","story","gallery"],"editNotes":"Reduce specular highlights; subtle clarity on hands."},
+  {"filename":"WhatsApp Image 2025-08-13 at 9.56.26 PM.jpeg","title":"Cake Cutting — Moment B","caption":"Alternate frame with crowd and decor visible.","alt":"Cake cutting with guests around and city lights in background","tags":["cake-cutting","event","night"],"bestUse":["gallery"],"editNotes":"Tone down background hotspots; crop edge distractions."},
+
+  {"filename":"WhatsApp Image 2025-08-14 at 11.40.02 AM.jpeg","title":"Balcony Portrait — Hills A","caption":"Daytime portrait on balcony with green hills.","alt":"Couple standing on balcony with green hills and trees behind","tags":["balcony","scenic","daylight","portrait"],"bestUse":["about","gallery"],"editNotes":"Control highlights on white clothing; gentle contrast."},
+  {"filename":"WhatsApp Image 2025-08-14 at 11.40.34 AM.jpeg","title":"Balcony Portrait — Hills B","caption":"Alternate framing from the same balcony setting.","alt":"Couple posing on balcony with blue sky and hills","tags":["balcony","scenic","daylight"],"bestUse":["gallery"],"editNotes":"Match color to frame A."},
+
+  {"filename":"WhatsApp Image 2025-08-14 at 5.28.45 PM.jpeg","title":"Travel Day — Street Scene A","caption":"Casual travel portrait in daylight.","alt":"Couple posing outdoors during daytime travel","tags":["travel","daylight","casual"],"bestUse":["gallery","story"],"editNotes":"Minor crop and exposure balance."},
+  {"filename":"WhatsApp Image 2025-08-14 at 5.28.46 PM.jpeg","title":"Travel Day — Street Scene B","caption":"Alternate travel shot from same session.","alt":"Casual outdoor portrait in daylight","tags":["travel","daylight","casual"],"bestUse":["gallery"],"editNotes":"Choose one as primary; keep as alternate."},
+
+  {"filename":"WhatsApp Image 2025-08-15 at 8.38.03 PM.jpeg","title":"Evening Gathering — Portrait","caption":"Evening portrait with soft ambient lighting.","alt":"Couple standing outdoors in the evening under soft lights","tags":["evening","event","portrait"],"bestUse":["story","gallery"],"editNotes":"Warm up white balance slightly; gentle noise reduction."},
+
+  {"filename":"WhatsApp Image 2025-08-16 at 1.24.41 AM.jpeg","title":"Wedding Stage — Night A","caption":"Full-length pose with ornate arch and pampas decor.","alt":"Couple standing on wedding stage beneath white floral arch at night","tags":["wedding-stage","night","formal"],"bestUse":["home-hero","event-hero","gallery-feature"],"editNotes":"Excellent symmetry; crop to 16:9 for hero variant."},
+  {"filename":"WhatsApp Image 2025-08-16 at 1.26.29 AM.jpeg","title":"Wedding Stage — Night B","caption":"Alternate pose with similar lighting.","alt":"Couple looking at each other on illuminated wedding stage","tags":["wedding-stage","night","formal"],"bestUse":["gallery"],"editNotes":"Balance exposure to reduce sparkle clipping."},
+  {"filename":"WhatsApp Image 2025-08-16 at 1.27.09 AM.jpeg","title":"Wedding Stage — Night C","caption":"Variation focusing on attire details.","alt":"Couple in embellished outfits under floral arch at night","tags":["wedding-stage","night","formal"],"bestUse":["gallery"],"editNotes":"Sharpen slightly; reduce green cast from stage lighting."}
+]
