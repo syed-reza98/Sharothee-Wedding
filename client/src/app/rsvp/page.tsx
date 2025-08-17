@@ -7,14 +7,45 @@ import Footer from "@/components/layout/Footer";
 import { useState } from "react";
 
 export default function RSVPPage() {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(3);
   // Start directly at RSVP form (step 2), no code required
+  // ...existing useState declarations...
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    let hasError = false;
+    // Submit RSVP for each event responded to
+    for (const event of events) {
+      const resp = responses[event.id];
+      if (!resp || !resp.response) continue;
+      try {
+        const res = await fetch('/api/rsvp/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            guestId: guestInfo.id,
+            eventId: event.id,
+            response: resp.response.toUpperCase(),
+            attendees: resp.num_attendees || 1,
+            dietaryPreferences: resp.dietary_preferences || '',
+            comments: resp.comments || '',
+          })
+        });
+        if (!res.ok) hasError = true;
+      } catch (err) {
+        hasError = true;
+      }
+    }
+    setLoading(false);
+    if (!hasError) {
+      setStep(3);
+    } else {
+      alert('There was a problem submitting your RSVP. Please try again.');
+    }
+  };
   // Use environment variable to control whether to skip RSVP code step (demo vs production)
-  const [step, setStep] = useState(
-    typeof process !== "undefined" && process.env.NEXT_PUBLIC_SKIP_RSVP_CODE === "true" ? 2 : 1
-  );
+  // Always show RSVP form by default
+  const [step, setStep] = useState(2);
   // TODO: Replace demo guest info and events with real fetch in production
   const [guestInfo] = useState({
     id: 'demo',
