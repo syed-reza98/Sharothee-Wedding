@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { VideoCameraIcon, StarIcon, GlobeAltIcon, CameraIcon } from '@heroicons/react/24/outline'
 
 interface MediaItem {
   id: string
@@ -147,9 +148,9 @@ export default function AdminMediaPage() {
                       target.src = 'https://via.placeholder.com/400x300/f3f4f6/6b7280?text=Image'
                     }}
                   />
-                ) : (
+        ) : (
                   <div className="text-center">
-                    <span className="text-4xl">🎥</span>
+          <VideoCameraIcon className="h-10 w-10 text-primary inline-block" />
                     <p className="text-sm text-gray-500 mt-2">Video</p>
                   </div>
                 )}
@@ -162,10 +163,10 @@ export default function AdminMediaPage() {
                   </h4>
                   <div className="flex space-x-1">
                     {item.featured && (
-                      <span className="text-yellow-500" title="Featured">⭐</span>
+                      <StarIcon className="h-5 w-5 text-yellow-500" title="Featured" />
                     )}
                     {item.public && (
-                      <span className="text-green-500" title="Public">🌐</span>
+                      <GlobeAltIcon className="h-5 w-5 text-green-500" title="Public" />
                     )}
                   </div>
                 </div>
@@ -207,7 +208,9 @@ export default function AdminMediaPage() {
         {mediaItems.length === 0 && !loading && (
           <div className="text-center py-12">
             <div className="text-gray-500">
-              <span className="text-4xl block mb-4">📸</span>
+              <div className="mb-4 flex justify-center">
+                <CameraIcon className="h-12 w-12 text-primary" />
+              </div>
               <p className="text-lg mb-2">No media items found</p>
               <p>Upload your first photo or video to get started.</p>
             </div>

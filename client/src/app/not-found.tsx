@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { HeartIcon, CalendarDaysIcon, EnvelopeIcon, PhotoIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline'
 
 export default function NotFound() {
   return (
@@ -9,7 +10,9 @@ export default function NotFound() {
       
       <div className="pt-24 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-6xl mb-8">💔</div>
+          <div className="mb-8 flex justify-center">
+            <HeartIcon className="h-16 w-16 text-rose-500" aria-hidden="true" />
+          </div>
           <h1 className="text-5xl md:text-6xl font-serif font-light text-secondary mb-6">
             Page Not Found
           </h1>
@@ -42,23 +45,29 @@ export default function NotFound() {
               Looking for something specific?
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-              <Link href="/events" className="text-muted hover:text-primary transition-colors">
-                📅 Wedding Events
+              <Link href="/events" className="text-muted hover:text-primary transition-colors inline-flex items-center gap-2">
+                <CalendarDaysIcon className="h-4 w-4" />
+                Wedding Events
               </Link>
-              <Link href="/rsvp" className="text-muted hover:text-primary transition-colors">
-                💌 RSVP
+              <Link href="/rsvp" className="text-muted hover:text-primary transition-colors inline-flex items-center gap-2">
+                <EnvelopeIcon className="h-4 w-4" />
+                RSVP
               </Link>
-              <Link href="/gallery" className="text-muted hover:text-primary transition-colors">
-                📸 Photo Gallery
+              <Link href="/gallery" className="text-muted hover:text-primary transition-colors inline-flex items-center gap-2">
+                <PhotoIcon className="h-4 w-4" />
+                Photo Gallery
               </Link>
-              <Link href="/travel" className="text-muted hover:text-primary transition-colors">
-                ✈️ Travel Info
+              <Link href="/travel" className="text-muted hover:text-primary transition-colors inline-flex items-center gap-2">
+                <MapPinIcon className="h-4 w-4" />
+                Travel Info
               </Link>
-              <Link href="/contact" className="text-muted hover:text-primary transition-colors">
-                📞 Contact Us
+              <Link href="/contact" className="text-muted hover:text-primary transition-colors inline-flex items-center gap-2">
+                <PhoneIcon className="h-4 w-4" />
+                Contact Us
               </Link>
-              <Link href="/#story" className="text-muted hover:text-primary transition-colors">
-                💕 Our Story
+              <Link href="/#story" className="text-muted hover:text-primary transition-colors inline-flex items-center gap-2">
+                <HeartIcon className="h-4 w-4" />
+                Our Story
               </Link>
             </div>
           </div>

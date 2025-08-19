@@ -19,12 +19,15 @@
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+  "e2e": "playwright test --config=playwright.config.js --project=chromium",
+  "e2e:headed": "playwright test --config=playwright.config.js --project=chromium --headed"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@headlessui/react": "^2.0.4",
     "@heroicons/react": "^2.0.18",
+    "@playwright/test": "^1.54.2",
     "@prisma/client": "^6.14.0",
     "@tanstack/react-query": "^5.51.23",
     "@types/bcryptjs": "^2.4.6",

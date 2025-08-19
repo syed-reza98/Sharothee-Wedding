@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { VideoCameraIcon, SignalIcon, ClockIcon } from '@heroicons/react/24/outline'
 
 interface Stream {
   id: string;
@@ -69,12 +70,16 @@ export default function LiveStreamPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-20">
-              <div className="text-4xl mb-4">📺</div>
+              <div className="mb-4 flex justify-center">
+                <VideoCameraIcon className="h-10 w-10 text-primary" aria-hidden="true" />
+              </div>
               <p className="text-muted">Loading streams...</p>
             </div>
           ) : streams.length === 0 ? (
             <div className="bg-white rounded-lg p-12 text-center shadow-lg">
-              <div className="text-6xl mb-6">📺</div>
+              <div className="mb-6 flex justify-center">
+                <VideoCameraIcon className="h-12 w-12 text-primary" aria-hidden="true" />
+              </div>
               <h2 className="text-2xl font-semibold text-secondary mb-4">
                 No Live Streams Available
               </h2>
@@ -85,16 +90,13 @@ export default function LiveStreamPage() {
                 <h3 className="font-semibold text-foreground mb-2">Upcoming Streams</h3>
                 <div className="space-y-2 text-sm text-muted">
                   <div className="flex justify-between">
-                    <span>Mehndi Ceremony</span>
-                    <span>August 15, 6:00 PM</span>
+                    <span>Holud Ceremony</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Wedding Ceremony</span>
-                    <span>August 16, 10:00 AM</span>
+                    <span>Akhd Ceremony</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Reception Dinner</span>
-                    <span>August 16, 7:00 PM</span>
+                    <span>Reception</span>
                   </div>
                 </div>
               </div>
@@ -109,7 +111,9 @@ export default function LiveStreamPage() {
                       <div className="w-full h-full flex items-center justify-center">
                         {/* In a real implementation, this would be an actual video player */}
                         <div className="text-center text-white">
-                          <div className="animate-pulse text-red-500 text-6xl mb-4">🔴</div>
+                          <div className="animate-pulse text-red-500 mb-4 flex items-center justify-center">
+                            <SignalIcon className="h-10 w-10" aria-hidden="true" />
+                          </div>
                           <h3 className="text-2xl font-semibold mb-2">LIVE</h3>
                           <p className="text-lg">{selectedStream.title}</p>
                           <p className="text-sm opacity-75 mt-2">
@@ -120,7 +124,9 @@ export default function LiveStreamPage() {
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <div className="text-center text-white">
-                          <div className="text-6xl mb-4">📺</div>
+                          <div className="mb-4 flex justify-center">
+                            <VideoCameraIcon className="h-12 w-12" aria-hidden="true" />
+                          </div>
                           <h3 className="text-2xl font-semibold mb-2">Stream Offline</h3>
                           <p className="text-lg">{selectedStream.title}</p>
                           {selectedStream.startTime && (
@@ -138,8 +144,9 @@ export default function LiveStreamPage() {
                         {selectedStream.title}
                       </h2>
                       {selectedStream.isLive && (
-                        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                          🔴 LIVE
+                        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium inline-flex items-center gap-1">
+                          <SignalIcon className="h-4 w-4" aria-hidden="true" />
+                          LIVE
                         </span>
                       )}
                     </div>
@@ -148,10 +155,10 @@ export default function LiveStreamPage() {
                     )}
                     <div className="flex flex-wrap gap-4 text-sm text-muted">
                       {selectedStream.startTime && (
-                        <span>Start: {formatTime(selectedStream.startTime)}</span>
+                        <span className="inline-flex items-center gap-1"><ClockIcon className="h-4 w-4" /> Start: {formatTime(selectedStream.startTime)}</span>
                       )}
                       {selectedStream.endTime && (
-                        <span>End: {formatTime(selectedStream.endTime)}</span>
+                        <span className="inline-flex items-center gap-1"><ClockIcon className="h-4 w-4" /> End: {formatTime(selectedStream.endTime)}</span>
                       )}
                     </div>
                   </div>
@@ -180,8 +187,9 @@ export default function LiveStreamPage() {
                                 {stream.title}
                               </h3>
                               {stream.isLive && (
-                                <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                                  🔴 LIVE
+                                <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
+                                  <SignalIcon className="h-3 w-3" aria-hidden="true" />
+                                  LIVE
                                 </span>
                               )}
                             </div>
@@ -190,15 +198,19 @@ export default function LiveStreamPage() {
                             )}
                             <div className="flex gap-4 text-xs text-muted mt-2">
                               {stream.startTime && (
-                                <span>Start: {formatTime(stream.startTime)}</span>
+                                <span className="inline-flex items-center gap-1"><ClockIcon className="h-3 w-3" /> Start: {formatTime(stream.startTime)}</span>
                               )}
                               {stream.endTime && (
-                                <span>End: {formatTime(stream.endTime)}</span>
+                                <span className="inline-flex items-center gap-1"><ClockIcon className="h-3 w-3" /> End: {formatTime(stream.endTime)}</span>
                               )}
                             </div>
                           </div>
                           <div className="text-2xl">
-                            {stream.isLive ? '🔴' : '📺'}
+                            {stream.isLive ? (
+                              <SignalIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
+                            ) : (
+                              <VideoCameraIcon className="h-6 w-6 text-muted" aria-hidden="true" />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -214,24 +226,27 @@ export default function LiveStreamPage() {
                 </h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="font-semibold text-foreground mb-3">🕐 Stream Schedule</h3>
+                    <h3 className="font-semibold text-foreground mb-3 inline-flex items-center gap-2">
+                      <ClockIcon className="h-5 w-5" />
+                      Stream Schedule
+                    </h3>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span>Mehndi Ceremony</span>
-                        <span className="text-muted">Aug 15, 6:00 PM</span>
+                        <span>Holud Ceremony</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Wedding Ceremony</span>
-                        <span className="text-muted">Aug 16, 10:00 AM</span>
+                        <span>Akhd Ceremony</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Reception Dinner</span>
-                        <span className="text-muted">Aug 16, 7:00 PM</span>
+                        <span>Reception</span>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-3">💡 Tips for Best Experience</h3>
+                    <h3 className="font-semibold text-foreground mb-3 inline-flex items-center gap-2">
+                      <VideoCameraIcon className="h-5 w-5" />
+                      Tips for Best Experience
+                    </h3>
                     <ul className="space-y-1 text-sm text-muted">
                       <li>• Use a stable internet connection</li>
                       <li>• Join 10-15 minutes before start time</li>

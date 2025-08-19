@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import {
+  UsersIcon,
+  EnvelopeIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  PhotoIcon,
+  CalendarDaysIcon,
+  FilmIcon,
+} from '@heroicons/react/24/outline'
 
 interface DashboardStats {
   totalGuests: number
@@ -51,42 +60,42 @@ export default function AdminDashboard() {
     {
       title: 'Total Guests',
       value: stats.totalGuests,
-      icon: '👥',
+      icon: UsersIcon,
       href: '/admin/guests',
       color: 'bg-blue-500'
     },
     {
       title: 'RSVPs Received',
       value: stats.totalRSVPs,
-      icon: '✉️',
+      icon: EnvelopeIcon,
       href: '/admin/guests',
       color: 'bg-green-500'
     },
     {
       title: 'Attending',
       value: stats.attendingCount,
-      icon: '✅',
+      icon: CheckCircleIcon,
       href: '/admin/guests',
       color: 'bg-emerald-500'
     },
     {
       title: 'Pending RSVPs',
       value: stats.pendingCount,
-      icon: '⏳',
+      icon: ClockIcon,
       href: '/admin/guests',
       color: 'bg-yellow-500'
     },
     {
       title: 'Media Items',
       value: stats.mediaCount,
-      icon: '📸',
+      icon: PhotoIcon,
       href: '/admin/media',
       color: 'bg-purple-500'
     },
     {
       title: 'Contact Requests',
       value: stats.contactRequests,
-      icon: '📧',
+      icon: EnvelopeIcon,
       href: '/admin/contacts',
       color: 'bg-red-500'
     }
@@ -97,28 +106,28 @@ export default function AdminDashboard() {
       title: 'Add New Guest',
       description: 'Invite a new guest to the wedding',
       href: '/admin/guests',
-      icon: '👥',
+      icon: UsersIcon,
       color: 'bg-blue-500'
     },
     {
       title: 'Upload Media',
       description: 'Add photos or videos to the gallery',
       href: '/admin/media',
-      icon: '📸',
+      icon: PhotoIcon,
       color: 'bg-purple-500'
     },
     {
       title: 'Create Event',
       description: 'Add a new wedding event',
       href: '/admin/events',
-      icon: '📅',
+      icon: CalendarDaysIcon,
       color: 'bg-green-500'
     },
     {
       title: 'Manage Streams',
       description: 'Set up live streaming for events',
       href: '/admin/streams',
-      icon: '📺',
+      icon: FilmIcon,
       color: 'bg-red-500'
     }
   ]
@@ -153,7 +162,7 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center">
               <div className={`${stat.color} rounded-lg p-3 mr-4`}>
-                <span className="text-white text-xl">{stat.icon}</span>
+                <stat.icon className="h-6 w-6 text-white" />
               </div>
               <div>
                 <p className="text-sm text-muted">{stat.title}</p>
@@ -197,7 +206,7 @@ export default function AdminDashboard() {
             >
               <div className="flex flex-col items-center text-center">
                 <div className={`${action.color} rounded-lg p-3 mb-3`}>
-                  <span className="text-white text-xl">{action.icon}</span>
+                  <action.icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">{action.title}</h3>
                 <p className="text-sm text-muted">{action.description}</p>
@@ -213,7 +222,7 @@ export default function AdminDashboard() {
         <div className="space-y-3">
           <div className="flex items-center py-2">
             <div className="bg-green-100 rounded-full p-2 mr-3">
-              <span className="text-green-600">✅</span>
+              <CheckCircleIcon className="h-5 w-5 text-green-600" />
             </div>
             <div>
               <p className="font-medium">New RSVP received</p>
@@ -223,7 +232,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center py-2">
             <div className="bg-blue-100 rounded-full p-2 mr-3">
-              <span className="text-blue-600">📸</span>
+              <PhotoIcon className="h-5 w-5 text-blue-600" />
             </div>
             <div>
               <p className="font-medium">New media uploaded</p>
@@ -233,7 +242,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center py-2">
             <div className="bg-purple-100 rounded-full p-2 mr-3">
-              <span className="text-purple-600">📧</span>
+              <EnvelopeIcon className="h-5 w-5 text-purple-600" />
             </div>
             <div>
               <p className="font-medium">Contact form submission</p>

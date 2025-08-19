@@ -11,23 +11,30 @@ jest.mock('next/link', () => {
 })
 
 describe('RSVP Page', () => {
+  beforeAll(() => {
+    // Force the page to render the form (step 2)
+    process.env.NEXT_PUBLIC_SKIP_RSVP_CODE = 'true'
+  })
+
   it('renders the RSVP page heading', () => {
     render(<RSVPPage />)
     
     expect(screen.getByRole('heading', { name: /^RSVP$/i, level: 1 })).toBeInTheDocument()
   })
 
-  it('displays the token input form', () => {
+  it('shows the RSVP selection form', () => {
     render(<RSVPPage />)
-    
-    const tokenInput = screen.getByRole('textbox')
-    expect(tokenInput).toBeInTheDocument()
-    expect(tokenInput).toHaveAttribute('placeholder', 'Enter your RSVP code')
+    // At least one event card and radio options should be visible
+    expect(screen.getByText(/Holud/i)).toBeInTheDocument()
+    expect(screen.getByText(/Akdh/i)).toBeInTheDocument()
+    expect(screen.getByText(/Reception/i)).toBeInTheDocument()
+  // Check for radio labels (appears for each event)
+  expect(screen.getAllByText(/Will you be attending\?/i).length).toBeGreaterThan(0)
   })
 
   it('has a continue button', () => {
     render(<RSVPPage />)
     
-    expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /submit rsvp/i })).toBeInTheDocument()
   })
 })
