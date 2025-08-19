@@ -124,7 +124,8 @@ export default function TravelPage() {
             {/* Lakeshore Grand Card */}
             <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
               <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Grand, Gulshan</h3>
-              <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps?q=Lakeshore+Grand+Gulshan+Dhaka&output=embed" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
+              <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7872241391133!2d90.41237199999999!3d23.7905901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c74155d9349b%3A0x9e22941d6ac7e135!2sLakeshore%20Grand!5e0!3m2!1sbn!2sbd!4v1755635388160!5m2!1sbn!2sbd" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
+              {/* <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps/place/Lakeshore+Grand/@23.7905901,90.412372,17z/data=!3m1!4b1!4m6!3m5!1s0x3755c74155d9349b:0x9e22941d6ac7e135!8m2!3d23.7905901!4d90.412372!16s%2Fg%2F11yhrm3k24?entry=ttu&g_ep=EgoyMDI1MDgxNy4wIKXMDSoASAFQAw%3D%3D" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe> */}
               <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
             </div>
             {/* Lakeshore Heights Card */}
