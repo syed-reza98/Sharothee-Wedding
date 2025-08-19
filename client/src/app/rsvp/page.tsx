@@ -9,32 +9,27 @@ import { HandRaisedIcon, CheckCircleIcon, XMarkIcon, QuestionMarkCircleIcon, Spa
 export default function RSVPPage() {
   // Always start at RSVP form (step 2)
   const [step, setStep] = useState(2);
-  // Token for RSVP code flow (used in Step 1)
-  const [token, setToken] = useState<string>("");
-
-  // Local types for clarity
-  type RSVPEvent = { id: string; title: string; date: string; time?: string };
-  type GuestInfo = { id: string; name: string; email: string; country: string };
-  type RSVPResponseFields = {
-    response?: "attending" | "not_attending" | "maybe";
-    num_attendees?: number;
-    dietary_preferences?: string;
-    comments?: string;
-  };
-
   // TODO: Replace demo guest info and events with real fetch in production
-  const [guestInfo, setGuestInfo] = useState<GuestInfo>({
+  const [guestInfo] = useState({
     id: "demo",
     name: "Guest",
     email: "",
     country: "",
   });
-  const [events, setEvents] = useState<RSVPEvent[]>([
+  const [events] = useState([
     { id: "1", title: "Holud", date: "2025-12-16" },
     { id: "2", title: "Akdh", date: "2025-12-17" },
     { id: "3", title: "Reception", date: "2025-12-18" },
   ]);
-  const [responses, setResponses] = useState<Record<string, RSVPResponseFields>>({});
+  const [responses, setResponses] = useState<Record<
+    string,
+    {
+      response?: string;
+      num_attendees?: number;
+      dietary_preferences?: string;
+      comments?: string;
+    }
+  >>({});
   const [loading, setLoading] = useState(false);
   // General RSVP questions state
   type AttendDhaka = "yes" | "no" | "maybe";
@@ -56,42 +51,6 @@ export default function RSVPPage() {
   const [emergencyPhone, setEmergencyPhone] = useState<string>("");
   const [emergencyEmail, setEmergencyEmail] = useState<string>("");
   const [emailAddress, setEmailAddress] = useState<string>("");
-
-  const handleTokenSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await fetch('/api/rsvp/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setGuestInfo(data.guest);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setEvents(data.events.map((event: any) => ({
-          id: event.id,
-          title: event.title,
-          date: event.date.split('T')[0],
-          time: event.time,
-        })));
-        setStep(2);
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || 'Invalid RSVP token');
-      }
-    } catch (error) {
-      console.error('Token validation error:', error);
-      alert('Failed to validate token. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleResponseChange = (eventId: string, field: string, value: string | number) => {
     setResponses((prev) => ({

@@ -9,9 +9,22 @@ import {
   SparklesIcon,
   HeartIcon,
   GiftTopIcon,
+  TvIcon,
 } from "@heroicons/react/24/outline";
 
 export default function EventsPage() {
+  type EventItem = {
+    id: number;
+    title: string;
+    date: string;
+    time?: string;
+    venue: string;
+    address?: string[];
+    location?: string;
+    description?: string;
+    dressCode?: string;
+    type: 'holud' | 'akdh' | 'reception';
+  };
   // Helpers: build address string, maps URL, and ICS calendar content safely on the server
   const addressString = (venue?: string, address?: string[] | undefined) => {
     const parts = [venue, ...(address || [])].filter(Boolean) as string[];
@@ -90,7 +103,7 @@ export default function EventsPage() {
     const ics = lines.join('\r\n');
     return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
   };
-  const events = [
+  const events: EventItem[] = [
     {
       id: 1,
       title: "Holud",
@@ -225,17 +238,17 @@ export default function EventsPage() {
                           <div>
                             <p className="font-semibold text-secondary tracking-wide uppercase text-base sm:text-lg leading-snug">{event.venue}</p>
                             <address className="not-italic space-y-0.5 mt-0.5">
-                              {Array.isArray((event as any).address) ? (
-                                (event as any).address.map((line: string, i: number) => (
+                              {Array.isArray(event.address) && event.address.length > 0 ? (
+                                event.address.map((line, i) => (
                                   <p key={i} className="text-gray-700 text-sm sm:text-base leading-relaxed">{toTitleCase(line)}</p>
                                 ))
-                              ) : (
-                                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{toTitleCase((event as any).location as string)}</p>
-                              )}
+                              ) : event.location ? (
+                                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{toTitleCase(event.location)}</p>
+                              ) : null}
                             </address>
                             <div className="mt-3 flex flex-wrap items-center gap-2">
                               <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressString(event.venue, (event as any).address))}`}
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressString(event.venue, event.address))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label={`Open ${event.venue} in Google Maps`}
@@ -244,7 +257,7 @@ export default function EventsPage() {
                                 <MapPinIcon className="h-4 w-4" aria-hidden="true" /> Get Directions <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
                               </a>
                               <a
-                                href={buildIcsDataUri(event.title, event.date, (event as any).time, event.venue, (event as any).address)}
+                                href={buildIcsDataUri(event.title, event.date, event.time, event.venue, event.address)}
                                 download={`${event.title.replace(/\s+/g,'-')}-${event.date}.ics`}
                                 aria-label={`Add ${event.title} on ${new Date(event.date).toLocaleDateString('en-US')} to your calendar`}
                                 className="inline-flex items-center gap-1.5 text-primary text-xs sm:text-sm font-medium rounded-full border border-primary/30 px-3 py-1.5 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
@@ -319,7 +332,9 @@ export default function EventsPage() {
             so you can still be part of our special day.
           </p>
           <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl max-w-sm sm:max-w-md mx-auto transform hover:scale-105 transition-transform duration-300">
-            <div className="text-4xl sm:text-5xl mb-3 sm:mb-4">📺</div>
+            <div className="mb-3 sm:mb-4 flex justify-center">
+              <TvIcon className="h-12 w-12 sm:h-14 sm:w-14 text-primary" />
+            </div>
             <h3 className="font-semibold text-foreground mb-2 text-lg sm:text-xl">Live Stream Available</h3>
             <p className="text-xs sm:text-sm text-muted mb-4 sm:mb-6">Wedding ceremony and reception will be broadcast live</p>
             <button className="bg-primary hover:bg-primary-dark text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
