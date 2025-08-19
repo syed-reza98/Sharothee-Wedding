@@ -1,6 +1,12 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend: Resend | null = null;
+function getResend(): Resend | null {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  if (!resend) resend = new Resend(key);
+  return resend;
+}
 
 interface EmailData {
   to: string[];
@@ -11,7 +17,13 @@ interface EmailData {
 
 export async function sendEmail({ to, subject, html, from = 'Wedding <noreply@wedding.com>' }: EmailData) {
   try {
-    const { data, error } = await resend.emails.send({
+    const client = getResend();
+    if (!client) {
+      console.warn('RESEND_API_KEY is not set. Skipping email send.');
+      return { success: false, error: new Error('Missing RESEND_API_KEY') };
+    }
+
+    const { data, error } = await client.emails.send({
       from,
       to,
       subject,
