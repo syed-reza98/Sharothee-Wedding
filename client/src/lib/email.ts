@@ -1,44 +1,54 @@
-import { Resend } from 'resend';
+import nodemailer, { Transporter } from 'nodemailer'
 
-let resend: Resend | null = null;
-function getResend(): Resend | null {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return null;
-  if (!resend) resend = new Resend(key);
-  return resend;
+let transporter: Transporter | null = null
+
+function getTransporter(): Transporter | null {
+  if (transporter) return transporter
+
+  const user = process.env.GMAIL_USER
+  const pass = process.env.GMAIL_APP_PASSWORD
+
+  if (!user || !pass) {
+    console.warn('GMAIL_USER or GMAIL_APP_PASSWORD is not set. Skipping email send.')
+    return null
+  }
+
+  transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user, pass },
+  })
+
+  return transporter
 }
 
 interface EmailData {
-  to: string[];
-  subject: string;
-  html: string;
-  from?: string;
+  to: string[]
+  subject: string
+  html: string
+  from?: string
 }
 
-export async function sendEmail({ to, subject, html, from = 'Wedding <noreply@wedding.com>' }: EmailData) {
+export async function sendEmail({ to, subject, html, from }: EmailData) {
   try {
-    const client = getResend();
-    if (!client) {
-      console.warn('RESEND_API_KEY is not set. Skipping email send.');
-      return { success: false, error: new Error('Missing RESEND_API_KEY') };
+    const tx = getTransporter()
+    if (!tx) {
+      return { success: false, error: new Error('Missing Gmail credentials') }
     }
 
-    const { data, error } = await client.emails.send({
-      from,
-      to,
+    const fromAddress =
+      from || process.env.GMAIL_FROM || `Wedding <${process.env.GMAIL_USER}>`
+
+    const info = await tx.sendMail({
+      from: fromAddress,
+      to: to.join(','),
       subject,
       html,
-    });
+    })
 
-    if (error) {
-      console.error('Email error:', error);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
+    return { success: true, data: info }
   } catch (error) {
-    console.error('Email error:', error);
-    return { success: false, error };
+    console.error('Email error:', error)
+    return { success: false, error }
   }
 }
 

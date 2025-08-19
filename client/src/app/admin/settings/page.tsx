@@ -22,7 +22,7 @@ export default function AdminSettingsPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Support Email</label>
-          <input className="w-full px-3 py-2 border rounded-lg" placeholder="hello@inciaandarvins.wedding" defaultValue="hello@inciaandarvins.wedding" />
+          <input className="w-full px-3 py-2 border rounded-lg" placeholder="codestromhub@gmail.com" defaultValue="codestromhub@gmail.com" />
         </div>
         <button type="submit" disabled={saving} className="bg-primary text-white px-4 py-2 rounded-lg">
           {saving ? 'Saving…' : 'Save Settings'}
