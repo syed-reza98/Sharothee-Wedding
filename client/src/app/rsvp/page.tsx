@@ -9,27 +9,32 @@ import { HandRaisedIcon, CheckCircleIcon, XMarkIcon, QuestionMarkCircleIcon, Spa
 export default function RSVPPage() {
   // Always start at RSVP form (step 2)
   const [step, setStep] = useState(2);
+  // Token field (for Step 1 flow)
+  const [token, setToken] = useState<string>("");
+
+  // Types for clarity and safety
+  type RSVPEvent = { id: string; title: string; date: string; time?: string };
+  type GuestInfo = { id: string; name: string; email: string; country: string };
+  type RSVPResponseFields = {
+    response?: "attending" | "not_attending" | "maybe";
+    num_attendees?: number;
+    dietary_preferences?: string;
+    comments?: string;
+  };
+
   // TODO: Replace demo guest info and events with real fetch in production
-  const [guestInfo] = useState({
+  const [guestInfo, setGuestInfo] = useState<GuestInfo>({
     id: "demo",
     name: "Guest",
     email: "",
     country: "",
   });
-  const [events] = useState([
+  const [events, setEvents] = useState<RSVPEvent[]>([
     { id: "1", title: "Holud", date: "2025-12-16" },
     { id: "2", title: "Akdh", date: "2025-12-17" },
     { id: "3", title: "Reception", date: "2025-12-18" },
   ]);
-  const [responses, setResponses] = useState<Record<
-    string,
-    {
-      response?: string;
-      num_attendees?: number;
-      dietary_preferences?: string;
-      comments?: string;
-    }
-  >>({});
+  const [responses, setResponses] = useState<Record<string, RSVPResponseFields>>({});
   const [loading, setLoading] = useState(false);
   // General RSVP questions state
   type AttendDhaka = "yes" | "no" | "maybe";
@@ -70,6 +75,41 @@ export default function RSVPPage() {
       setLoading(false);
       setStep(3);
     }, 700);
+  };
+
+  const handleTokenSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/rsvp/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        const data: { guest: GuestInfo; events: Array<{ id: string; title: string; date: string; time?: string }> } = await response.json();
+        setGuestInfo(data.guest);
+        setEvents(
+          data.events.map((event) => ({
+            id: event.id,
+            title: event.title,
+            date: event.date.includes('T') ? event.date.split('T')[0] : event.date,
+            time: event.time,
+          }))
+        );
+        setStep(2);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        alert(errorData.error || 'Invalid RSVP token');
+      }
+    } catch (err) {
+      console.error('Token validation error:', err);
+      alert('Failed to validate token. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
