@@ -53,17 +53,13 @@ export default function ContactPage() {
 
   const contacts = [
     {
-      title: "Wedding Coordinators",
-      people: [
-        { name: "Sarah Johnson", role: "Lead Coordinator", phone: "+880 1234-567890", email: "sarah@weddingplanner.com" },
-        { name: "Michael Chen", role: "Assistant Coordinator", phone: "+880 1234-567891", email: "michael@weddingplanner.com" }
-      ]
-    },
-    {
       title: "Emergency Contacts",
       people: [
-        { name: "Emergency Hotline", role: "24/7 Support", phone: "+880 1234-911911", email: "emergency@inciaandarvins.wedding" },
-        { name: "Hotel Concierge", role: "Guest Services", phone: "+880 1234-567892", email: "concierge@dhakaregency.com" }
+        { name: "Rana", role: "24/7 Support", phone: "+880 17 9340 3767" },
+        { name: "Tahamina", role: "24/7 Support", phone: "+880 17 9999 7024" },
+        { name: "Fazlu", role: "24/7 Support", phone: "+880 17 1330 2987" },
+        { name: "Lalin", role: "24/7 Support", phone: "+880 17 3001 2090" },
+  // ...existing code...
       ]
     }
   ];
@@ -79,7 +75,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <div className="w-16 sm:w-20 md:w-24 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
-          <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed text-foreground/90 tracking-[0.015em]">
+          <p className="text-lg sm:text-xl text-muted max-w-2xl mx-auto leading-relaxed">
             Have questions about our wedding? We&apos;d love to hear from you!
           </p>
         </div>
@@ -97,7 +93,7 @@ export default function ContactPage() {
                   <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-secondary mb-4">
                     Message Sent!
                   </h2>
-                  <p className="text-foreground/80 mb-6 text-sm sm:text-base leading-relaxed">
+                  <p className="text-muted mb-6 text-sm sm:text-base">
                     Thank you for reaching out! We&apos;ll get back to you as soon as possible.
                   </p>
                   <button
@@ -112,14 +108,14 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-secondary mb-6 tracking-tight">
+                  <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-secondary mb-6">
                     Send us a message
                   </h2>
                   
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2 tracking-wide">
+                        <label htmlFor="name" className="block text-sm font-bold text-gray-900 mb-2">
                           Name *
                         </label>
                         <input
@@ -128,13 +124,12 @@ export default function ContactPage() {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
                           required
                         />
                       </div>
-                      
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2 tracking-wide">
+                        <label htmlFor="email" className="block text-sm font-bold text-gray-900 mb-2">
                           Email *
                         </label>
                         <input
@@ -143,14 +138,14 @@ export default function ContactPage() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
                           required
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2 tracking-wide">
+                      <label htmlFor="phone" className="block text-sm font-bold text-gray-900 mb-2">
                         Phone Number
                       </label>
                       <input
@@ -159,12 +154,12 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2 tracking-wide">
+                      <label htmlFor="subject" className="block text-sm font-bold text-gray-900 mb-2">
                         Subject *
                       </label>
                       <select
@@ -172,7 +167,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold transition-all"
                         required
                       >
                         <option value="">Please select a subject</option>
@@ -187,7 +182,7 @@ export default function ContactPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2 tracking-wide">
+                      <label htmlFor="message" className="block text-sm font-bold text-gray-900 mb-2">
                         Message *
                       </label>
                       <textarea
@@ -196,7 +191,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
-                        className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-vertical"
+                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all resize-vertical"
                         placeholder="Tell us how we can help you..."
                         required
                       />
@@ -216,126 +211,38 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div className="space-y-6 sm:space-y-8">
-              {/* Quick Contact */}
-              <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl">
-                <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-                  Quick Contact
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary">📧</span>
+
+              {/* Wedding Team Contacts */}
+              {/* Emergency Contacts Only */}
+              <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl border-2 border-primary">
+                <h3 className="text-xl sm:text-2xl font-serif font-semibold text-primary mb-4 sm:mb-6 text-center">Emergency Contacts</h3>
+                <div className="flex flex-col gap-4 items-center">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-md">
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Rana</span>
+                      <a href="tel:+8801793403767" className="text-primary hover:underline font-semibold text-base">+880 17 9340 3767</a>
                     </div>
-                    <div>
-                      <p className="font-medium text-foreground">Email</p>
-                      <p className="text-foreground/85 text-sm font-light">contact@inciaandarvins.wedding</p>
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Tahamina</span>
+                      <a href="tel:+8801799997024" className="text-primary hover:underline font-semibold text-base">+880 17 9999 7024</a>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary">📱</span>
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Fazlu</span>
+                      <a href="tel:+8801713302987" className="text-primary hover:underline font-semibold text-base">+880 17 1330 2987</a>
                     </div>
-                    <div>
-                      <p className="font-medium text-foreground">WhatsApp</p>
-                      <p className="text-foreground/85 text-sm font-light">+880 1234-567890</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary">📍</span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">Wedding Location</p>
-                      <p className="text-foreground/85 text-sm font-light">Dhaka, Bangladesh</p>
+                    <div className="flex flex-col items-center bg-gray-50 rounded-lg p-4">
+                      <span className="font-bold text-gray-900 text-lg">Lalin</span>
+                      <a href="tel:+8801730012090" className="text-primary hover:underline font-semibold text-base">+880 17 3001 2090</a>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Wedding Team Contacts */}
-              {contacts.map((contactGroup, groupIndex) => (
-                <div key={groupIndex} className="bg-white rounded-xl p-6 sm:p-8 shadow-xl">
-                  <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-                    {contactGroup.title}
-                  </h3>
-                  <div className="space-y-4">
-                    {contactGroup.people.map((person, personIndex) => (
-                      <div key={personIndex} className="border-b border-cream-100 pb-4 last:border-b-0 last:pb-0">
-                        <p className="font-medium text-foreground">{person.name}</p>
-                        <p className="text-sm text-foreground/80 mb-2 font-light tracking-wide">{person.role}</p>
-                        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-1 sm:space-y-0 text-sm">
-                          <a 
-                            href={`tel:${person.phone}`}
-                            className="text-primary hover:underline"
-                          >
-                            {person.phone}
-                          </a>
-                          <a 
-                            href={`mailto:${person.email}`}
-                            className="text-primary hover:underline"
-                          >
-                            {person.email}
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 sm:py-20 bg-white/50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-foreground/80 text-sm sm:text-base leading-relaxed tracking-[0.01em]">
-              Here are some common questions we receive. Don&apos;t see your question? Feel free to contact us!
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8">
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">When should I RSVP?</h3>
-              <p className="text-foreground/80 text-sm sm:text-base leading-relaxed">
-                Please RSVP as soon as possible, but no later than July 15, 2025. 
-                This helps us finalize catering and seating arrangements.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">What&apos;s the dress code?</h3>
-              <p className="text-foreground/80 text-sm sm:text-base leading-relaxed">
-                We&apos;ll have different dress codes for each event. Detailed information 
-                will be sent with your invitation and is available on our Events page.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">Can I bring a plus-one?</h3>
-              <p className="text-foreground/80 text-sm sm:text-base leading-relaxed">
-                Plus-one information is specified on your invitation. If you have 
-                questions about your invitation, please contact us directly.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="font-semibold text-foreground mb-3">Will there be vegetarian/vegan options?</h3>
-              <p className="text-foreground/80 text-sm sm:text-base leading-relaxed">
-                Yes! We&apos;ll have various dietary options available. Please let us know 
-                about any specific dietary requirements when you RSVP.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-16 sm:py-20 gradient-hero">
@@ -343,7 +250,7 @@ export default function ContactPage() {
           <h2 className="text-3xl sm:text-4xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
             Ready to Celebrate with Us?
           </h2>
-          <p className="text-foreground/85 mb-8 text-sm sm:text-base leading-relaxed">
+          <p className="text-muted mb-8 text-sm sm:text-base">
             Don&apos;t forget to RSVP and check out all the wedding details.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">

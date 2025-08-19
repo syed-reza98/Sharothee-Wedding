@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from "next/link";
@@ -6,20 +7,57 @@ import Footer from "@/components/layout/Footer";
 import { useState } from "react";
 
 export default function RSVPPage() {
-  const [step, setStep] = useState(1);
-  const [token, setToken] = useState('');
-  const [guestInfo, setGuestInfo] = useState<{
-    id: string;
-    name: string;
-    email: string;
-    country: string;
-  } | null>(null);
-  const [events, setEvents] = useState<Array<{
-    id: string;
-    title: string;
-    date: string;
-    time: string;
-  }>>([]);
+  // Start directly at RSVP form (step 2), no code required
+  // ...existing useState declarations...
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    let hasError = false;
+    // Submit RSVP for each event responded to
+    for (const event of events) {
+      const resp = responses[event.id];
+      if (!resp || !resp.response) continue;
+      try {
+        const res = await fetch('/api/rsvp/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            guestId: guestInfo.id,
+            eventId: event.id,
+            response: resp.response.toUpperCase(),
+            attendees: resp.num_attendees || 1,
+            dietaryPreferences: resp.dietary_preferences || '',
+            comments: resp.comments || '',
+          })
+        });
+        if (!res.ok) hasError = true;
+      } catch (err) {
+        hasError = true;
+      }
+    }
+    setLoading(false);
+    if (!hasError) {
+      setStep(3);
+    } else {
+      alert('There was a problem submitting your RSVP. Please try again.');
+    }
+  };
+  // Use environment variable to control whether to skip RSVP code step (demo vs production)
+  // Always show RSVP form by default
+  const [step, setStep] = useState(2);
+  // TODO: Replace demo guest info and events with real fetch in production
+  const [guestInfo] = useState({
+    id: 'demo',
+    name: 'Guest',
+    email: '',
+    country: ''
+  });
+  const [events] = useState([
+    { id: '1', title: 'Holud', date: '2025-12-16' },
+    { id: '2', title: 'Akdh', date: '2025-12-17' },
+    { id: '3', title: 'Reception', date: '2025-12-18' }
+  ]);
   const [responses, setResponses] = useState<Record<string, {
     response?: string;
     num_attendees?: number;
@@ -27,42 +65,6 @@ export default function RSVPPage() {
     comments?: string;
   }>>({});
   const [loading, setLoading] = useState(false);
-
-  const handleTokenSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await fetch('/api/rsvp/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setGuestInfo(data.guest);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setEvents(data.events.map((event: any) => ({
-          id: event.id,
-          title: event.title,
-          date: event.date.split('T')[0],
-          time: event.time,
-        })));
-        setStep(2);
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || 'Invalid RSVP token');
-      }
-    } catch (error) {
-      console.error('Token validation error:', error);
-      alert('Failed to validate token. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleResponseChange = (eventId: string, field: string, value: string | number) => {
     setResponses(prev => ({
@@ -74,44 +76,9 @@ export default function RSVPPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const rsvpPromises = Object.entries(responses).map(([eventId, response]) => {
-        if (!response.response) return null;
-
-        return fetch('/api/rsvp/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            guestId: guestInfo!.id,
-            eventId,
-            response: response.response.toUpperCase(),
-            attendees: response.num_attendees || 1,
-            dietaryPreferences: response.dietary_preferences,
-            comments: response.comments,
-          }),
-        });
-      }).filter(Boolean);
-
-      await Promise.all(rsvpPromises);
-      setStep(3);
-    } catch (error) {
-      console.error('RSVP submission error:', error);
-      alert('Failed to submit RSVP. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-wedding">
       <Navigation />
-
       {/* Hero Section */}
       <section className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -124,65 +91,9 @@ export default function RSVPPage() {
           </p>
         </div>
       </section>
-
-      {/* RSVP Form */}
+      {/* RSVP Form (no code required) */}
       <section className="pb-16 sm:pb-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          {step === 1 && (
-            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl">
-              <div className="text-center mb-6 sm:mb-8">
-                <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🎫</div>
-                <h2 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-2">
-                  Enter Your RSVP Code
-                </h2>
-                <p className="text-muted text-sm sm:text-base">
-                  Please enter the RSVP code from your invitation to continue.
-                </p>
-              </div>
-
-              <form onSubmit={handleTokenSubmit} className="space-y-4 sm:space-y-6">
-                <div>
-                  <label htmlFor="token" className="block text-sm font-medium text-foreground mb-2">
-                    RSVP Code
-                  </label>
-                  <input
-                    type="text"
-                    id="token"
-                    value={token}
-                    onChange={(e) => setToken(e.target.value)}
-                    placeholder="Enter your RSVP code"
-                    className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-center text-lg tracking-wider transition-all"
-                    required
-                  />
-                  <p className="text-xs sm:text-sm text-muted mt-2">
-                    Your RSVP code can be found on your invitation card or email.
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  {loading ? 'Validating...' : 'Continue'}
-                </button>
-              </form>
-
-              <div className="mt-8 p-4 bg-cream-50 rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">Don&apos;t have an RSVP code?</h3>
-                <p className="text-sm text-muted mb-3">
-                  If you can&apos;t find your RSVP code, please contact us and we&apos;ll help you out.
-                </p>
-                <Link 
-                  href="/contact"
-                  className="text-primary hover:text-primary-dark font-medium text-sm"
-                >
-                  Contact Us →
-                </Link>
-              </div>
-            </div>
-          )}
-
           {step === 2 && (
             <div className="bg-white rounded-lg p-8 shadow-lg">
               <div className="text-center mb-8">
@@ -190,26 +101,24 @@ export default function RSVPPage() {
                 <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">
                   Welcome, {guestInfo?.name}!
                 </h2>
-                <p className="text-muted">
+                <p className="text-gray-900 font-semibold">
                   Please let us know which events you&apos;ll be attending.
                 </p>
               </div>
-
               <form onSubmit={handleSubmit} className="space-y-8">
                 {events.map((event) => (
-                  <div key={event.id} className="border border-cream-200 rounded-lg p-6">
+                  <div key={event.id} className="border border-gray-400 rounded-lg p-6 bg-white">
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-lg font-semibold text-foreground">{event.title}</h3>
-                        <p className="text-muted text-sm">
-                          {new Date(event.date).toLocaleDateString()} at {event.time}
+                        <h3 className="text-lg font-bold text-gray-900">{event.title}</h3>
+                        <p className="text-gray-900 text-sm font-semibold">
+                          {new Date(event.date).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
-
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-3">
+                        <label className="block text-sm font-bold text-gray-900 mb-3">
                           Will you be attending?
                         </label>
                         <div className="grid grid-cols-3 gap-3">
@@ -222,10 +131,10 @@ export default function RSVPPage() {
                                 onChange={(e) => handleResponseChange(event.id, 'response', e.target.value)}
                                 className="sr-only"
                               />
-                              <div className={`p-3 text-center rounded-lg border-2 transition-colors ${
+                              <div className={`p-3 text-center rounded-lg border-2 transition-colors font-semibold ${
                                 responses[event.id]?.response === response
                                   ? 'border-primary bg-primary/10 text-primary'
-                                  : 'border-cream-200 text-muted hover:border-primary/50'
+                                  : 'border-gray-400 text-gray-900 bg-white hover:border-primary/50'
                               }`}>
                                 <div className="text-lg mb-1">
                                   {response === 'attending' ? '✅' : response === 'not_attending' ? '❌' : '🤔'}
@@ -238,17 +147,16 @@ export default function RSVPPage() {
                           ))}
                         </div>
                       </div>
-
                       {responses[event.id]?.response === 'attending' && (
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <label htmlFor={`attendees_${event.id}`} className="block text-sm font-medium text-foreground mb-2">
+                            <label htmlFor={`attendees_${event.id}`} className="block text-sm font-bold text-gray-900 mb-2">
                               Number of attendees
                             </label>
                             <select
                               id={`attendees_${event.id}`}
                               onChange={(e) => handleResponseChange(event.id, 'num_attendees', parseInt(e.target.value))}
-                              className="w-full px-3 py-2 border border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                              className="w-full px-3 py-2 border-2 border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white text-gray-900 font-bold"
                             >
                               <option value="1">1 person</option>
                               <option value="2">2 people</option>
@@ -256,15 +164,14 @@ export default function RSVPPage() {
                               <option value="4">4 people</option>
                             </select>
                           </div>
-
                           <div>
-                            <label htmlFor={`dietary_${event.id}`} className="block text-sm font-medium text-foreground mb-2">
+                            <label htmlFor={`dietary_${event.id}`} className="block text-sm font-bold text-gray-900 mb-2">
                               Dietary preferences
                             </label>
                             <select
                               id={`dietary_${event.id}`}
                               onChange={(e) => handleResponseChange(event.id, 'dietary_preferences', e.target.value)}
-                              className="w-full px-3 py-2 border border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                              className="w-full px-3 py-2 border-2 border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white text-gray-900 font-bold"
                             >
                               <option value="">No preferences</option>
                               <option value="vegetarian">Vegetarian</option>
@@ -280,19 +187,17 @@ export default function RSVPPage() {
                     </div>
                   </div>
                 ))}
-
                 <div>
-                  <label htmlFor="special_requests" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="special_requests" className="block text-sm font-bold text-gray-900 mb-2">
                     Special requests or message
                   </label>
                   <textarea
                     id="special_requests"
                     rows={4}
                     placeholder="Any special requests, accessibility needs, or a message for the couple..."
-                    className="w-full px-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border-2 border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white text-gray-900 font-bold"
                   />
                 </div>
-
                 <button
                   type="submit"
                   disabled={loading}
@@ -303,7 +208,6 @@ export default function RSVPPage() {
               </form>
             </div>
           )}
-
           {step === 3 && (
             <div className="bg-white rounded-lg p-8 shadow-lg text-center">
               <div className="text-6xl mb-6">🎉</div>
@@ -314,7 +218,6 @@ export default function RSVPPage() {
                 Your RSVP has been submitted successfully. We&apos;ll send you a confirmation email 
                 with all the details shortly.
               </p>
-              
               <div className="space-y-4">
                 <Link 
                   href="/events"
@@ -333,8 +236,8 @@ export default function RSVPPage() {
           )}
         </div>
       </section>
-
       <Footer />
     </div>
   );
+
 }

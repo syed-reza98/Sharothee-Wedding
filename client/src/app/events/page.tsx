@@ -6,54 +6,40 @@ export default function EventsPage() {
   const events = [
     {
       id: 1,
-      title: "Mehndi Ceremony",
-      date: "2025-08-15",
-      time: "6:00 PM",
-      venue: "Private Residence",
+      title: "Holud",
+      date: "2025-12-16",
+      venue: "Fourtis Platinum Ground",
       location: "Dhaka, Bangladesh",
-      description: "Traditional mehndi ceremony with family and close friends. Join us for an evening of music, dance, and beautiful henna designs.",
-      dressCode: "Colorful traditional attire",
-      type: "mehndi"
+      description: "",
+      dressCode: "",
+      type: "holud"
     },
     {
       id: 2,
-      title: "Wedding Ceremony",
-      date: "2025-08-16",
-      time: "10:00 AM",
-      venue: "Dhaka Regency Hotel",
+      title: "Akdh",
+      date: "2025-12-17",
+      venue: "Seraton Hotel",
       location: "Dhaka, Bangladesh",
-      description: "The main wedding ceremony where Incia and Arvin will exchange vows surrounded by family and friends.",
-      dressCode: "Formal traditional or western attire",
-      type: "wedding"
+      description: "",
+      dressCode: "",
+      type: "akdh"
     },
     {
       id: 3,
-      title: "Reception Dinner",
-      date: "2025-08-16",
-      time: "7:00 PM",
-      venue: "Dhaka Regency Hotel",
+      title: "Reception",
+      date: "2025-12-18",
+      venue: "BCFCC",
       location: "Dhaka, Bangladesh",
-      description: "Evening reception with dinner, speeches, and dancing to celebrate the newlyweds.",
-      dressCode: "Formal attire",
+      description: "",
+      dressCode: "",
       type: "reception"
-    },
-    {
-      id: 4,
-      title: "After-Party Celebration",
-      date: "2025-08-20",
-      time: "4:00 PM",
-      venue: "Private Beach Resort",
-      location: "Phu Quoc, Vietnam",
-      description: "Extended celebration on the beautiful beaches of Phu Quoc with intimate friends and family.",
-      dressCode: "Beach formal / Resort wear",
-      type: "after_party"
     }
   ];
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case 'mehndi': return '🎨';
-      case 'wedding': return '💍';
+      case 'holud': return '🌼';
+      case 'akdh': return '💍';
       case 'reception': return '🥂';
       case 'after_party': return '🏖️';
       default: return '🎉';
@@ -76,6 +62,7 @@ export default function EventsPage() {
           </p>
         </div>
       </section>
+
 
       {/* Events Timeline */}
       <section className="pb-16 sm:pb-20">
@@ -109,7 +96,6 @@ export default function EventsPage() {
                                 day: 'numeric' 
                               })}
                             </span>
-                            <span className="flex items-center">🕐 {event.time}</span>
                           </div>
                         </div>
                       </div>
@@ -118,19 +104,18 @@ export default function EventsPage() {
                         <div className="flex items-start">
                           <span className="text-primary mr-3 text-lg flex-shrink-0">📍</span>
                           <div>
-                            <p className="font-medium text-foreground text-sm sm:text-base">{event.venue}</p>
-                            <p className="text-muted text-xs sm:text-sm">{event.location}</p>
+                            <p className="font-bold text-gray-900 text-base sm:text-lg">{event.venue}</p>
+                            <p className="text-gray-900 text-sm sm:text-base">{event.location}</p>
                           </div>
                         </div>
                         
                         <div className="flex items-start">
-                          <span className="text-primary mr-3 text-lg flex-shrink-0">👗</span>
-                          <p className="text-muted text-xs sm:text-sm">{event.dressCode}</p>
+                          {/* Dress code removed as requested */}
                         </div>
                       </div>
                       
                       <p className="text-muted leading-relaxed mb-6 text-sm sm:text-base">
-                        {event.description}
+                        {/* Description removed as requested */}
                       </p>
                       
                       <div className="flex flex-col sm:flex-row gap-3">
