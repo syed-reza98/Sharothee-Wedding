@@ -1,66 +1,15 @@
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { PaperAirplaneIcon, BuildingLibraryIcon, MapIcon, SunIcon, CurrencyDollarIcon, BuildingOffice2Icon, AcademicCapIcon, MegaphoneIcon, DevicePhoneMobileIcon, PhoneIcon } from '@heroicons/react/24/outline'
 
 export default function TravelPage() {
-  const accommodations = [
-    {
-      name: "Dhaka Regency Hotel & Resort",
-      type: "Main Wedding Venue",
-      location: "Dhaka, Bangladesh",
-      description: "Our main wedding venue with special rates for guests",
-      amenities: ["Pool", "Spa", "Restaurant", "Airport Shuttle"],
-      contact: {
-        phone: "+880 2-8836500",
-        email: "reservations@dhakaregency.com",
-        website: "www.dhakaregency.com"
-      },
-      booking: {
-        code: "INCIA-ARVIN2025",
-        deadline: "2025-07-15",
-        discount: "20% off standard rates"
-      }
-    },
-    {
-      name: "The Westin Dhaka",
-      type: "Luxury Option",
-      location: "Dhaka, Bangladesh",
-      description: "Premium accommodation near the wedding venue",
-      amenities: ["Luxury Spa", "Fine Dining", "Business Center", "Concierge"],
-      contact: {
-        phone: "+880 2-222-71100",
-        email: "reservations.dhaka@westin.com",
-        website: "www.marriott.com/dhaka"
-      },
-      booking: {
-        code: "WEDDING2025",
-        deadline: "2025-07-20",
-        discount: "15% off best available rate"
-      }
-    },
-    {
-      name: "Six Senses Ninh Van Bay",
-      type: "Vietnam After-Party",
-      location: "Phu Quoc, Vietnam",
-      description: "Beachfront resort for our Vietnam celebration",
-      amenities: ["Private Beach", "Water Sports", "Spa", "Fine Dining"],
-      contact: {
-        phone: "+84 28 3823 6888",
-        email: "reservations-ninhvanbay@sixsenses.com",
-        website: "www.sixsenses.com/resorts/ninh-van-bay"
-      },
-      booking: {
-        code: "INCIAANDARVINS",
-        deadline: "2025-07-30",
-        discount: "Group rates available"
-      }
-    }
-  ];
+  // No longer using old accommodations array
 
   const transportation = [
     {
       title: "Flying to Dhaka",
-      icon: "✈️",
+      icon: PaperAirplaneIcon,
       details: [
         "Main airport: Hazrat Shahjalal International Airport (DAC)",
         "Major airlines: Emirates, Qatar Airways, Turkish Airlines, Singapore Airlines",
@@ -70,7 +19,7 @@ export default function TravelPage() {
     },
     {
       title: "Airport Transportation",
-      icon: "🚗",
+  icon: BuildingLibraryIcon,
       details: [
         "Hotel shuttle service available (pre-arranged)",
         "Taxi service: Approximately 45-60 minutes to city center",
@@ -80,7 +29,7 @@ export default function TravelPage() {
     },
     {
       title: "Getting to Vietnam",
-      icon: "🏝️",
+  icon: MapIcon,
       details: [
         "Fly to Ho Chi Minh City (SGN) then domestic to Phu Quoc (PQC)",
         "Direct international flights to Phu Quoc from some cities",
@@ -116,32 +65,32 @@ export default function TravelPage() {
   const tips = [
     {
       title: "Weather",
-      icon: "🌤️",
-      content: "August in Dhaka: Warm and humid (25-32°C). Pack light, breathable clothing. Occasional rain showers expected."
+  icon: SunIcon,
+      content: "December in Dhaka: Pleasant and cool (15-25°C). Expect dry weather, low humidity, and lots of sunshine. Light sweaters or shawls are recommended for evenings."
     },
     {
       title: "Currency",
-      icon: "💱",
+  icon: CurrencyDollarIcon,
       content: "Bangladesh: Bangladeshi Taka (BDT). Vietnam: Vietnamese Dong (VND). USD widely accepted at hotels."
     },
     {
       title: "Health",
-      icon: "🏥",
+  icon: BuildingOffice2Icon,
       content: "Consult your doctor for recommended vaccinations. Drink bottled water. Travel insurance recommended."
     },
     {
       title: "Culture",
-      icon: "🕌",
+  icon: AcademicCapIcon,
       content: "Respectful dress for religious sites. Remove shoes when entering homes/mosques. Modest attire preferred."
     },
     {
       title: "Language",
-      icon: "🗣️",
+  icon: MegaphoneIcon,
       content: "Bengali in Bangladesh, Vietnamese in Vietnam. English widely spoken in hotels and tourist areas."
     },
     {
       title: "Connectivity",
-      icon: "📱",
+  icon: DevicePhoneMobileIcon,
       content: "WiFi available at hotels. Consider local SIM cards for data. International roaming can be expensive."
     }
   ];
@@ -165,67 +114,31 @@ export default function TravelPage() {
 
       {/* Accommodations */}
       <section className="pb-12 sm:pb-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
-              Where to Stay
+              Accommodations
             </h2>
-            <p className="text-muted max-w-2xl mx-auto text-sm sm:text-base">
-              We&apos;ve arranged special rates at select hotels for your convenience.
-            </p>
           </div>
-
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-            {accommodations.map((hotel, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300">
-                <div className="p-6 sm:p-8">
-                  <div className="flex flex-col mb-4 sm:mb-6">
-                    <div>
-                      <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary mb-1 sm:mb-2">
-                        {hotel.name}
-                      </h3>
-                      <p className="text-primary text-sm sm:text-base font-medium">{hotel.type}</p>
-                      <p className="text-muted text-xs sm:text-sm">{hotel.location}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-muted text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">{hotel.description}</p>
-
-                  <div className="mb-4 sm:mb-6">
-                    <h4 className="font-semibold text-foreground mb-2 sm:mb-3 text-sm sm:text-base">Amenities</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {hotel.amenities.map((amenity, amenityIndex) => (
-                        <span
-                          key={amenityIndex}
-                          className="bg-cream-100 text-muted px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
-                        >
-                          {amenity}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-4 sm:pt-6">
-                    <div className="bg-primary/10 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-                      <h4 className="font-semibold text-primary mb-1 sm:mb-2 text-sm sm:text-base">Special Offer</h4>
-                      <p className="text-sm sm:text-base text-primary mb-1 sm:mb-2">{hotel.booking.discount}</p>
-                      <p className="text-xs sm:text-sm text-muted mb-1">
-                        Code: <strong>{hotel.booking.code}</strong>
-                      </p>
-                      <p className="text-xs sm:text-sm text-muted">
-                        Book by: {new Date(hotel.booking.deadline).toLocaleDateString()}
-                      </p>
-                    </div>
-
-                    <div className="space-y-2 text-sm sm:text-base">
-                      <p className="flex items-center"><span className="mr-2">📞</span> {hotel.contact.phone}</p>
-                      <p className="flex items-center"><span className="mr-2">✉️</span> {hotel.contact.email}</p>
-                      <p className="flex items-center"><span className="mr-2">🌐</span> {hotel.contact.website}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="grid sm:grid-cols-2 gap-8 mb-10">
+            {/* Lakeshore Grand Card */}
+            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Grand, Gulshan</h3>
+              <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps?q=Lakeshore+Grand+Gulshan+Dhaka&output=embed" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
+              <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
+            </div>
+            {/* Lakeshore Heights Card */}
+            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Heights, Gulshan</h3>
+              <iframe title="Lakeshore Heights Gulshan Map" src="https://www.google.com/maps?q=Lakeshore+Heights+Gulshan+Dhaka&output=embed" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
+              <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
+            </div>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-primary mb-2">Vietnam</h3>
+              <p className="text-gray-900 text-sm">The reservations for Accommodations will be made for all guests traveling from abroad by the Bride’s Family and Wedding Team.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -246,7 +159,9 @@ export default function TravelPage() {
             {transportation.map((transport, index) => (
               <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                 <div className="text-center mb-4 sm:mb-6">
-                  <div className="text-4xl sm:text-5xl mb-2 sm:mb-4">{transport.icon}</div>
+                  <div className="mb-2 sm:mb-4 flex justify-center">
+                    <transport.icon className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
+                  </div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary">
                     {transport.title}
                   </h3>
@@ -291,11 +206,6 @@ export default function TravelPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="bg-primary/10 rounded-lg p-3">
-                  <p className="text-sm text-primary font-medium">
-                    📋 {visa.assistance}
-                  </p>
-                </div>
               </div>
             ))}
           </div>
@@ -330,7 +240,9 @@ export default function TravelPage() {
             {tips.map((tip, index) => (
               <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                 <div className="text-center mb-3 sm:mb-4">
-                  <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">{tip.icon}</div>
+                  <div className="mb-2 sm:mb-3 flex justify-center">
+                    <tip.icon className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+                  </div>
                   <h3 className="font-semibold text-foreground text-sm sm:text-base">{tip.title}</h3>
                 </div>
                 <p className="text-xs sm:text-sm text-muted text-center leading-relaxed">
@@ -352,9 +264,16 @@ export default function TravelPage() {
             Our travel support team is available around the clock to assist you during your journey.
           </p>
           <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl max-w-sm sm:max-w-md mx-auto transform hover:scale-105 transition-transform duration-300">
-            <div className="text-4xl sm:text-5xl mb-3 sm:mb-4">📞</div>
+            <div className="mb-3 sm:mb-4 flex justify-center">
+              <PhoneIcon className="h-12 w-12 sm:h-14 sm:w-14 text-primary" />
+            </div>
             <h3 className="font-semibold text-foreground mb-2 sm:mb-3 text-lg sm:text-xl">Emergency Travel Hotline</h3>
-            <p className="text-primary font-medium mb-1 sm:mb-2 text-lg sm:text-xl">+880 1234-911911</p>
+            <ul className="space-y-1 mb-4 sm:mb-6">
+              <li className="text-primary font-medium text-lg sm:text-xl">Rana: <a href="tel:+8801793403767" className="hover:underline">+880 17 9340 3767</a></li>
+              <li className="text-primary font-medium text-lg sm:text-xl">Tahamina: <a href="tel:+8801799997024" className="hover:underline">+880 17 9999 7024</a></li>
+              <li className="text-primary font-medium text-lg sm:text-xl">Fazlu: <a href="tel:+8801713302987" className="hover:underline">+880 17 1330 2987</a></li>
+              <li className="text-primary font-medium text-lg sm:text-xl">Lalin: <a href="tel:+8801730012090" className="hover:underline">+880 17 3001 2090</a></li>
+            </ul>
             <p className="text-xs sm:text-sm text-muted mb-4 sm:mb-6">Available 24/7 for urgent travel assistance</p>
             <Link
               href="/contact"

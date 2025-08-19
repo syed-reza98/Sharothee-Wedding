@@ -3,6 +3,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 
 export default function EventsPage() {
+  // Helpers: build address string, maps URL, and ICS calendar content safely on the server
   const events = [
     {
       id: 1,
@@ -14,6 +15,13 @@ export default function EventsPage() {
       description: "Traditional mehndi ceremony with family and close friends. Join us for an evening of music, dance, and beautiful henna designs.",
       dressCode: "Colorful traditional attire",
       type: "mehndi"
+      address: [
+        "NEAR TO ADAMJEE CANTONMENT PUBLIC SCHOOL & COLLEGE",
+        "JOLSHIRI, PURBACHAL, DHAKA-1216"
+      ],
+      description: "",
+      dressCode: "",
+      type: "holud"
     },
     {
       id: 2,
@@ -25,6 +33,9 @@ export default function EventsPage() {
       description: "The main wedding ceremony where Incia and Arvin will exchange vows surrounded by family and friends.",
       dressCode: "Formal traditional or western attire",
       type: "wedding"
+      venue: "SHERATON DHAKA — Sheraton Grand Ballroom (Level 12)",
+      address: [
+        "44 KEMAL ATATURK AVENUE, BANANI",
     },
     {
       id: 3,
@@ -35,28 +46,24 @@ export default function EventsPage() {
       location: "Dhaka, Bangladesh",
       description: "Evening reception with dinner, speeches, and dancing to celebrate the newlyweds.",
       dressCode: "Formal attire",
+        "AGARGAON, SHER-E-BANGLA NAGAR",
+        "DHAKA-1209"
+      ],
       type: "reception"
     },
-    {
-      id: 4,
-      title: "After-Party Celebration",
-      date: "2025-08-20",
-      time: "4:00 PM",
-      venue: "Private Beach Resort",
-      location: "Phu Quoc, Vietnam",
       description: "Extended celebration on the beautiful beaches of Phu Quoc with intimate friends and family.",
       dressCode: "Beach formal / Resort wear",
-      type: "after_party"
     }
   ];
 
-  const getEventIcon = (type: string) => {
+  const getEventIcon = (type: string): React.ElementType => {
     switch (type) {
-      case 'mehndi': return '🎨';
-      case 'wedding': return '💍';
-      case 'reception': return '🥂';
       case 'after_party': return '🏖️';
       default: return '🎉';
+      case 'holud': return SparklesIcon;
+      case 'akdh': return HeartIcon;
+      case 'reception': return GiftTopIcon;
+      default: return SparklesIcon;
     }
   };
 
@@ -77,6 +84,7 @@ export default function EventsPage() {
         </div>
       </section>
 
+
       {/* Events Timeline */}
       <section className="pb-16 sm:pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -96,8 +104,6 @@ export default function EventsPage() {
                     <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1" data-testid="event-card">
                       <div className="flex flex-col sm:flex-row sm:items-center mb-4 sm:mb-6">
                         <span className="text-3xl sm:text-4xl mr-0 sm:mr-4 mb-2 sm:mb-0" data-testid="event-icon">{getEventIcon(event.type)}</span>
-                        <div className="flex-1">
-                          <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-semibold text-secondary mb-2">
                             {event.title}
                           </h3>
                           <div className="flex flex-col sm:flex-row sm:items-center text-muted space-y-1 sm:space-y-0 sm:space-x-4 text-sm sm:text-base">
@@ -108,38 +114,64 @@ export default function EventsPage() {
                                 month: 'long', 
                                 day: 'numeric' 
                               })}
+                                  })}
+                                </time>
+                                {event.time ? (
+                                  <>
+                                    {' '}·{' '}
+                                    <time dateTime={(() => { const m = event.time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); if(!m) return ''; const hh = parseInt(m[1],10) % 12 + (m[3].toUpperCase()==='PM'?12:0); return `${String(hh).padStart(2,'0')}:${m[2]}`; })()}>{event.time}</time>
+                                  </>
                             </span>
-                            <span className="flex items-center">🕐 {event.time}</span>
                           </div>
                         </div>
                       </div>
                       
                       <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                         <div className="flex items-start">
-                          <span className="text-primary mr-3 text-lg flex-shrink-0">📍</span>
+                          <span className="text-primary mr-3 flex-shrink-0" aria-hidden>
+                            <MapPinIcon className="h-5 w-5" aria-hidden="true" />
+                          </span>
                           <div>
-                            <p className="font-medium text-foreground text-sm sm:text-base">{event.venue}</p>
-                            <p className="text-muted text-xs sm:text-sm">{event.location}</p>
+                            <p className="font-semibold text-secondary tracking-wide uppercase text-base sm:text-lg leading-snug">{event.venue}</p>
+                            <address className="not-italic space-y-0.5 mt-0.5">
+                              {Array.isArray((event as any).address) ? (
+                                (event as any).address.map((line: string, i: number) => (
+                                  <p key={i} className="text-gray-700 text-sm sm:text-base leading-relaxed">{toTitleCase(line)}</p>
+                                ))
+                              ) : (
+                                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{toTitleCase((event as any).location as string)}</p>
+                              )}
+                            </address>
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
+                              <a
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressString(event.venue, (event as any).address))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`Open ${event.venue} in Google Maps`}
+                                className="inline-flex items-center gap-1.5 text-primary text-xs sm:text-sm font-medium rounded-full border border-primary/30 px-3 py-1.5 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
+                              >
+                                <MapPinIcon className="h-4 w-4" aria-hidden="true" /> Get Directions <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
+                              </a>
+                              <a
+                                href={buildIcsDataUri(event.title, event.date, (event as any).time, event.venue, (event as any).address)}
+                                download={`${event.title.replace(/\s+/g,'-')}-${event.date}.ics`}
+                                aria-label={`Add ${event.title} on ${new Date(event.date).toLocaleDateString('en-US')} to your calendar`}
+                                className="inline-flex items-center gap-1.5 text-primary text-xs sm:text-sm font-medium rounded-full border border-primary/30 px-3 py-1.5 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
+                              >
+                                <CalendarDaysIcon className="h-4 w-4" aria-hidden="true" /> Add to Calendar (.ics)
+                              </a>
+                            </div>
                           </div>
                         </div>
                         
                         <div className="flex items-start">
-                          <span className="text-primary mr-3 text-lg flex-shrink-0">👗</span>
-                          <p className="text-muted text-xs sm:text-sm">{event.dressCode}</p>
+                          {/* Dress code removed as requested */}
                         </div>
                       </div>
                       
-                      <p className="text-muted leading-relaxed mb-6 text-sm sm:text-base">
-                        {event.description}
                       </p>
                       
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <button className="bg-primary hover:bg-primary-dark text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
-                          View Details
-                        </button>
-                        <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-200">
-                          Add to Calendar
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -152,6 +184,13 @@ export default function EventsPage() {
                         <p className="text-muted font-medium text-sm sm:text-base">{event.title} Photo</p>
                       </div>
                     </div>
+                          <div className="text-center text-primary">
+                            {(() => { const Icon = getEventIcon(event.type); return <Icon className="h-10 w-10 sm:h-12 sm:w-12 inline-block mb-2 sm:mb-4" aria-hidden="true" />; })()}
+                            <p className="text-muted font-medium text-sm sm:text-base">{event.title} Photo</p>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
