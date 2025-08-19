@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { PhotoIcon, VideoCameraIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/layout/Navigation";
@@ -96,12 +97,16 @@ export default function GalleryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-12 sm:py-20">
-              <div className="text-4xl sm:text-5xl mb-4">📸</div>
+              <div className="mb-4 flex justify-center">
+                <PhotoIcon className="h-12 w-12 sm:h-14 sm:w-14 text-primary" />
+              </div>
               <p className="text-muted text-sm sm:text-base">Loading gallery...</p>
             </div>
           ) : Object.keys(groupedMedia).length === 0 ? (
             <div className="text-center py-12 sm:py-20">
-              <div className="text-4xl sm:text-5xl mb-4">📸</div>
+              <div className="mb-4 flex justify-center">
+                <PhotoIcon className="h-12 w-12 sm:h-14 sm:w-14 text-primary" />
+              </div>
               <p className="text-muted text-sm sm:text-base">No photos available yet. Check back soon!</p>
             </div>
           ) : (
@@ -134,7 +139,9 @@ export default function GalleryPage() {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                             <div className="text-center">
-                              <div className="text-3xl sm:text-4xl mb-2">🎥</div>
+                              <div className="mb-2 flex justify-center">
+                                <VideoCameraIcon className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+                              </div>
                               <p className="text-xs sm:text-sm text-muted">Video</p>
                             </div>
                           </div>

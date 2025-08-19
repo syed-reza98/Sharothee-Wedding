@@ -110,12 +110,145 @@ body {
   }
 }
 
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .animate-floatIn {
   animation: floatIn 0.8s ease-out forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Photo hover effects for Our Story section */
+.story-photo-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+}
+
+.story-photo-hover:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 20px 40px rgba(212, 165, 116, 0.3);
+}
+
+/* Warm tone effects for Where It All Began section */
+.warm-photo-hover {
+  transition: all 0.5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+}
+
+.warm-photo-hover:hover {
+  transform: scale(1.1) rotate(0deg);
+  box-shadow: 0 15px 35px rgba(251, 146, 60, 0.3);
+}
+
+/* Decorative elements */
+.story-divider {
+  position: relative;
+}
+
+.story-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  transform: translateY(-50%);
+}
+
+/* Enhanced photo cards */
+.photo-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.photo-card:hover {
+  box-shadow: 0 20px 60px rgba(212, 165, 116, 0.2);
+  transform: translateY(-5px);
+}
+
+.photo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(212, 165, 116, 0.1) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photo-card:hover::after {
+  opacity: 1;
+}
+
+/* Floating pulse animation for decorative dots */
+@keyframes warmPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }
 
 /* Elegant gradient backgrounds */

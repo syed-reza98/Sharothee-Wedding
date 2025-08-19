@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { HeartIcon } from '@heroicons/react/24/outline'
 
 interface TimeLeft {
   days: number;
@@ -56,8 +57,9 @@ export default function Countdown({ targetDate, className = '' }: CountdownProps
     return (
       <div className={`text-center ${className}`}>
         <div className="animate-floatIn">
-          <h3 className="text-2xl sm:text-3xl font-serif font-semibold text-secondary mb-2">
-            🎉 We&apos;re Married! 🎉
+          <h3 className="text-2xl sm:text-3xl font-serif font-semibold text-secondary mb-2 inline-flex items-center gap-2">
+            <HeartIcon className="h-7 w-7 text-primary" />
+            We&apos;re Married!
           </h3>
           <p className="text-lg text-muted">
             Thank you for celebrating with us

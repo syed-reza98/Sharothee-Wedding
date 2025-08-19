@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { FaceFrownIcon } from '@heroicons/react/24/outline'
 
 interface ErrorBoundaryState {
   hasError: boolean
@@ -56,7 +57,9 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
         <div className="min-h-screen flex items-center justify-center bg-gradient-wedding">
           <div className="max-w-md mx-auto text-center px-4">
             <div className="bg-white rounded-xl p-8 shadow-xl">
-              <div className="text-6xl mb-4">😔</div>
+              <div className="mb-4 flex justify-center">
+                <FaceFrownIcon className="h-16 w-16 text-secondary" aria-hidden="true" />
+              </div>
               <h1 className="text-2xl font-serif font-semibold text-secondary mb-4">
                 Something went wrong
               </h1>

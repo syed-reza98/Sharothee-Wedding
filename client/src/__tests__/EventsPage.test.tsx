@@ -24,7 +24,7 @@ describe('Events Page', () => {
 
   it('shows event cards with icons', () => {
     const { getAllByTestId } = render(<EventsPage />)
-    const emojiElements = getAllByTestId('event-icon')
-    expect(emojiElements.length).toBeGreaterThan(0)
+    const iconElements = getAllByTestId('event-icon')
+    expect(iconElements.length).toBeGreaterThan(0)
   })
 })
