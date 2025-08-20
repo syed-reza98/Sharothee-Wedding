@@ -14,7 +14,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "analyze": "ANALYZE=1 next build",
-    "security:scan": "npm audit --audit-level=high || true",
+    "security:scan": "npm audit --audit-level=high",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
