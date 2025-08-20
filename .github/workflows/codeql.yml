@@ -46,7 +46,7 @@ jobs:
       if: matrix.language == 'javascript-typescript'
       run: |
         cd client
-        npm ci --only=production
+        npm ci --omit=dev
       continue-on-error: true
 
     - name: Initialize CodeQL
