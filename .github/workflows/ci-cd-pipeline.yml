@@ -111,9 +111,7 @@ jobs:
       if: success()
       with:
         name: wedding-website-build
-        path: |
-          client/.next
-          client/out
+        path: client/.next/
         retention-days: 7
 
   security-audit:
@@ -165,11 +163,32 @@ jobs:
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: npm ci --prefer-offline --no-audit
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: wedding-website-build
-        path: client/
+    - name: Create environment file
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        cat << EOF > .env.local
+        # Database
+        DATABASE_URL="file:./dev.db"
+        
+        # NextAuth
+        NEXTAUTH_SECRET="wedding-test-secret-key-for-ci"
+        NEXTAUTH_URL="http://localhost:3000"
+        
+        # Email (Test keys)
+        RESEND_API_KEY="re_test_api_key"
+        
+        # Cloudinary (Test keys)
+        CLOUDINARY_CLOUD_NAME="test-cloud"
+        CLOUDINARY_API_KEY="test-api-key"
+        CLOUDINARY_API_SECRET="test-api-secret"
+        EOF
+        echo "✅ Environment file created for performance testing"
+
+    - name: Generate Prisma client
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npx prisma generate
+        echo "✅ Prisma client generated"
 
     - name: Lighthouse Performance Test
       uses: treosh/lighthouse-ci-action@v11
