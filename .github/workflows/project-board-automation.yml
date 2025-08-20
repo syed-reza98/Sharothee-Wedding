@@ -14,8 +14,10 @@ jobs:
   move-to-boards:
     runs-on: ubuntu-latest
     steps:
+      # Check for both 'opened' (issues event) and 'created' (issue_comment event) actions
+      # to support issues created directly or via comments that create/tag issues
       - name: Move Bug Reports to Bug Triage
-        if: contains(github.event.issue.title, '[BUG]') && github.event.action == 'opened'
+        if: success() && github.event.issue && contains(github.event.issue.title, '[BUG]') && (github.event.action == 'opened' || github.event.action == 'created')
         uses: actions/github-script@v7
         with:
           script: |
@@ -28,7 +30,7 @@ jobs:
             })
 
       - name: Move Feature Requests to Backlog
-        if: contains(github.event.issue.title, '[FEATURE]') && github.event.action == 'opened'
+        if: success() && github.event.issue && contains(github.event.issue.title, '[FEATURE]') && (github.event.action == 'opened' || github.event.action == 'created')
         uses: actions/github-script@v7
         with:
           script: |
@@ -40,7 +42,7 @@ jobs:
             })
 
       - name: Move Deployment Tasks to Pipeline
-        if: contains(github.event.issue.title, '[DEPLOY]') && github.event.action == 'opened'
+        if: success() && github.event.issue && contains(github.event.issue.title, '[DEPLOY]') && (github.event.action == 'opened' || github.event.action == 'created')
         uses: actions/github-script@v7
         with:
           script: |
@@ -51,8 +53,9 @@ jobs:
               body: '🚀 **Deployment Task Created**\n\nThis deployment has been added to the Deployment Pipeline board.\n\n**Pre-Deployment Checklist:**\n- [ ] Code review complete\n- [ ] Tests passing\n- [ ] Environment variables ready\n- [ ] Database backup created\n- [ ] Rollback plan confirmed\n\n*Automated by Sharothee Wedding Project Management*'
             })
 
+      # Only celebrate when issues are actually closed (not on issue_comment events)
       - name: Celebrate Issue Completion
-        if: github.event.action == 'closed'
+        if: success() && github.event.issue && github.event.action == 'closed'
         uses: actions/github-script@v7
         with:
           script: |
