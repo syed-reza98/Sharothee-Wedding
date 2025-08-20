@@ -37,8 +37,8 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 - **Backend**: Next.js API Routes
 - **Database**: MySQL with Prisma ORM
 - **Authentication**: NextAuth.js with JWT tokens
-- **File Storage**: Cloudinary for media management
-- **Email Service**: Resend for notifications
+- **File Storage**: Open-Source and Free provider for media management
+- **Email Service**: NodeMailer and Gmail
 - **Forms**: React Hook Form with Zod validation
 - **State Management**: Zustand
 - **Testing**: Jest with React Testing Library
@@ -50,8 +50,8 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 - Node.js 18+ 
 - npm or yarn
 - MySQL database
-- Cloudinary account (for media storage)
-- Resend account (for emails)
+- Open-Source Free Provider account (for media storage)
+- Gmail App Password and account (for emails)
 
 ### Installation
 
@@ -79,13 +79,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
    NEXTAUTH_SECRET="your-secret-key"
    NEXTAUTH_URL="http://localhost:3000"
    
-   # Cloudinary
-   CLOUDINARY_CLOUD_NAME="your-cloud-name"
-   CLOUDINARY_API_KEY="your-api-key"
-   CLOUDINARY_API_SECRET="your-api-secret"
-   
-   # Resend
-   RESEND_API_KEY="your-resend-api-key"
+
    ```
 
 4. **Set up the database**
