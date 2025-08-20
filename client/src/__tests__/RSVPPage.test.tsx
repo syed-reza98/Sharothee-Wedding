@@ -26,7 +26,7 @@ describe('RSVP Page', () => {
     render(<RSVPPage />)
     
     // Check for the main RSVP question
-    expect(screen.getByLabelText(/grace us with your presence/i)).toBeInTheDocument()
+    expect(screen.getByText(/Will you be able to grace us with your presence in Dhaka\?/i)).toBeInTheDocument()
     
     // Check for family side question
     expect(screen.getByText(/Are you from The Bride's Family or The Groom's Family\?/i)).toBeInTheDocument()
