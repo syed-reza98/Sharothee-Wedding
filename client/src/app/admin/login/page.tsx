@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { Suspense } from 'react'
 
-export default function AdminLogin() {
+function AdminLoginInner() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -133,5 +133,14 @@ export default function AdminLogin() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function AdminLogin() {
+  // Wrap the component that uses useSearchParams in Suspense
+  return (
+    <Suspense fallback={null}>
+      <AdminLoginInner />
+    </Suspense>
   )
 }

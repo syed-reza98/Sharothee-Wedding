@@ -14,7 +14,7 @@ export default function HomePage() {
       <section id="home" className="min-h-screen flex items-center justify-center gradient-hero pt-16">
         <div className="text-center px-4 sm:px-6 lg:px-8 w-full max-w-6xl">
           <div className="animate-fadeInUp">
-            <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight">
+            <h2 className="pt-2 sm:pt-3 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight">
               Incia & Arvin
             </h2>
             <div className="w-16 sm:w-20 md:w-24 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
@@ -26,30 +26,32 @@ export default function HomePage() {
             </p>
             
             {/* Wedding Date */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 sm:p-8 max-w-sm sm:max-w-md mx-auto mb-8 sm:mb-12 shadow-xl border border-white/20">
-              <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-4">
-                Save the Date
-              </h3>
-              <p className="text-lg sm:text-xl font-light text-foreground mb-4">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-sm sm:max-w-md mx-auto mb-8 sm:mb-12 shadow-xl border border-cream-200">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <CalendarDaysIcon className="h-6 w-6 text-primary" />
+                <h3 className="text-xl sm:text-2xl font-serif font-semibold text-secondary">
+                  Save the Date
+                </h3>
+              </div>
+              <p className="text-2xl sm:text-3xl font-light text-secondary mb-3">
                 December 16, 2025
               </p>
-              
+              <p className="text-sm text-muted mb-4">Tuesday • Starts at 6:00 PM</p>
               {/* Countdown Timer */}
               <Countdown 
                 targetDate="2025-12-16T00:00:00+06:00" 
                 className="mb-4"
               />
-              
               <p className="text-muted font-medium">
                 Dhaka, Bangladesh
               </p>
-              <p className="text-sm text-muted mt-2">
+              <p className="text-sm text-muted mt-1">
                 After-party in Phu Quoc, Vietnam
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md mx-auto mb-10 sm:mb-12">
               <Link
                 href="/rsvp"
                 className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
@@ -70,17 +72,19 @@ export default function HomePage() {
       {/* Our Story Section */}
       <section id="story" className="py-20 bg-white relative overflow-hidden">
         {/* Decorative Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-0 left-0 w-full h-full" aria-hidden="true">
           <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/50 rounded-full blur-3xl"></div>
         </div>
         
   <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center mb-6">
-              <div className="w-12 h-px bg-primary"></div>
-              <span className="mx-4 text-sm font-medium text-primary tracking-wider uppercase">Our Journey</span>
-              <div className="w-12 h-px bg-primary"></div>
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="w-12 h-px bg-primary/60"></div>
+              <HeartIcon className="h-4 w-4 text-primary mx-3" aria-hidden="true" />
+              <span className="mx-1 text-sm font-medium text-primary tracking-wider uppercase">Our Journey</span>
+              <HeartIcon className="h-4 w-4 text-primary mx-3" aria-hidden="true" />
+              <div className="w-12 h-px bg-primary/60"></div>
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-secondary mb-6">
               Our Love Story
@@ -96,72 +100,71 @@ export default function HomePage() {
             <div className="grid lg:grid-cols-5 gap-8 items-center">
               <div className="lg:col-span-2 space-y-6">
                 <div className="inline-flex items-center">
-                  <div className="w-8 h-px bg-orange-400"></div>
-                  <span className="mx-3 text-xs font-medium text-orange-600 tracking-wider uppercase">Chapter 1</span>
+                  <div className="w-8 h-px bg-primary/40"></div>
+                  <span className="mx-3 text-xs font-medium text-primary tracking-wider uppercase">Chapter 1</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-serif font-semibold text-orange-800 mb-6">
+                <h3 className="text-3xl md:text-4xl font-serif font-semibold text-secondary mb-6">
                   Where It All Began
                 </h3>
-                <p className="text-gray-700 leading-relaxed text-lg mb-6">
+                <p className="text-muted leading-relaxed text-lg mb-6">
                   In the vibrant hallways of the American International School of Dhaka (AISD), 
                   what started as innocent friendship in middle school blossomed into 
                   something truly magical. From sharing lunch to navigating teenage years 
                   together, we were inseparable—building memories that would last a lifetime.
                 </p>
-                <div className="inline-flex items-center text-orange-600 text-sm font-medium">
+                <div className="inline-flex items-center text-primary text-sm font-medium">
                   <span>2010 - 2015 • AISD Years</span>
-                  <div className="ml-3 w-6 h-px bg-orange-400"></div>
+                  <div className="ml-3 w-6 h-px bg-primary/40"></div>
                 </div>
               </div>
               
               <div className="lg:col-span-3">
                 <div className="relative">
                   {/* Main central photo with warm overlay */}
-                  <div className="relative h-72 lg:h-80 rounded-2xl overflow-hidden shadow-2xl mb-4">
+          <div className="relative h-80 lg:h-96 rounded-2xl overflow-hidden shadow-2xl mb-4">
                     <Image
                       src="/images/story/Where It All Began 1.jpeg"
                       alt="AISD memories - Where it all began"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+            className="object-cover object-[50%_24%] sm:object-[50%_28%] lg:object-[50%_32%] scale-[1.06] hover:scale-[1.1] transition-transform duration-700 brightness-110 contrast-105 saturate-105 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 60vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-transparent to-amber-300/15"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
                     <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg">
-                      <span className="text-xs font-semibold text-orange-800">School Days Magic</span>
+                      <span className="text-xs font-semibold text-secondary">School Days Magic</span>
                     </div>
                   </div>
                   
           {/* Two side photos in a creative layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="relative h-40 sm:h-36 lg:h-36 rounded-xl overflow-hidden shadow-lg transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+          <div className="relative h-40 sm:h-36 lg:h-36 rounded-xl overflow-hidden shadow-lg md:transform md:-rotate-1 md:hover:rotate-0 transition-transform duration-500 motion-reduce:transform-none motion-reduce:transition-none">
                     <Image
                       src="/images/story/Where It All Began 2.jpeg"
                       alt="AISD school days together"
                       fill
-                      className="object-cover scale-[1.15] hover:scale-[1.2] transition-transform duration-700 brightness-110 contrast-105 saturate-110"
+                      className="object-cover scale-[1.22] hover:scale-[1.26] transition-transform duration-700 brightness-125 contrast-110 saturate-110 motion-reduce:transform-none motion-reduce:transition-none"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 30vw"
-                      style={{ objectPosition: '50% 35%' }}
-                      priority
+                      style={{ objectPosition: '48% 32%' }}
                     />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-amber-200/10 to-transparent"></div>
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-accent/5 to-transparent"></div>
                   </div>
-        <div className="relative h-40 sm:h-36 lg:h-36 rounded-xl overflow-hidden shadow-lg transform rotate-1 hover:rotate-0 transition-transform duration-500">
+  <div className="relative h-40 sm:h-36 lg:h-36 rounded-xl overflow-hidden shadow-lg md:transform md:rotate-1 md:hover:rotate-0 transition-transform duration-500 motion-reduce:transform-none motion-reduce:transition-none">
                     <Image
                       src="/images/story/Where It All Began 3.jpeg"
                       alt="Early friendship moments"
                       fill
-      className="object-cover scale-[1.15] hover:scale-[1.2] transition-transform duration-700 brightness-110 contrast-105 saturate-110"
+      className="object-cover scale-[1.22] hover:scale-[1.26] transition-transform duration-700 brightness-105 saturate-105 motion-reduce:transform-none motion-reduce:transition-none"
       sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 30vw"
-      style={{ objectPosition: '50% 35%' }}
+      style={{ objectPosition: '50% 28%' }}
                     />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-orange-200/10 to-transparent"></div>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent"></div>
                   </div>
                 </div> {/* end grid */}
                 </div> {/* end relative container */}
                 
                 {/* Decorative elements */}
-                <div className="absolute -top-3 -left-3 w-6 h-6 bg-orange-300 rounded-full animate-pulse"></div>
-                <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-amber-400 rounded-full animate-pulse delay-300"></div>
+                <div className="absolute -top-3 -left-3 w-6 h-6 bg-accent/50 rounded-full animate-pulse" aria-hidden="true"></div>
+                <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-primary/40 rounded-full animate-pulse delay-300" aria-hidden="true"></div>
                 {/* Ensure proper closure of this column */}
                 
               </div>
@@ -188,16 +191,16 @@ export default function HomePage() {
                       src="/images/story/Love Across Continents 1.jpeg"
                       alt="Casual moments together across continents"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      className="object-cover hover:scale-105 transition-transform duration-700 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-secondary">Adventures Together</span>
                     </div>
                     {/* Floating decorative element */}
-                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shadow-lg">
-                      <GlobeAmericasIcon className="h-6 w-6 text-blue-600" />
+                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shadow-lg" aria-hidden="true">
+                      <GlobeAmericasIcon className="h-6 w-6 text-primary" />
                     </div>
                   </div>
                   
@@ -207,16 +210,16 @@ export default function HomePage() {
                       src="/images/story/Love Across Continents 2.jpeg"
                       alt="Supporting each other through challenges"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      className="object-cover hover:scale-105 transition-transform duration-700 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-secondary">Achieving Goals</span>
                     </div>
                     {/* Floating decorative element */}
-                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shadow-lg">
-                      <TrophyIcon className="h-6 w-6 text-green-600" />
+                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center shadow-lg" aria-hidden="true">
+                      <TrophyIcon className="h-6 w-6 text-primary" />
                     </div>
                   </div>
                 </div>
@@ -297,7 +300,7 @@ export default function HomePage() {
                       src="/images/story/tuscany-proposal 1.jpg"
                       alt="The magical Tuscany proposal moment"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      className="object-cover hover:scale-105 transition-transform duration-700 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
                     <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
@@ -309,7 +312,7 @@ export default function HomePage() {
                       src="/images/story/tuscany-proposal 2.jpg"
                       alt="Celebration with families in Tuscany"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      className="object-cover hover:scale-105 transition-transform duration-700 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
                     <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
@@ -340,20 +343,20 @@ export default function HomePage() {
                       src="/images/story/Building Our Future Together 1.jpeg"
                       alt="Planning our future together"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      className="object-cover hover:scale-105 transition-transform duration-700 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
                   </div>
                   <div className="relative h-64 lg:h-80 rounded-2xl overflow-hidden shadow-xl">
                     <Image
                       src="/images/story/recent-together.jpg"
                       alt="Recent moments together"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      className="object-cover hover:scale-105 transition-transform duration-700 motion-reduce:transform-none motion-reduce:transition-none"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
                   </div>
                 </div>
               </div>
@@ -379,58 +382,13 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Final Celebration Journey Card */}
-            <div className="relative">
-              <div className="bg-gradient-to-br from-cream-50 to-accent/30 rounded-3xl p-8 md:p-12 text-center shadow-lg backdrop-blur-sm border border-cream-200">
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg">
-                    <HeartIcon className="h-8 w-8 text-white" />
-                  </div>
-                </div>
-                
-                <div className="mt-8">
-                  <h3 className="text-3xl md:text-4xl font-serif font-semibold text-secondary mb-6">
-                    Our Celebration Journey
-                  </h3>
-                  <p className="text-muted leading-relaxed text-lg max-w-3xl mx-auto mb-8">
-                    From an elegant engagement celebration in Dubai to our wedding in 
-                    our hometown of Dhaka, and finally an unforgettable after-party on 
-                    a stunning island in Phu Quoc, Vietnam—we&apos;re celebrating our love 
-                    with those who matter most across the places that shaped our story.
-                  </p>
-                  
-                  <div className="grid md:grid-cols-3 gap-6 mt-8">
-                    <div className="bg-white/50 rounded-xl p-6 backdrop-blur-sm">
-                      <div className="mb-3 flex justify-center">
-                        <GlobeAmericasIcon className="h-7 w-7 text-primary" />
-                      </div>
-                      <h4 className="font-semibold text-secondary mb-2">Dubai</h4>
-                      <p className="text-sm text-muted">Engagement Celebration</p>
-                    </div>
-                    <div className="bg-white/50 rounded-xl p-6 backdrop-blur-sm">
-                      <div className="mb-3 flex justify-center">
-                        <MapPinIcon className="h-7 w-7 text-primary" />
-                      </div>
-                      <h4 className="font-semibold text-secondary mb-2">Dhaka</h4>
-                      <p className="text-sm text-muted">Wedding Ceremony</p>
-                    </div>
-                    <div className="bg-white/50 rounded-xl p-6 backdrop-blur-sm">
-                      <div className="mb-3 flex justify-center">
-                        <MapPinIcon className="h-7 w-7 text-primary" />
-                      </div>
-                      <h4 className="font-semibold text-secondary mb-2">Phu Quoc</h4>
-                      <p className="text-sm text-muted">After Party</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Final Celebration Journey Card moved below before footer */}
           </div>
         </div>
       </section>
 
       {/* Gallery Preview Section */}
-      <section className="py-20 bg-gray-50">
+  <section className="py-20 bg-cream-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
@@ -532,7 +490,7 @@ export default function HomePage() {
       </section>
 
       {/* Quick Links Section */}
-      <section className="py-20 gradient-wedding">
+  <section className="py-20 gradient-wedding">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
@@ -543,7 +501,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <Link href="/events" className="group">
-              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-cream-200">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                   <CalendarDaysIcon className="h-7 w-7 text-primary" />
                 </div>
@@ -557,7 +515,7 @@ export default function HomePage() {
             </Link>
 
             <Link href="/gallery" className="group">
-              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-cream-200">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                   <PhotoIcon className="h-7 w-7 text-primary" />
                 </div>
@@ -571,7 +529,7 @@ export default function HomePage() {
             </Link>
 
             <Link href="/travel" className="group">
-              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-cream-200">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                   <MapPinIcon className="h-7 w-7 text-primary" />
                 </div>
@@ -585,7 +543,7 @@ export default function HomePage() {
             </Link>
 
             <Link href="/rsvp" className="group">
-              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-cream-200">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                   <EnvelopeIcon className="h-7 w-7 text-primary" />
                 </div>
@@ -597,6 +555,52 @@ export default function HomePage() {
                 </p>
               </div>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Celebration Journey (moved) */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+            <div className="bg-gradient-to-br from-cream-50 to-accent/30 rounded-3xl p-8 md:p-12 text-center shadow-lg backdrop-blur-sm border border-cream-200">
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg">
+                  <HeartIcon className="h-8 w-8 text-white" />
+                </div>
+              </div>
+              <div className="mt-8">
+                <h3 className="text-3xl md:text-4xl font-serif font-semibold text-secondary mb-6">
+                  Our Celebration Journey
+                </h3>
+                <p className="text-muted leading-relaxed text-lg max-w-3xl mx-auto mb-8">
+                  From an elegant engagement celebration in Dubai to our wedding in Dhaka, and an unforgettable after-party in Phu Quoc—celebrating with those who matter most across the places that shaped our story.
+                </p>
+                <div className="grid md:grid-cols-3 gap-6 mt-8">
+                  <div className="bg-white rounded-xl p-6 border border-cream-200">
+                    <div className="mb-3 flex justify-center">
+                      <GlobeAmericasIcon className="h-7 w-7 text-primary" />
+                    </div>
+                    <h4 className="font-semibold text-secondary mb-2">Dubai</h4>
+                    <p className="text-sm text-muted">Engagement Celebration</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-6 border border-cream-200">
+                    <div className="mb-3 flex justify-center">
+                      <MapPinIcon className="h-7 w-7 text-primary" />
+                    </div>
+                    <h4 className="font-semibold text-secondary mb-2">Dhaka</h4>
+                    <p className="text-sm text-muted">Wedding Ceremony</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-6 border border-cream-200">
+                    <div className="mb-3 flex justify-center">
+                      <MapPinIcon className="h-7 w-7 text-primary" />
+                    </div>
+                    <h4 className="font-semibold text-secondary mb-2">Phu Quoc</h4>
+                    <p className="text-sm text-muted">After Party</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

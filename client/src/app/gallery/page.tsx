@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PhotoIcon, VideoCameraIcon } from '@heroicons/react/24/outline'
+import { PhotoIcon, VideoCameraIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/layout/Navigation";
@@ -120,11 +120,11 @@ export default function GalleryPage() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className="group relative bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105"
+                      className="group relative bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
                       onClick={() => setSelectedImage(item)}
                     >
                       <div className="aspect-square relative">
@@ -147,18 +147,20 @@ export default function GalleryPage() {
                           </div>
                         )}
                       </div>
-                      <div className="p-4 sm:p-6">
-                        <h3 className="font-medium text-foreground text-sm sm:text-base">{item.title}</h3>
-                        {item.description && (
-                          <p className="text-xs sm:text-sm text-muted mt-1">{item.description}</p>
-                        )}
-                      </div>
+                      {/* Captions intentionally removed for a cleaner, immersive grid */}
                       
-                      {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                        <button className="bg-white text-primary px-4 sm:px-6 py-2 sm:py-3 rounded-full font-medium text-sm sm:text-base transform scale-90 group-hover:scale-100 transition-transform shadow-lg">
-                          View Full Size
-                        </button>
+                      {/* Overlay: desktop hover CTA, mobile subtle hint */}
+                      <div className="absolute inset-0 pointer-events-none">
+                        <div className="hidden sm:flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+                          <span className="bg-white text-primary px-5 py-2 rounded-full font-medium text-sm shadow-lg flex items-center gap-2">
+                            <ArrowsPointingOutIcon className="w-5 h-5" /> View Full Size
+                          </span>
+                        </div>
+                        <div className="sm:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-center">
+                          <span className="inline-flex items-center gap-1 text-white/90 text-xs">
+                            <ArrowsPointingOutIcon className="w-4 h-4" /> Tap to view
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -171,28 +173,40 @@ export default function GalleryPage() {
 
       {/* Image Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-2 sm:p-4" onClick={() => setSelectedImage(null)}>
-          <div className="relative max-w-5xl max-h-full w-full" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-8 sm:-top-12 right-0 text-white text-xl sm:text-2xl hover:text-gray-300 z-10 bg-black/50 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
-            >
-              ✕
-            </button>
-            <div className="relative">
+        <div
+          className="fixed inset-0 bg-black z-50 p-0 sm:p-4 flex items-center justify-center"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative w-full h-[100svh] sm:h-auto sm:max-h-[90vh] sm:max-w-6xl" onClick={(e) => e.stopPropagation()}>
+            {/* Top bar for mobile */}
+            <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-3 py-3 bg-gradient-to-b from-black/70 to-transparent sm:px-0 sm:py-0">
+              <button
+                aria-label="Close"
+                onClick={() => setSelectedImage(null)}
+                className="text-white bg-black/50 hover:bg-black/60 rounded-full w-9 h-9 flex items-center justify-center sm:w-10 sm:h-10"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Image container */}
+            <div className="w-full h-full flex items-center justify-center touch-pan-zoom">
               <Image
                 src={selectedImage.url}
                 alt={selectedImage.title}
-                width={1200}
-                height={800}
-                className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                width={2000}
+                height={1500}
+                className="w-full h-full object-contain"
+                priority
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-4 sm:p-6 rounded-b-lg">
-                <h3 className="font-medium text-lg sm:text-xl mb-1">{selectedImage.title}</h3>
-                {selectedImage.description && (
-                  <p className="text-sm sm:text-base opacity-90">{selectedImage.description}</p>
-                )}
-              </div>
+            </div>
+
+            {/* Caption: show on larger screens to maximize space on mobile */}
+            <div className="hidden sm:block absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-4 sm:p-6">
+              <h3 className="font-medium text-lg sm:text-xl mb-1">{selectedImage.title}</h3>
+              {selectedImage.description && (
+                <p className="text-sm sm:text-base opacity-90">{selectedImage.description}</p>
+              )}
             </div>
           </div>
         </div>

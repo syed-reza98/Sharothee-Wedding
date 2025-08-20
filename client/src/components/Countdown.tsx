@@ -72,44 +72,45 @@ export default function Countdown({ targetDate, className = '' }: CountdownProps
   return (
     <div className={`text-center ${className}`}>
       <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-sm mx-auto">
-        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30">
-          <div className="text-lg sm:text-2xl font-bold text-secondary">
+        <div className="bg-white rounded-lg p-2.5 sm:p-3 border border-cream-200 shadow-sm">
+          <div className="text-xl sm:text-2xl font-semibold text-secondary">
             {timeLeft.days}
           </div>
-          <div className="text-xs sm:text-sm text-muted font-medium">
+          <div className="text-[10px] sm:text-xs text-muted font-medium tracking-wide">
             {timeLeft.days === 1 ? 'Day' : 'Days'}
           </div>
         </div>
         
-        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30">
-          <div className="text-lg sm:text-2xl font-bold text-secondary">
+        <div className="bg-white rounded-lg p-2.5 sm:p-3 border border-cream-200 shadow-sm">
+          <div className="text-xl sm:text-2xl font-semibold text-secondary">
             {timeLeft.hours.toString().padStart(2, '0')}
           </div>
-          <div className="text-xs sm:text-sm text-muted font-medium">
+          <div className="text-[10px] sm:text-xs text-muted font-medium tracking-wide">
             {timeLeft.hours === 1 ? 'Hour' : 'Hours'}
           </div>
         </div>
         
-        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30">
-          <div className="text-lg sm:text-2xl font-bold text-secondary">
+        <div className="bg-white rounded-lg p-2.5 sm:p-3 border border-cream-200 shadow-sm">
+          <div className="text-xl sm:text-2xl font-semibold text-secondary">
             {timeLeft.minutes.toString().padStart(2, '0')}
           </div>
-          <div className="text-xs sm:text-sm text-muted font-medium">
+          <div className="text-[10px] sm:text-xs text-muted font-medium tracking-wide">
             {timeLeft.minutes === 1 ? 'Min' : 'Mins'}
           </div>
         </div>
         
-        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30">
-          <div className="text-lg sm:text-2xl font-bold text-secondary">
+        <div className="bg-white rounded-lg p-2.5 sm:p-3 border border-cream-200 shadow-sm">
+          <div className="text-xl sm:text-2xl font-semibold text-secondary">
             {timeLeft.seconds.toString().padStart(2, '0')}
           </div>
-          <div className="text-xs sm:text-sm text-muted font-medium">
+          <div className="text-[10px] sm:text-xs text-muted font-medium tracking-wide">
             {timeLeft.seconds === 1 ? 'Sec' : 'Secs'}
           </div>
         </div>
       </div>
       
-      <p className="text-sm text-muted mt-3 font-medium">
+      <p className="text-sm text-muted mt-3 font-medium inline-flex items-center gap-2">
+        <HeartIcon className="h-4 w-4 text-primary" />
         Until we say &quot;I do&quot;
       </p>
     </div>

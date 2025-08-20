@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-import { PaperAirplaneIcon, BuildingLibraryIcon, MapIcon, SunIcon, CurrencyDollarIcon, BuildingOffice2Icon, AcademicCapIcon, MegaphoneIcon, DevicePhoneMobileIcon, PhoneIcon } from '@heroicons/react/24/outline'
+import { PaperAirplaneIcon, BuildingLibraryIcon, MapIcon, SunIcon, CurrencyDollarIcon, BuildingOffice2Icon, AcademicCapIcon, MegaphoneIcon, DevicePhoneMobileIcon, PhoneIcon, MapPinIcon, StarIcon, UserGroupIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 
 export default function TravelPage() {
   // No longer using old accommodations array
@@ -42,6 +42,7 @@ export default function TravelPage() {
   const visaInfo = [
     {
       country: "Bangladesh",
+      icon: BuildingLibraryIcon,
       requirements: [
         "Tourist visa required for most nationalities",
         "Apply at Bangladesh embassy/consulate in your country",
@@ -52,6 +53,7 @@ export default function TravelPage() {
     },
     {
       country: "Vietnam",
+      icon: MapIcon,
       requirements: [
         "eVisa available for most nationalities",
         "30-day tourist visa (extendable)",
@@ -119,26 +121,108 @@ export default function TravelPage() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold text-secondary mb-4 sm:mb-6">
               Accommodations
             </h2>
+            <p className="text-muted max-w-2xl mx-auto text-sm sm:text-base">
+              Comfortable stays for our celebrations in Dhaka and details for Vietnam travel.
+            </p>
           </div>
-          <div className="grid sm:grid-cols-2 gap-8 mb-10">
+          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 mb-10">
             {/* Lakeshore Grand Card */}
-            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
-              <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Grand, Gulshan</h3>
-              <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7872241391133!2d90.41237199999999!3d23.7905901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c74155d9349b%3A0x9e22941d6ac7e135!2sLakeshore%20Grand!5e0!3m2!1sbn!2sbd!4v1755635388160!5m2!1sbn!2sbd" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
-              {/* <iframe title="Lakeshore Grand Gulshan Map" src="https://www.google.com/maps/place/Lakeshore+Grand/@23.7905901,90.412372,17z/data=!3m1!4b1!4m6!3m5!1s0x3755c74155d9349b:0x9e22941d6ac7e135!8m2!3d23.7905901!4d90.412372!16s%2Fg%2F11yhrm3k24?entry=ttu&g_ep=EgoyMDI1MDgxNy4wIKXMDSoASAFQAw%3D%3D" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe> */}
-              <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
+            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 text-center hover:-translate-y-0.5">
+              <div className="text-center mb-4 sm:mb-6">
+                <div className="mb-2 sm:mb-3 flex justify-center">
+                  <BuildingOffice2Icon className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+                </div>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary">Lakeshore Grand, Gulshan</h3>
+                <p className="text-xs sm:text-sm text-muted mt-1">Premium 5-star stay near Gulshan-2</p>
+              </div>
+              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-muted mb-4 sm:mb-6">
+                <li className="flex items-start justify-center"><MapPinIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> Gulshan, Dhaka</li>
+                <li className="flex items-start justify-center"><StarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> 5-star accommodation</li>
+                <li className="flex items-start justify-center"><UserGroupIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> Rooms reserved for wedding guests</li>
+                <li className="flex items-start justify-center"><CheckCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> No booking needed for invited guests</li>
+              </ul>
+        <div className="relative w-full h-48 sm:h-56 md:h-60 rounded-xl border border-cream-200 overflow-hidden mb-3 bg-cream-50 shadow-inner">
+                <iframe
+                  title="Lakeshore Grand Gulshan Map"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7872241391133!2d90.41237199999999!3d23.7905901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c74155d9349b%3A0x9e22941d6ac7e135!2sLakeshore%20Grand!5e0!3m2!1sbn!2sbd!4v1755635388160!5m2!1sbn!2sbd"
+                  className="absolute inset-0 w-full h-full pointer-events-none filter brightness-100 contrast-105 saturate-150 hue-rotate-15"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Lakeshore+Grand+Gulshan+Dhaka"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full border border-cream-300 text-primary hover:bg-primary/5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-1"
+                  aria-label="Open Lakeshore Grand on Google Maps"
+                >
+                  Open in Google Maps
+                </a>
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=Lakeshore+Grand+Gulshan+Dhaka"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full border border-cream-300 text-primary hover:bg-primary/5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-1"
+                  aria-label="Get directions to Lakeshore Grand"
+                >
+                  Directions
+                </a>
+              </div>
             </div>
             {/* Lakeshore Heights Card */}
-            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
-              <h3 className="text-xl font-bold text-primary mb-2">Lakeshore Heights, Gulshan</h3>
-              <iframe title="Lakeshore Heights Gulshan Map" src="https://www.google.com/maps?q=Lakeshore+Heights+Gulshan+Dhaka&output=embed" className="w-full h-48 rounded-xl border mb-4" loading="lazy"></iframe>
-              <p className="text-gray-900 text-sm">You don’t have to make any reservations for accommodations in Dhaka and these 5-Star Hotels are already booked for the event. Wishing everybody a pleasant stay.</p>
+            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 text-center hover:-translate-y-0.5">
+              <div className="text-center mb-4 sm:mb-6">
+                <div className="mb-2 sm:mb-3 flex justify-center">
+                  <BuildingOffice2Icon className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+                </div>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary">Lakeshore Heights, Gulshan</h3>
+                <p className="text-xs sm:text-sm text-muted mt-1">Elegant 5-star stay in the heart of Gulshan</p>
+              </div>
+              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-muted mb-4 sm:mb-6">
+                <li className="flex items-start justify-center"><MapPinIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> Gulshan, Dhaka</li>
+                <li className="flex items-start justify-center"><StarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> 5-star accommodation</li>
+                <li className="flex items-start justify-center"><UserGroupIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> Rooms reserved for wedding guests</li>
+                <li className="flex items-start justify-center"><CheckCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2 mt-0.5" /> No booking needed for invited guests</li>
+              </ul>
+        <div className="relative w-full h-48 sm:h-56 md:h-60 rounded-xl border border-cream-200 overflow-hidden mb-3 bg-cream-50 shadow-inner">
+                <iframe
+                  title="Lakeshore Heights Gulshan Map"
+                  src="https://www.google.com/maps?q=Lakeshore+Heights+Gulshan+Dhaka&output=embed"
+                  className="absolute inset-0 w-full h-full pointer-events-none filter brightness-100 contrast-105 saturate-150 hue-rotate-15"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Lakeshore+Heights+Gulshan+Dhaka"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full border border-cream-300 text-primary hover:bg-primary/5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-1"
+                  aria-label="Open Lakeshore Heights on Google Maps"
+                >
+                  Open in Google Maps
+                </a>
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=Lakeshore+Heights+Gulshan+Dhaka"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full border border-cream-300 text-primary hover:bg-primary/5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-1"
+                  aria-label="Get directions to Lakeshore Heights"
+                >
+                  Directions
+                </a>
+              </div>
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center">
-              <h3 className="text-xl font-bold text-primary mb-2">Vietnam</h3>
-              <p className="text-gray-900 text-sm">The reservations for Accommodations will be made for all guests traveling from abroad by the Bride’s Family and Wedding Team.</p>
+            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl text-center">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary mb-2">Vietnam</h3>
+              <p className="text-muted text-sm sm:text-base">The reservations for accommodations will be made for all guests traveling from abroad by the Bride’s Family and Wedding Team.</p>
             </div>
           </div>
         </div>
@@ -195,21 +279,34 @@ export default function TravelPage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {visaInfo.map((visa, index) => (
-              <div key={index} className="bg-white rounded-lg p-6 shadow-lg">
-                <h3 className="text-xl font-serif font-semibold text-secondary mb-4">
-                  {visa.country} Visa
-                </h3>
-                <ul className="space-y-2 text-sm text-muted mb-4">
+              <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div className="text-center mb-4 sm:mb-6">
+                  {visa.icon && (
+                    <div className="mb-2 sm:mb-3 flex justify-center">
+                      <visa.icon className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+                    </div>
+                  )}
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-serif font-semibold text-secondary">
+                    {visa.country} Visa
+                  </h3>
+                </div>
+                <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-muted mb-4 sm:mb-6">
                   {visa.requirements.map((requirement, reqIndex) => (
                     <li key={reqIndex} className="flex items-start">
-                      <span className="text-primary mr-2 mt-1">•</span>
-                      {requirement}
+                      <span className="text-primary mr-3 mt-1 flex-shrink-0">•</span>
+                      <span className="leading-relaxed">{requirement}</span>
                     </li>
                   ))}
                 </ul>
+                {visa.assistance && (
+                  <p className="text-xs sm:text-sm text-muted text-center">
+                    {visa.assistance}
+                  </p>
+                )}
               </div>
             ))}
           </div>
+          
 
           <div className="text-center mt-6 sm:mt-8">
             <p className="text-muted mb-4 sm:mb-6 text-sm sm:text-base">
@@ -217,7 +314,7 @@ export default function TravelPage() {
             </p>
             <Link
               href="/contact"
-              className="bg-primary hover:bg-primary-dark text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
+              className="bg-primary hover:bg-primary-dark text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
             >
               Contact Our Travel Team
             </Link>

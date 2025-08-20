@@ -195,7 +195,7 @@ client/
 - Domain DNS properly pointed to VPS
 
 ## Emergency Contacts
-- **Primary contact**: hello@inciaandarvins.wedding
+- **Primary contact**: codestromhub@gmail.com
 - **Phone**: +880 1234-567890  
 - **Location**: Dhaka, Bangladesh
 

@@ -1,44 +1,60 @@
-import { Resend } from 'resend';
+import nodemailer, { Transporter } from 'nodemailer'
+import type { SentMessageInfo } from 'nodemailer'
 
-let resend: Resend | null = null;
-function getResend(): Resend | null {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return null;
-  if (!resend) resend = new Resend(key);
-  return resend;
+let transporter: Transporter | null = null
+
+function getTransporter(): Transporter | null {
+  if (transporter) return transporter
+
+  const user = process.env.GMAIL_USER
+  const pass = process.env.GMAIL_APP_PASSWORD
+
+  if (!user || !pass) {
+    console.warn('GMAIL_USER or GMAIL_APP_PASSWORD is not set. Skipping email send.')
+    return null
+  }
+
+  transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: { user, pass },
+  })
+
+  return transporter
 }
 
 interface EmailData {
-  to: string[];
-  subject: string;
-  html: string;
-  from?: string;
+  to: string[]
+  subject: string
+  html: string
+  from?: string
 }
 
-export async function sendEmail({ to, subject, html, from = 'Wedding <noreply@wedding.com>' }: EmailData) {
+export async function sendEmail({ to, subject, html, from }: EmailData) {
   try {
-    const client = getResend();
-    if (!client) {
-      console.warn('RESEND_API_KEY is not set. Skipping email send.');
-      return { success: false, error: new Error('Missing RESEND_API_KEY') };
+    const tx = getTransporter()
+    if (!tx) {
+      return { success: false, error: new Error('Missing Gmail credentials') }
     }
 
-    const { data, error } = await client.emails.send({
-      from,
-      to,
+    const fromAddress =
+      from || process.env.GMAIL_FROM || `Wedding <${process.env.GMAIL_USER}>`
+
+    const info = (await tx.sendMail({
+      from: fromAddress,
+      to: to.join(','),
       subject,
       html,
-    });
-
-    if (error) {
-      console.error('Email error:', error);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
+    })) as SentMessageInfo
+    // Basic debug log for troubleshooting
+    try {
+      console.log('[email] sent', { messageId: info?.messageId as string | undefined, to })
+    } catch {}
+    return { success: true, data: info }
   } catch (error) {
-    console.error('Email error:', error);
-    return { success: false, error };
+    console.error('Email error:', error)
+    return { success: false, error }
   }
 }
 
@@ -69,4 +85,44 @@ export function generateContactNotificationEmail(name: string, email: string, su
       <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
     </div>
   `;
+}
+
+export function generateRSVPFormEmail(data: {
+  guestName?: string
+  willAttendDhaka: 'yes' | 'no' | 'maybe' | ''
+  familySide: 'bride' | 'groom' | 'both' | ''
+  guestCountOption: '1' | '2' | '3' | '4' | 'other' | ''
+  guestCountOther?: string
+  additionalInfo?: string
+  contact: {
+    preferred: { number: string; whatsapp: boolean; botim: boolean }
+    secondary: { number: string; whatsapp: boolean; botim: boolean }
+    emergency: { name: string; phone: string; email: string }
+    email: string
+  }
+}) {
+  const rows = [
+    ['Guest Name', data.guestName || '—'],
+    ['Will attend in Dhaka', data.willAttendDhaka || '—'],
+    ["Family Side", data.familySide || '—'],
+    ['Guest Count', data.guestCountOption === 'other' ? `Other: ${data.guestCountOther || '—'}` : data.guestCountOption || '—'],
+    ['Additional Info', data.additionalInfo || '—'],
+    ['Preferred Number', `${data.contact.preferred.number || '—'} (WhatsApp: ${data.contact.preferred.whatsapp ? 'Yes' : 'No'}, Botim: ${data.contact.preferred.botim ? 'Yes' : 'No'})`],
+    ['Secondary Number', `${data.contact.secondary.number || '—'} (WhatsApp: ${data.contact.secondary.whatsapp ? 'Yes' : 'No'}, Botim: ${data.contact.secondary.botim ? 'Yes' : 'No'})`],
+    ['Emergency Contact', `${data.contact.emergency.name || '—'} / ${data.contact.emergency.phone || '—'} / ${data.contact.emergency.email || '—'}`],
+    ['Email', data.contact.email || '—'],
+  ]
+
+  const tr = rows
+    .map(([k, v]) => `<tr><td style="padding:8px;border:1px solid #eee;font-weight:600">${k}</td><td style="padding:8px;border:1px solid #eee">${v}</td></tr>`) 
+    .join('')
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto;">
+      <h1 style="color: #8B7355; text-align: center;">RSVP Received</h1>
+      <p style="text-align:center">Thank you${data.guestName ? `, ${data.guestName}` : ''}! We've received your RSVP.</p>
+      <table style="width:100%;border-collapse:collapse;margin-top:12px">${tr}</table>
+      <p style="margin-top:16px">With love,<br/>Incia & Arvin</p>
+    </div>
+  `
 }

@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Providers from "@/components/providers";
+import RouteLoader from "@/components/RouteLoader";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -55,6 +57,10 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-cream-50 text-gray-800">
         <Providers>
           <ErrorBoundary>
+            {/* Wrap components that read search params in Suspense to satisfy Next.js CSR bailout requirements */}
+            <Suspense fallback={null}>
+              <RouteLoader />
+            </Suspense>
             {children}
           </ErrorBoundary>
         </Providers>
