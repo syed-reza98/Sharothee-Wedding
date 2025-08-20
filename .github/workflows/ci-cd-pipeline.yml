@@ -211,7 +211,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const deployInput = '${{ github.event.inputs.deploy_environment }}';
-          const environment = '${{ github.event.inputs.deploy_environment || 'development' }}';
+          const environment = deployInput || 'development';
           const isProduction = environment === 'production';
           
           console.log(`🚀 Deployment readiness check for: ${environment}`);
