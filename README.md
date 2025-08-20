@@ -51,7 +51,7 @@ A comprehensive, bilingual (English & Bengali) wedding website serving as the di
 - npm or yarn
 - MySQL database
 - Open-Source Free Provider account (for media storage)
-- Gmail App Password and account (for emails)
+- Gmail App Password and account (for emails) ([how to generate](https://support.google.com/accounts/answer/185833?hl=en))
 
 ### Installation
 
