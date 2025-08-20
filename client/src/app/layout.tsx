@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Providers from "@/components/providers";
+import RouteLoader from "@/components/RouteLoader";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-cream-50 text-gray-800">
         <Providers>
           <ErrorBoundary>
+            <RouteLoader />
             {children}
           </ErrorBoundary>
         </Providers>

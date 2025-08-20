@@ -7,8 +7,17 @@ import { TextEncoder, TextDecoder } from 'util'
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 
-// Mock fetch for API testing
-global.fetch = jest.fn()
+// Provide fetch/Request/Response/Headers if missing (Node or jsdom)
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const undici = require('undici')
+  if (!global.fetch) global.fetch = undici.fetch
+  if (!global.Headers) global.Headers = undici.Headers
+  if (!global.Request) global.Request = undici.Request
+  if (!global.Response) global.Response = undici.Response
+} catch (_) {
+  // ignore if undici is not available
+}
 
 // Mock next/navigation for usePathname
 jest.mock('next/navigation', () => ({

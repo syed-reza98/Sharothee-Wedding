@@ -41,13 +41,19 @@ export default function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                  className={`group relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
                     isActive(item.href)
-                      ? 'text-primary border-b-2 border-primary'
-                      : 'text-muted hover:text-primary hover:border-b-2 hover:border-primary/50'
+                      ? 'text-primary'
+                      : 'text-muted hover:text-primary'
                   }`}
                 >
                   {item.name}
+                  <span
+                    className={`pointer-events-none absolute left-3 right-3 -bottom-0.5 h-0.5 rounded bg-primary transition-all duration-200 origin-left ${
+                      isActive(item.href) ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100'
+                    }`}
+                    aria-hidden="true"
+                  />
                 </Link>
               ))}
             </div>
@@ -72,7 +78,7 @@ export default function Navigation() {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
+    {isOpen && (
           <div className="lg:hidden border-t border-cream-200">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-md">
               {navigation.map((item) => (
@@ -80,10 +86,10 @@ export default function Navigation() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 text-base font-medium rounded-md transition-colors duration-200 ${
+          className={`block px-4 py-3 text-base font-medium rounded-md transition-colors duration-200 ${
                     isActive(item.href)
-                      ? 'text-primary bg-primary/10 border-l-4 border-primary'
-                      : 'text-muted hover:text-primary hover:bg-cream-50'
+            ? 'text-primary bg-primary/10 border-l-4 border-primary'
+            : 'text-muted hover:text-primary hover:bg-cream-50'
                   }`}
                 >
                   {item.name}
