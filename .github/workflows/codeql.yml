@@ -1,15 +1,4 @@
-# For most projects, this workflow file will not need changing; you simply need
-# to commit it to your repository.
-#
-# You may wish to alter this file to override the set of languages analyzed,
-# or to provide custom queries or build logic.
-#
-# ******** NOTE ********
-# We have attempted to detect the languages in your repository. Please check
-# the `language` matrix defined below to confirm you have the correct set of
-# supported CodeQL languages.
-#
-name: "CodeQL Advanced"
+name: "🔒 CodeQL Advanced Security Analysis"
 
 on:
   push:
@@ -17,28 +6,21 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '15 9 * * 6'
+    - cron: '15 9 * * 6'  # Weekly on Saturday at 9:15 AM
+  workflow_dispatch:  # Allow manual triggering
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  packages: read
 
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    # Runner size impacts CodeQL analysis time. To learn more, please see:
-    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
-    #   - https://gh.io/supported-runners-and-hardware-resources
-    #   - https://gh.io/using-larger-runners (GitHub.com only)
-    # Consider using larger runners or machines with greater resources for possible analysis time improvements.
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
-    permissions:
-      # required for all workflows
-      security-events: write
-
-      # required to fetch internal or private CodeQL packs
-      packages: read
-
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
-
+    timeout-minutes: 360
+    
     strategy:
       fail-fast: false
       matrix:
@@ -47,54 +29,73 @@ jobs:
           build-mode: none
         - language: javascript-typescript
           build-mode: none
-        # CodeQL supports the following values keywords for 'language': 'actions', 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'rust', 'swift'
-        # Use `c-cpp` to analyze code written in C, C++ or both
-        # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
-        # Use 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
-        # To learn more about changing the languages that are analyzed or customizing the build mode for your analysis,
-        # see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning.
-        # If you are analyzing a compiled language, you can modify the 'build-mode' for that language to customize how
-        # your codebase is analyzed, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/codeql-code-scanning-for-compiled-languages
+          
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    # Add any setup steps before running the `github/codeql-action/init` action.
-    # This includes steps like installing compilers or runtimes (`actions/setup-node`
-    # or others). This is typically only required for manual builds.
-    # - name: Setup runtime (example)
-    #   uses: actions/setup-example@v1
+    - name: Setup Node.js (for JavaScript/TypeScript analysis)
+      if: matrix.language == 'javascript-typescript'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: 'client/package-lock.json'
 
-    # Initializes the CodeQL tools for scanning.
+    - name: Install dependencies (for better analysis)
+      if: matrix.language == 'javascript-typescript'
+      run: |
+        cd client
+        npm ci --only=production
+      continue-on-error: true
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file.
-        # Prefix the list here with "+" to use these queries and those in the config file.
-
-        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-        #queries: security-extended,security-and-quality
-
-    # If the analyze step fails for one of the languages you are analyzing with
-    # "We were unable to automatically build your code", modify the matrix above
-    # to set the build mode to "manual" for that language. Then modify this step
-    # to build your code.
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
-    - if: matrix.build-mode == 'manual'
-      shell: bash
-      run: |
-        echo 'If you are using a "manual" build mode for one or more of the' \
-          'languages you are analyzing, replace this with the commands to build' \
-          'your code, for example:'
-        echo '  make bootstrap'
-        echo '  make release'
-        exit 1
+        config-file: ./.github/codeql/codeql-config.yml
+        queries: security-extended,security-and-quality
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+        
+  security-summary:
+    name: Security Analysis Summary
+    runs-on: ubuntu-latest
+    needs: analyze
+    if: always()
+    steps:
+      - name: Security Analysis Complete
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const workflow_run_url = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
+            console.log('🔒 CodeQL Security Analysis completed for Sharothee Wedding Website');
+            console.log('📊 Analysis covers:');
+            console.log('  - GitHub Actions workflows');
+            console.log('  - Next.js application code');
+            console.log('  - TypeScript/JavaScript security patterns');
+            console.log('  - Wedding website specific vulnerabilities');
+            console.log(`📋 Full report: ${workflow_run_url}`);
+            
+            // Only create issue if this is a scheduled run and there were failures
+            if (context.eventName === 'schedule' && '${{ needs.analyze.result }}' === 'failure') {
+              try {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: '🚨 CodeQL Security Analysis Failed - Weekly Scan',
+                  body: `# 🔒 Security Analysis Issue\n\nThe weekly CodeQL security analysis has failed and requires immediate attention.\n\n**Details:**\n- **Run ID:** ${context.runId}\n- **Workflow:** CodeQL Advanced Security Analysis\n- **Trigger:** Scheduled weekly scan\n- **Status:** ❌ Failed\n\n**Action Required:**\n- [ ] Review security scan results\n- [ ] Address any identified vulnerabilities\n- [ ] Fix workflow configuration if needed\n- [ ] Ensure wedding website security standards\n\n**Links:**\n- [Workflow Run](${workflow_run_url})\n- [Security Tab](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/security)\n\n⚠️ **This affects wedding website security and should be resolved promptly.**\n\n*Automated issue created by CodeQL workflow failure detection*`,
+                  labels: ['security', 'critical', 'automated'],
+                  assignees: ['syed-reza98']
+                });
+                console.log('Created security issue for failed analysis');
+              } catch (error) {
+                console.error('Failed to create security issue:', error);
+              }
+            }

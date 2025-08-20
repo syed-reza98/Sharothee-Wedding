@@ -2,7 +2,9 @@ name: 🏷️ Auto Label Issues
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, edited, reopened]
+  issue_comment:
+    types: [created]
 
 permissions:
   issues: write
@@ -13,85 +15,209 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Label Bug Reports
-        if: contains(github.event.issue.title, '[BUG]')
+        if: success() && github.event.issue && contains(github.event.issue.title, '[BUG]') && (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'created' || github.event.action == 'reopened')
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['bug', 'needs-triage']
-            })
+            try {
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['bug', 'needs-triage']
+              });
+              console.log('Added bug labels successfully');
+            } catch (error) {
+              console.error('Error adding bug labels:', error);
+            }
 
       - name: Label Feature Requests
-        if: contains(github.event.issue.title, '[FEATURE]')
+        if: success() && github.event.issue && contains(github.event.issue.title, '[FEATURE]') && (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'created' || github.event.action == 'reopened')
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['enhancement', 'needs-review']
-            })
+            try {
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['enhancement', 'needs-review']
+              });
+              console.log('Added feature labels successfully');
+            } catch (error) {
+              console.error('Error adding feature labels:', error);
+            }
 
       - name: Label Deployment Tasks
-        if: contains(github.event.issue.title, '[DEPLOY]')
+        if: success() && github.event.issue && contains(github.event.issue.title, '[DEPLOY]') && (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'created' || github.event.action == 'reopened')
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['deployment', 'high-priority']
-            })
+            try {
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['deployment', 'high-priority']
+              });
+              console.log('Added deployment labels successfully');
+            } catch (error) {
+              console.error('Error adding deployment labels:', error);
+            }
 
       - name: Label Critical Issues
-        if: contains(github.event.issue.body, 'Critical') || contains(github.event.issue.body, 'Must Have')
+        if: success() && github.event.issue && github.event.issue.body && (contains(github.event.issue.body, 'Critical') || contains(github.event.issue.body, 'Must Have') || contains(github.event.issue.body, 'wedding day') || contains(github.event.issue.body, 'URGENT'))
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['critical', 'urgent']
-            })
+            try {
+              const labels = ['critical', 'urgent'];
+              
+              // Check for wedding day criticality
+              if (context.payload.issue.body.toLowerCase().includes('wedding day') || 
+                  context.payload.issue.body.toLowerCase().includes('before wedding day')) {
+                labels.push('wedding-day-critical');
+              }
+              
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: labels
+              });
+              console.log('Added critical labels successfully:', labels);
+            } catch (error) {
+              console.error('Error adding critical labels:', error);
+            }
 
-      - name: Auto-assign to Owner
-        if: contains(github.event.issue.labels.*.name, 'critical') || contains(github.event.issue.title, '[DEPLOY]')
+      - name: Auto-assign Critical Issues
+        if: success() && github.event.issue && (contains(github.event.issue.title, '[DEPLOY]') || (github.event.issue.body && (contains(github.event.issue.body, 'Critical') || contains(github.event.issue.body, 'wedding day'))))
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.addAssignees({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              assignees: ['syed-reza98']
-            })
+            try {
+              await github.rest.issues.addAssignees({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                assignees: ['syed-reza98']
+              });
+              console.log('Auto-assigned to syed-reza98 successfully');
+            } catch (error) {
+              console.error('Error auto-assigning:', error);
+            }
 
-      - name: Add Wedding Day Priority
-        if: contains(github.event.issue.body, 'Before Wedding Day') || contains(github.event.issue.body, 'wedding day')
+      - name: Add Wedding Day Priority Labels
+        if: success() && github.event.issue && github.event.issue.body && (contains(github.event.issue.body, 'Before Wedding Day') || contains(github.event.issue.body, 'wedding day') || contains(github.event.issue.body, 'Wedding Day'))
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['wedding-day-critical']
-            })
+            try {
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['wedding-day-critical']
+              });
+              console.log('Added wedding-day-critical label successfully');
+            } catch (error) {
+              console.error('Error adding wedding-day-critical label:', error);
+            }
+
+      - name: Add Priority Based on Keywords
+        if: success() && github.event.issue && github.event.issue.body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              const body = context.payload.issue.body.toLowerCase();
+              const title = context.payload.issue.title.toLowerCase();
+              const labels = [];
+              
+              // High priority keywords
+              if (body.includes('production') || body.includes('live') || 
+                  body.includes('blocking') || body.includes('urgent') ||
+                  title.includes('urgent') || title.includes('critical')) {
+                labels.push('high-priority');
+              }
+              
+              // Mobile-specific issues
+              if (body.includes('mobile') || body.includes('iphone') || 
+                  body.includes('android') || body.includes('responsive')) {
+                labels.push('mobile');
+              }
+              
+              // UI/UX issues
+              if (body.includes('ui') || body.includes('ux') || 
+                  body.includes('design') || body.includes('layout')) {
+                labels.push('ui-ux');
+              }
+              
+              // Performance issues
+              if (body.includes('slow') || body.includes('performance') || 
+                  body.includes('loading') || body.includes('speed')) {
+                labels.push('performance');
+              }
+              
+              if (labels.length > 0) {
+                await github.rest.issues.addLabels({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  labels: labels
+                });
+                console.log('Added priority/category labels successfully:', labels);
+              }
+            } catch (error) {
+              console.error('Error adding priority labels:', error);
+            }
 
       - name: Comment on Critical Issues
-        if: contains(github.event.issue.labels.*.name, 'critical')
+        if: success() && github.event.issue && (github.event.action == 'opened' || github.event.action == 'created') && github.event.issue.body && (contains(github.event.issue.body, 'Critical') || contains(github.event.issue.body, 'wedding day') || contains(github.event.issue.title, '[DEPLOY]'))
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🚨 **Critical Issue Detected**\n\nThis issue has been marked as critical and requires immediate attention. @syed-reza98 has been automatically assigned.\n\n**Next Steps:**\n- [ ] Investigate and assess impact\n- [ ] Create action plan\n- [ ] Implement fix\n- [ ] Test and validate\n- [ ] Deploy if necessary\n\n*This is an automated message from the Sharothee Wedding Project Management System.*'
-            })
+            try {
+              const isCritical = context.payload.issue.body.toLowerCase().includes('critical');
+              const isWeddingDay = context.payload.issue.body.toLowerCase().includes('wedding day');
+              const isDeployment = context.payload.issue.title.includes('[DEPLOY]');
+              
+              let message = '🚨 **High Priority Issue Detected**\n\n';
+              
+              if (isWeddingDay) {
+                message = '💒 **Wedding Day Critical Issue**\n\n';
+                message += 'This issue affects wedding day functionality and requires immediate attention!\n\n';
+              } else if (isCritical) {
+                message = '🚨 **Critical Issue Detected**\n\n';
+                message += 'This issue has been marked as critical and requires immediate attention.\n\n';
+              } else if (isDeployment) {
+                message = '🚀 **Deployment Task**\n\n';
+                message += 'This deployment task has been flagged for priority handling.\n\n';
+              }
+              
+              message += `@syed-reza98 has been automatically assigned.\n\n**Next Steps:**\n- [ ] Investigate and assess impact\n- [ ] Create action plan\n- [ ] Implement fix\n- [ ] Test and validate\n- [ ] Deploy if necessary\n\n`;
+              
+              if (isWeddingDay) {
+                message += '**Emergency Contacts:**\n- Primary: codestromhub@gmail.com\n- Phone: +880 1234-567890\n\n';
+              }
+              
+              message += '*This is an automated message from the [Sharothee Wedding Project Management System](https://github.com/users/syed-reza98/projects/5).*';
+              
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+              console.log('Added critical issue comment successfully');
+            } catch (error) {
+              console.error('Error adding critical issue comment:', error);
+            }

@@ -1,0 +1,279 @@
+name: 🧪 Wedding Website CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'client/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'client/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Environment to deploy to'
+        required: false
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  checks: write
+
+env:
+  NODE_VERSION: '20'
+  WORKING_DIRECTORY: './client'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: 'client/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npm ci --prefer-offline --no-audit
+        echo "✅ Dependencies installed successfully"
+
+    - name: Create environment file
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        cat << EOF > .env.local
+        # Database
+        DATABASE_URL="file:./dev.db"
+        
+        # NextAuth
+        NEXTAUTH_SECRET="wedding-test-secret-key-for-ci"
+        NEXTAUTH_URL="http://localhost:3000"
+        
+        # Email (Test keys)
+        RESEND_API_KEY="re_test_api_key"
+        
+        # Cloudinary (Test keys)
+        CLOUDINARY_CLOUD_NAME="test-cloud"
+        CLOUDINARY_API_KEY="test-api-key"
+        CLOUDINARY_API_SECRET="test-api-secret"
+        EOF
+        echo "✅ Environment file created for CI"
+
+    - name: Generate Prisma client
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npx prisma generate
+        echo "✅ Prisma client generated"
+
+    - name: Lint code
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npm run lint
+        echo "✅ Code linting passed"
+
+    - name: Type check
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npm run type-check
+        echo "✅ TypeScript check passed"
+
+    - name: Run tests
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npm test -- --ci --coverage --watchAll=false
+        echo "✅ Tests completed"
+
+    - name: Build application
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npm run build
+        echo "✅ Build completed successfully"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: wedding-website-build
+        path: |
+          client/.next
+          client/out
+        retention-days: 7
+
+  security-audit:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: success()
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: 'client/package-lock.json'
+
+    - name: Security audit
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npm audit --audit-level=high
+        echo "✅ Security audit completed"
+      continue-on-error: true
+
+    - name: Check for vulnerable packages
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        npx audit-ci --config ./audit-ci.json || echo "⚠️ Security vulnerabilities found"
+      continue-on-error: true
+
+  performance-test:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: success() && github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: 'client/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: npm ci --prefer-offline --no-audit
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: wedding-website-build
+        path: client/
+
+    - name: Lighthouse Performance Test
+      uses: treosh/lighthouse-ci-action@v11
+      with:
+        configPath: './client/lighthouserc.json'
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+        workingDirectory: ${{ env.WORKING_DIRECTORY }}
+
+  deployment-check:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-audit]
+    if: success() && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
+    
+    steps:
+    - name: Deployment Readiness Check
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const environment = '${{ github.event.inputs.deploy_environment || "development" }}';
+          const isProduction = environment === 'production';
+          
+          console.log(`🚀 Deployment readiness check for: ${environment}`);
+          
+          if (isProduction) {
+            // Check for any open critical issues
+            const { data: criticalIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'wedding-day-critical,critical',
+              state: 'open'
+            });
+            
+            if (criticalIssues.length > 0) {
+              console.log(`⚠️ ${criticalIssues.length} critical issues found - proceed with caution`);
+              
+              // Create deployment warning comment
+              const warningMessage = `🚨 **Production Deployment Warning**\n\n` +
+                `There are ${criticalIssues.length} critical issues open:\n\n` +
+                criticalIssues.map(issue => `- #${issue.number}: ${issue.title}`).join('\n') +
+                `\n\nPlease review these issues before deploying to production.\n\n` +
+                `*Automated check from Wedding Website CI/CD Pipeline*`;
+              
+              if (context.issue && context.issue.number) {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: warningMessage
+                });
+              }
+            } else {
+              console.log('✅ No critical issues found - ready for production');
+            }
+          }
+          
+          // Log deployment readiness
+          console.log('📋 Deployment Checklist:');
+          console.log('  ✅ Build successful');
+          console.log('  ✅ Tests passed');
+          console.log('  ✅ Security audit completed');
+          console.log('  ✅ Code quality checks passed');
+          console.log(`  🎯 Target environment: ${environment}`);
+          
+          return { 
+            ready: true, 
+            environment: environment,
+            timestamp: new Date().toISOString()
+          };
+
+  workflow-summary:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-audit, deployment-check]
+    if: always()
+    
+    steps:
+    - name: Workflow Summary
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const buildStatus = '${{ needs.build-and-test.result }}';
+          const securityStatus = '${{ needs.security-audit.result }}';
+          const deploymentStatus = '${{ needs.deployment-check.result }}';
+          
+          console.log('🎯 Wedding Website CI/CD Pipeline Summary');
+          console.log('==========================================');
+          console.log(`Build & Test: ${buildStatus === 'success' ? '✅' : '❌'} ${buildStatus}`);
+          console.log(`Security Audit: ${securityStatus === 'success' ? '✅' : securityStatus === 'skipped' ? '⏭️' : '❌'} ${securityStatus}`);
+          console.log(`Deployment Check: ${deploymentStatus === 'success' ? '✅' : deploymentStatus === 'skipped' ? '⏭️' : '❌'} ${deploymentStatus}`);
+          
+          const overallSuccess = buildStatus === 'success';
+          console.log(`Overall Status: ${overallSuccess ? '✅ SUCCESS' : '❌ FAILED'}`);
+          
+          if (!overallSuccess) {
+            console.log('🚨 Pipeline failed - check logs and resolve issues before proceeding');
+          } else {
+            console.log('🎉 Pipeline completed successfully - wedding website is ready!');
+          }
+          
+          return {
+            success: overallSuccess,
+            build: buildStatus,
+            security: securityStatus,
+            deployment: deploymentStatus
+          };
