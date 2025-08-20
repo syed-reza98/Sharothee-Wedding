@@ -192,9 +192,8 @@ jobs:
 
     - name: Lighthouse Performance Test
       uses: treosh/lighthouse-ci-action@v11
-      working-directory: ${{ env.WORKING_DIRECTORY }}
       with:
-        configPath: './lighthouserc.json'
+        configPath: '${{ env.WORKING_DIRECTORY }}/lighthouserc.json'
         uploadArtifacts: true
         temporaryPublicStorage: true
         artifactName: 'lighthouse-results'
