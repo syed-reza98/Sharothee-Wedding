@@ -3,12 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "description": "Incia & Arvin's Wedding Website - Frontend",
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "build:github": "next build && next export",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "analyze": "ANALYZE=1 next build",
+    "security:scan": "npm audit --audit-level=high",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -22,14 +28,13 @@
     "db:seed": "tsx prisma/seed.ts",
     "email:test": "tsx src/scripts/send-test-email.ts",
     "postinstall": "prisma generate",
-    "e2e": "playwright test --config=playwright.config.js --project=chromium",
-    "e2e:headed": "playwright test --config=playwright.config.js --project=chromium --headed"
+    "e2e": "playwright test --config=playwright.config.ts --project=chromium",
+    "e2e:headed": "playwright test --config=playwright.config.ts --project=chromium --headed"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@headlessui/react": "^2.0.4",
     "@heroicons/react": "^2.0.18",
-    "@playwright/test": "^1.54.2",
     "@prisma/client": "^6.14.0",
     "@tanstack/react-query": "^5.51.23",
     "@types/bcryptjs": "^2.4.6",
@@ -53,6 +58,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.54.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.13",
