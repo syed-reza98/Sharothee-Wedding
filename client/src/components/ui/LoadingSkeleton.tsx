@@ -100,7 +100,7 @@ export function WeddingLoader({ message = "Loading your magical moments..." }: {
           </svg>
         </div>
       </div>
-      <p className="text-muted text-lg font-light">{message}</p>
+      <p className="text-muted text-lg font-light" role="status" aria-live="polite">{message}</p>
       <div className="mt-4 flex space-x-1">
         <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
         <div className="w-2 h-2 bg-primary rounded-full animate-bounce delay-100"></div>
