@@ -52,7 +52,7 @@ async function main() {
       data: {
         title: 'Mehndi Ceremony',
         description: 'Traditional henna ceremony with music and dancing',
-        date: new Date('2025-03-15T16:00:00Z'),
+        date: new Date('2025-12-15T16:00:00Z'),
         time: '16:00',
         venueId: venues[0].id,
         order: 1,
@@ -62,7 +62,7 @@ async function main() {
       data: {
         title: 'Wedding Ceremony',
         description: 'Sacred wedding ceremony and vows',
-        date: new Date('2025-03-16T10:00:00Z'),
+        date: new Date('2025-12-16T10:00:00Z'),
         time: '10:00',
         venueId: venues[0].id,
         order: 2,
@@ -72,7 +72,7 @@ async function main() {
       data: {
         title: 'Reception',
         description: 'Wedding reception with dinner and celebration',
-        date: new Date('2025-03-16T18:00:00Z'),
+        date: new Date('2025-12-16T18:00:00Z'),
         time: '18:00',
         venueId: venues[0].id,
         order: 3,
@@ -82,7 +82,7 @@ async function main() {
       data: {
         title: 'Vietnam Celebration',
         description: 'Intimate celebration in beautiful Phu Quoc',
-        date: new Date('2025-03-20T15:00:00Z'),
+        date: new Date('2025-12-20T15:00:00Z'),
         time: '15:00',
         venueId: venues[1].id,
         order: 4,
@@ -234,8 +234,19 @@ async function main() {
         streamUrl: 'https://www.youtube.com/embed/live_stream_id',
         isLive: false,
         eventId: events[1].id, // Wedding ceremony
-        startTime: new Date('2025-03-16T09:45:00Z'),
-        endTime: new Date('2025-03-16T12:00:00Z'),
+        startTime: new Date('2025-12-16T09:45:00Z'),
+        endTime: new Date('2025-12-16T12:00:00Z'),
+      },
+    }),
+    prisma.stream.create({
+      data: {
+        title: 'Wedding Ceremony Live Stream',
+        description: 'Live broadcast of the wedding ceremony for remote guests',
+        streamUrl: 'https://www.youtube.com/embed/live_stream_id_2',
+        isLive: false,
+        eventId: events[2].id, // Reception
+        startTime: new Date('2025-12-16T13:00:00Z'),
+        endTime: new Date('2025-12-16T17:00:00Z'),
       },
     }),
   ])
