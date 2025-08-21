@@ -303,6 +303,13 @@ jobs:
         npx prisma generate
         echo "✅ Prisma client generated"
 
+    - name: Build application for Lighthouse
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🏗️ Building application for Lighthouse testing..."
+        npm run build
+        echo "✅ Build completed for Lighthouse testing"
+
     - name: Lighthouse Performance Test
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
@@ -317,13 +324,39 @@ jobs:
           npm install -g @lhci/cli@^0.12.0
         fi
         
-        # Run Lighthouse CI
+        # Create optimized Lighthouse configuration for CI
+        echo "🔧 Creating optimized Lighthouse configuration for CI environment..."
+        cat > lighthouserc.ci.json << 'LIGHTHOUSE_CONFIG'
+        {
+          "ci": {
+            "collect": {
+              "url": ["http://localhost:3000"],
+              "startServerCommand": "npm run start",
+              "startServerReadyPattern": "ready",
+              "startServerReadyTimeout": 60000,
+              "numberOfRuns": 1,
+              "settings": {
+                "chromeFlags": "--no-sandbox --headless --disable-dev-shm-usage --disable-gpu --no-first-run --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding"
+              }
+            },
+            "assert": {
+              "assertions": {
+                "categories:performance": ["warn", {"minScore": 0.6}],
+                "categories:accessibility": ["warn", {"minScore": 0.8}],
+                "categories:best-practices": ["warn", {"minScore": 0.7}],
+                "categories:seo": ["warn", {"minScore": 0.8}]
+              }
+            },
+            "upload": {
+              "target": "temporary-public-storage"
+            }
+          }
+        }
+        LIGHTHOUSE_CONFIG
+        
+        # Run Lighthouse CI with CI-optimized config
         echo "🚀 Starting Lighthouse CI performance test..."
-        npx @lhci/cli autorun \
-          --config=lighthouserc.json \
-          --upload.target=temporary-public-storage \
-          --collect.numberOfRuns=1 \
-          --collect.settings.chromeFlags="--no-sandbox --headless --disable-dev-shm-usage"
+        npx @lhci/cli autorun --config=lighthouserc.ci.json
         
         echo "✅ Lighthouse CI completed successfully"
       env:
