@@ -24,12 +24,21 @@ describe('RSVP Page', () => {
 
   it('shows the RSVP selection form', () => {
     render(<RSVPPage />)
-    // At least one event card and radio options should be visible
-    expect(screen.getByText(/Holud/i)).toBeInTheDocument()
-    expect(screen.getByText(/Akdh/i)).toBeInTheDocument()
-    expect(screen.getByText(/Reception/i)).toBeInTheDocument()
-  // Check for radio labels (appears for each event)
-  expect(screen.getAllByText(/Will you be attending\?/i).length).toBeGreaterThan(0)
+    
+    // Check for the main RSVP question
+    expect(screen.getByText(/Will you be able to grace us with your presence in Dhaka\?/i)).toBeInTheDocument()
+    
+    // Check for family side question
+    expect(screen.getByText(/Are you from The Bride's Family or The Groom's Family\?/i)).toBeInTheDocument()
+    
+    // Check for guest count question
+    expect(screen.getByText(/How many guests will be present\?/i)).toBeInTheDocument()
+    
+    // Check for additional information field (use partial text to avoid special character issues)
+    expect(screen.getByText(/additional information/i)).toBeInTheDocument()
+    
+    // Check for contact details section
+    expect(screen.getByText(/Contact Details/i)).toBeInTheDocument()
   })
 
   it('has a continue button', () => {
