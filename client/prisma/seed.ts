@@ -246,7 +246,8 @@ async function main() {
         isLive: false,
         eventId: events[2].id, // Reception
         startTime: new Date('2025-12-16T09:45:00Z'),
-        endTime: new Date('2025-12-16T12:00:00Z'),
+        startTime: new Date('2025-12-16T13:00:00Z'),
+        endTime: new Date('2025-12-16T17:00:00Z'),
       },
     }),
   ])
