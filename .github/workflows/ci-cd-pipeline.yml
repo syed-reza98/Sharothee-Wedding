@@ -304,12 +304,45 @@ jobs:
         echo "✅ Prisma client generated"
 
     - name: Lighthouse Performance Test
-      uses: treosh/lighthouse-ci-action@v11
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Running Lighthouse CI from client directory..."
+        echo "Current directory: $(pwd)"
+        echo "Package.json exists: $([ -f package.json ] && echo 'YES' || echo 'NO')"
+        echo "Lighthouse config exists: $([ -f lighthouserc.json ] && echo 'YES' || echo 'NO')"
+        
+        # Install Lighthouse CI if not present
+        if ! command -v lhci &> /dev/null; then
+          echo "📦 Installing Lighthouse CI..."
+          npm install -g @lhci/cli@^0.12.0
+        fi
+        
+        # Run Lighthouse CI
+        echo "🚀 Starting Lighthouse CI performance test..."
+        npx @lhci/cli autorun \
+          --config=lighthouserc.json \
+          --upload.target=temporary-public-storage \
+          --collect.numberOfRuns=1 \
+          --collect.settings.chromeFlags="--no-sandbox --headless --disable-dev-shm-usage"
+        
+        echo "✅ Lighthouse CI completed successfully"
+      env:
+        NODE_VERSION: ${{ env.NODE_VERSION }}
+        LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
+        LHCI_BUILD_CONTEXT__COMMIT_TIME: ${{ github.event.head_commit.timestamp }}
+        LHCI_BUILD_CONTEXT__CURRENT_BRANCH: ${{ github.ref_name }}
+        LHCI_BUILD_CONTEXT__COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+    - name: Upload Lighthouse results
+      uses: actions/upload-artifact@v4
+      if: always()
       with:
-        configPath: './client/lighthouserc.json'
-        uploadArtifacts: true
-        temporaryPublicStorage: true
-        artifactName: 'lighthouse-results'
+        name: lighthouse-results-${{ github.sha }}
+        path: |
+          client/.lighthouseci/
+          client/lighthouse-results.json
+        retention-days: 7
+        if-no-files-found: ignore
 
   deployment-check:
     runs-on: ubuntu-latest
