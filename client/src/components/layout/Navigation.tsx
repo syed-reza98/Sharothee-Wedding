@@ -28,7 +28,7 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-18">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-start">
             <h1 className="text-lg sm:text-xl font-serif font-semibold text-secondary">
               I & A
             </h1>
@@ -63,7 +63,7 @@ export default function Navigation() {
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-muted hover:text-primary p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="text-muted hover:text-primary p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -79,8 +79,8 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
     {isOpen && (
-          <div className="lg:hidden border-t border-cream-200">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-md">
+          <div className="lg:hidden border-t border-cream-200" id="mobile-menu">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg z-[100]">
               {navigation.map((item) => (
                 <Link
                   key={item.name}

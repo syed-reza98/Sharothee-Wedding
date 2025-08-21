@@ -107,7 +107,7 @@ export default function ContactPage() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-bold text-gray-900 mb-2">
-                          Name *
+                          Full Name *
                         </label>
                         <input
                           type="text"
@@ -115,13 +115,13 @@ export default function ContactPage() {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all"
                           required
                         />
                       </div>
                       <div>
                         <label htmlFor="email" className="block text-sm font-bold text-gray-900 mb-2">
-                          Email *
+                          Email Address *
                         </label>
                         <input
                           type="email"
@@ -129,7 +129,7 @@ export default function ContactPage() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all"
                           required
                         />
                       </div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all"
                       />
                     </div>
 
@@ -158,7 +158,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium transition-all"
                         required
                       >
                         <option value="">Please select a subject</option>
@@ -182,7 +182,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
-                        className="w-full px-4 py-3 border-2 border-gray-900 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-semibold placeholder-gray-500 transition-all resize-vertical"
+                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all resize-vertical"
                         placeholder="Tell us how we can help you..."
                         required
                       />
