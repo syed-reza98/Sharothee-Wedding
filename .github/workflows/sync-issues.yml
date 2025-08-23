@@ -1,0 +1,46 @@
+name: Sync Issues
+
+permissions:
+  contents: read
+  issues: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  discover-issue-files:
+    runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.set-files.outputs.files }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-files
+        run: |
+          set -e
+          if [ -d ".github/issues" ]; then
+            files=$(find .github/issues -type f -name '*.yml' || true)
+            if [ -z "$files" ]; then
+              echo "files=[]" >> $GITHUB_OUTPUT
+            else
+              echo "files=$(echo "$files" | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "files=[]" >> $GITHUB_OUTPUT
+          fi
+
+  create-issues:
+    needs: [discover-issue-files]
+    runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.discover-issue-files.outputs.files) != '' && fromJson(needs.discover-issue-files.outputs.files) != [] }}
+    strategy:
+      matrix:
+        file: ${{ fromJson(needs.discover-issue-files.outputs.files) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create issue from file
+        uses: peter-evans/create-issue-from-file@v5
+        continue-on-error: true
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          content-filepath: ${{ matrix.file }}
+          update-existing: true
