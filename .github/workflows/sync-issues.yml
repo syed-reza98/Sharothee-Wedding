@@ -4,27 +4,22 @@ on:
   workflow_dispatch:
 
 jobs:
+  discover-issue-files:
+    runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.set-files.outputs.files }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-files
+        run: |
+          echo "files=$(find .github/issues -type f -name '*.yml' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
   create-issues:
+    needs: discover-issue-files
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file:
-          - .github/issues/bug_admin_fallback_credentials.yml
-          - .github/issues/bug_cloudinary_orphaned_assets.yml
-          - .github/issues/bug_media_approval_put_405.yml
-          - .github/issues/bug_missing_email_credentials.yml
-          - .github/issues/bug_prisma_sqlite_in_repo.yml
-          - .github/issues/bug_route_loader_timer_leak.yml
-          - .github/issues/feature_add_analytics.yml
-          - .github/issues/feature_add_seo_meta_files.yml
-          - .github/issues/feature_bilingual_i18n.yml
-          - .github/issues/feature_enable_next_image_checks.yml
-          - .github/issues/feature_opengraph_images.yml
-          - .github/issues/feature_optimize_gallery_images.yml
-          - .github/issues/feature_optimize_html_caching.yml
-          - .github/issues/feature_rate_limit_forms.yml
-          - .github/issues/feature_reduce_heartcollage_dom.yml
-          - .github/issues/feature_refine_global_css.yml
+        file: ${{ fromJson(needs.discover-issue-files.outputs.files) }}
     steps:
       - uses: actions/checkout@v4
       - name: Create issue from file
