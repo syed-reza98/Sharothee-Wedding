@@ -31,7 +31,7 @@ jobs:
   create-issues:
     needs: [discover-issue-files]
     runs-on: ubuntu-latest
-    if: ${{ fromJson(needs.discover-issue-files.outputs.files) != '' && fromJson(needs.discover-issue-files.outputs.files) != [] }}
+    if: ${{ fromJson(needs.discover-issue-files.outputs.files).length > 0 }}
     strategy:
       matrix:
         file: ${{ fromJson(needs.discover-issue-files.outputs.files) }}
