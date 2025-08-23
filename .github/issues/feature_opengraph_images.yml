@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Provide OpenGraph images for social sharing"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+Pages lack OpenGraph images, resulting in poor previews when shared on social platforms.
+
+## Proposed Solution
+1. Design shareable OG images for key pages (Home, Events, RSVP).
+2. Add `metadata` or `<Head>` tags referencing these images.
+3. Verify with social sharing debuggers.
+
+## Priority
+Low; improves social visibility.

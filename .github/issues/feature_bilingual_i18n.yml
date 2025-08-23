@@ -1,0 +1,20 @@
+---
+title: "[FEATURE] Implement bilingual i18n support"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+The project promises English and Bengali content but lacks an internationalization framework, leaving text hardcoded in English.
+
+## Benefits
+- Improved accessibility for Bengali-speaking guests
+- Easier content management
+
+## Proposed Solution
+1. Integrate an i18n library such as `next-intl` or `next-translate`.
+2. Extract strings into locale files for `en` and `bn`.
+3. Add a language switcher and persist selection.
+
+## Priority
+High to meet bilingual requirement.
