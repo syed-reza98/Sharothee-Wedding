@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Compress and lazy-load gallery images"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+Gallery images fail to load efficiently and many URLs return 404, hurting performance and UX.
+
+## Proposed Solution
+1. Ensure all gallery images are stored with correct paths.
+2. Use `next/image` with responsive sizes and compression.
+3. Lazy-load non-visible images and handle missing assets gracefully.
+
+## Priority
+Medium; critical for visual appeal.

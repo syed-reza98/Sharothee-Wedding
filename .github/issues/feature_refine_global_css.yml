@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Refine global CSS for performance and accessibility"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+`globals.css` sets `overflow-x: hidden` on `html` and `body` and applies transitions to all elements, which may cause accessibility and performance issues.
+
+## Proposed Solution
+1. Remove or scope `overflow-x: hidden` to specific containers.
+2. Limit transitions to opt-in classes/components.
+3. Test scrolling and animations with `prefers-reduced-motion` settings.
+
+## Priority
+Medium; enhances UX and accessibility.

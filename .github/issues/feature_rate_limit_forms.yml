@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Add rate limiting or CAPTCHA to forms"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+RSVP and contact endpoints currently accept unlimited submissions, leaving them vulnerable to spam or abuse.
+
+## Proposed Solution
+1. Implement rate limiting middleware or integrate CAPTCHA (hCaptcha/Recaptcha).
+2. Apply to `/api/rsvp/submit` and `/api/contact` routes.
+3. Provide user feedback when limit is hit or verification fails.
+
+## Priority
+Low; mitigates potential abuse.
