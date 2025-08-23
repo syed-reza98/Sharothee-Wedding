@@ -15,7 +15,7 @@ export default function HomePage() {
       <section id="home" className="min-h-screen flex items-center justify-center gradient-hero pt-16">
         <div className="text-center px-4 sm:px-6 lg:px-8 w-full max-w-6xl">
           <div className="animate-fadeInUp">
-            <h2 className="pt-2 sm:pt-3 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight">
+            <h2 className="pt-2 sm:pt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight">
               Incia & Arvin
             </h2>
             <div className="w-16 sm:w-20 md:w-24 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
@@ -79,7 +79,7 @@ export default function HomePage() {
       </section>
 
       {/* Our Story Section */}
-      <section id="story" className="py-20 bg-white relative overflow-hidden">
+      <section id="story" className="py-16 lg:py-20 bg-white relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full" aria-hidden="true">
           <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
@@ -87,7 +87,7 @@ export default function HomePage() {
         </div>
         
   <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
+          <div className="text-center mb-12 lg:mb-16">
             <div className="inline-flex items-center justify-center mb-6">
               <div className="w-12 h-px bg-primary/60"></div>
               <HeartIcon className="h-4 w-4 text-primary mx-3" aria-hidden="true" />
@@ -95,7 +95,7 @@ export default function HomePage() {
               <HeartIcon className="h-4 w-4 text-primary mx-3" aria-hidden="true" />
               <div className="w-12 h-px bg-primary/60"></div>
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-secondary mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-normal text-secondary mb-6">
               Our Love Story
             </h2>
             <div className="w-24 h-1 bg-primary mx-auto mb-4"></div>
@@ -104,10 +104,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="space-y-24">
+          <div className="space-y-16 lg:space-y-20">
             {/* Where It All Began - Redesigned Layout with Warm Tone */}
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-2 space-y-6">
+            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-1 space-y-6">
                 <div className="inline-flex items-center">
                   <div className="w-8 h-px bg-primary/40"></div>
                   <span className="mx-3 text-xs font-medium text-primary tracking-wider uppercase">Chapter 1</span>
@@ -127,7 +127,7 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-2">
                 <div className="relative">
                   {/* Main central photo with warm overlay */}
           <div className="relative h-80 lg:h-96 rounded-2xl overflow-hidden shadow-2xl mb-4">
@@ -191,8 +191,8 @@ export default function HomePage() {
             </div>
 
             {/* Love Across Continents - Dual Photo Layout */}
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-3 order-2 lg:order-1">
+            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-2 order-2 lg:order-1">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Shopping/Casual photo */}
                   <div className="relative h-72 lg:h-80 rounded-2xl overflow-hidden shadow-xl">
@@ -234,7 +234,7 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <div className="lg:col-span-2 order-1 lg:order-2 space-y-6">
+              <div className="lg:col-span-1 order-1 lg:order-2 space-y-6">
                 <div className="inline-flex items-center">
                   <div className="w-8 h-px bg-primary/50"></div>
                   <span className="mx-3 text-xs font-medium text-primary tracking-wider uppercase">Chapter 2</span>
@@ -281,8 +281,8 @@ export default function HomePage() {
             </div>
 
             {/* The Proposal in Tuscany - Dual Photo Layout */}
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-2 space-y-6">
+            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-1 space-y-6">
                 <div className="inline-flex items-center">
                   <div className="w-8 h-px bg-primary/50"></div>
                   <span className="mx-3 text-xs font-medium text-primary tracking-wider uppercase">Chapter 3</span>
@@ -302,7 +302,7 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-xl">
                     <Image
@@ -344,8 +344,8 @@ export default function HomePage() {
             </div>
 
             {/* Building Our Future Together - Side by Side Photos */}
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-3 order-2 lg:order-1">
+            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-center">
+              <div className="lg:col-span-2 order-2 lg:order-1">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="relative h-64 lg:h-80 rounded-2xl overflow-hidden shadow-xl">
                     <Image
@@ -370,7 +370,7 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <div className="lg:col-span-2 order-1 lg:order-2 space-y-6">
+              <div className="lg:col-span-1 order-1 lg:order-2 space-y-6">
                 <div className="inline-flex items-center">
                   <div className="w-8 h-px bg-primary/50"></div>
                   <span className="mx-3 text-xs font-medium text-primary tracking-wider uppercase">Chapter 4</span>
@@ -397,10 +397,10 @@ export default function HomePage() {
       </section>
 
       {/* Gallery Preview Section */}
-  <section className="py-20 bg-cream-50">
+  <section className="py-16 lg:py-20 bg-cream-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-normal text-secondary mb-6">
               Our Memories
             </h2>
             <div className="w-24 h-1 bg-primary mx-auto mb-4"></div>
@@ -410,7 +410,7 @@ export default function HomePage() {
           </div>
 
           {/* Gallery Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 mb-8">
             <div className="relative aspect-square rounded-lg overflow-hidden">
               <Image
                 src="/images/gallery/gallery-1.jpg"
@@ -499,16 +499,16 @@ export default function HomePage() {
       </section>
 
       {/* Quick Links Section */}
-  <section className="py-20 gradient-wedding">
+  <section className="py-16 lg:py-20 gradient-wedding">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-normal text-secondary mb-6">
               Wedding Information
             </h2>
             <div className="w-24 h-1 bg-primary mx-auto"></div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-5xl mx-auto">
             <Link href="/events" className="group">
               <div className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-cream-200">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
