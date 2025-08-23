@@ -1,0 +1,26 @@
+---
+title: "[BUG] Prisma configured for SQLite instead of MySQL"
+labels:
+  - bug
+  - needs-triage
+---
+## Summary
+README specifies MySQL, but `prisma/schema.prisma` uses SQLite, causing mismatched environments and potential deployment failures.
+
+## Steps to Reproduce
+1. Inspect `client/prisma/schema.prisma` datasource provider.
+2. Attempt to deploy with MySQL connection string.
+
+## Expected Behavior
+Prisma datasource should be set to MySQL to match production.
+
+## Actual Behavior
+Datasource uses SQLite, generating client for wrong DB.
+
+## Proposed Solution
+1. Change `provider` to `mysql` in schema.
+2. Update `.env.example` with MySQL `DATABASE_URL`.
+3. Regenerate Prisma client and run migrations.
+
+## Priority
+High for deployment consistency.

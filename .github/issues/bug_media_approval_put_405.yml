@@ -1,0 +1,27 @@
+---
+title: "[BUG] Media approval PUT request returns 405"
+labels:
+  - bug
+  - needs-triage
+---
+## Summary
+Approving media items in the admin dashboard sends a PUT request to `/api/media/[id]`, but the route only implements DELETE, resulting in a 405 Method Not Allowed.
+
+## Steps to Reproduce
+1. Log into the admin dashboard.
+2. Navigate to Media management.
+3. Click to approve a pending media item.
+
+## Expected Behavior
+Media approval should toggle the `approved` status and return the updated record.
+
+## Actual Behavior
+Request fails with 405, leaving the UI in an incorrect state.
+
+## Proposed Solution
+1. Add a PUT handler in `client/src/app/api/media/[id]/route.ts` to update `approved` via Prisma.
+2. Validate the request body and return the updated item.
+3. Update admin UI to handle success or error states.
+
+## Priority
+High for media moderation workflow.

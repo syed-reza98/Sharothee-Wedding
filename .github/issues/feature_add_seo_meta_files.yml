@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Add robots.txt and sitemap.xml for SEO"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+The site lacks `robots.txt` and `sitemap.xml`, causing 404s and reducing discoverability by search engines.
+
+## Proposed Solution
+1. Create `client/public/robots.txt` with standard directives.
+2. Generate `client/public/sitemap.xml` covering public routes.
+3. Automate sitemap generation using `next-sitemap` or similar.
+
+## Priority
+Medium; improves SEO and crawler behavior.

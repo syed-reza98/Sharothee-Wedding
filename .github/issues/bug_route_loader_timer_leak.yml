@@ -1,0 +1,26 @@
+---
+title: "[BUG] RouteLoader timer cleanup causes memory leak"
+labels:
+  - bug
+  - needs-triage
+---
+## Summary
+`RouteLoader` sets nested timeouts without properly clearing the inner hide timer, which can leak timers when navigating rapidly.
+
+## Steps to Reproduce
+1. Navigate between routes quickly.
+2. Observe multiple pending timers in dev tools.
+
+## Expected Behavior
+All timers should be cleared on component unmount.
+
+## Actual Behavior
+The hide timeout remains active after unmount.
+
+## Proposed Solution
+1. Track hide timeout ID outside finalize callback.
+2. Clear both finalize and hide timers in the effect cleanup.
+3. Add tests to ensure no timers remain after unmount.
+
+## Priority
+Low; affects performance over time.

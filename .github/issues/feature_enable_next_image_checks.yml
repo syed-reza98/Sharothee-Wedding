@@ -1,0 +1,21 @@
+---
+title: "[FEATURE] Re-enable Next.js image optimization and build checks"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+Current configuration disables `next/image` optimization and ignores TypeScript/ESLint errors, risking production issues and unoptimized assets.
+
+## Benefits
+- Smaller, optimized images
+- Catch build-time errors early
+- Aligns with Next.js best practices
+
+## Proposed Solution
+1. Set `images.unoptimized` to `false` in `next.config.ts`.
+2. Remove `eslint.ignoreDuringBuilds` and `typescript.ignoreBuildErrors`.
+3. Verify production build and optimized images.
+
+## Priority
+High for performance and reliability.
