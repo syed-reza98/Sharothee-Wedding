@@ -6,6 +6,9 @@ on:
 jobs:
   discover-issue-files:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
     outputs:
       files: ${{ steps.set-files.outputs.files }}
     steps:
