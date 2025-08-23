@@ -197,7 +197,7 @@ jobs:
         uploadArtifacts: true
         temporaryPublicStorage: true
         artifactName: 'lighthouse-results'
-      working-directory: ${{ env.WORKING_DIRECTORY }}
+
 
   deployment-check:
     runs-on: ubuntu-latest
