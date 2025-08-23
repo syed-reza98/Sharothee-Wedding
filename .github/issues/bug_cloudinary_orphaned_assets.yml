@@ -1,0 +1,27 @@
+---
+title: "[BUG] Cloudinary assets not removed on media deletion"
+labels:
+  - bug
+  - needs-triage
+---
+## Summary
+Deleting a media item removes the database record but leaves the corresponding Cloudinary file, resulting in orphaned assets and unnecessary storage costs.
+
+## Steps to Reproduce
+1. Upload media via admin dashboard.
+2. Delete the item.
+3. Inspect Cloudinary dashboard; file remains.
+
+## Expected Behavior
+Deleting media should also remove the asset from Cloudinary.
+
+## Actual Behavior
+Cloudinary asset persists after database deletion.
+
+## Proposed Solution
+1. Store `publicId` for each uploaded asset.
+2. In DELETE handler (`client/src/app/api/media/[id]/route.ts`), call Cloudinary destroy API with `publicId` before removing DB record.
+3. Log failures but do not block DB cleanup.
+
+## Priority
+Medium; prevents storage bloat.

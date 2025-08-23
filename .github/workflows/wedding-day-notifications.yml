@@ -24,7 +24,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '⚠️ **WEDDING DAY CRITICAL ALERT** ⚠️\n\nThis issue has been flagged as wedding day critical and requires immediate attention!\n\n📞 **Emergency Contacts:**\n- Primary: hello@inciaandarvins.wedding\n- Phone: +880 1234-567890\n- Developer: @syed-reza98\n\n🔴 **Action Required:**\n- [ ] Immediate assessment\n- [ ] Impact analysis\n- [ ] Emergency fix if needed\n- [ ] Communication to couple\n\n*This is a high-priority automated alert for Incia & Arvin\'s wedding website.*'
+              body: '⚠️ **WEDDING DAY CRITICAL ALERT** ⚠️\n\nThis issue has been flagged as wedding day critical and requires immediate attention!\n\n📞 **Emergency Contacts:**\n- Primary: codestromhub@gmail.com\n- Phone: +880 1234-567890\n- Developer: @syed-reza98\n\n🔴 **Action Required:**\n- [ ] Immediate assessment\n- [ ] Impact analysis\n- [ ] Emergency fix if needed\n- [ ] Communication to couple\n\n*This is a high-priority automated alert for Incia & Arvin\'s wedding website.*'
             })
 
       - name: Daily Status Check

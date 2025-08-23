@@ -49,9 +49,9 @@ export default function Footer() {
           <div className="text-center md:text-right">
             <h4 className="text-lg font-semibold mb-4">Get in Touch</h4>
             <div className="space-y-2 text-sm text-cream-200">
-              <p>📧 hello@inciaandarvins.wedding</p>
-              <p>📞 +880 1234-567890</p>
-              <p>📍 Dhaka, Bangladesh</p>
+              <p>Rana :+880-1793403767</p>
+              <p>Tahamina: +880-1799997024</p>
+              <p>Dhaka, Bangladesh</p>
             </div>
             <div className="mt-4">
               <Link
@@ -66,15 +66,7 @@ export default function Footer() {
 
         <div className="border-t border-cream-700/30 pt-8 text-center">
           <p className="text-cream-300 text-sm">
-            © 2025 Incia & Arvin&apos;s Wedding. Built with love by{" "}
-            <Link 
-              href="https://codestormhub.com" 
-              className="text-cream-200 hover:text-white transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              CodeStorm Hub
-            </Link>
+            © 2025 Incia & Arvin&apos;s Wedding.
           </p>
         </div>
       </div>

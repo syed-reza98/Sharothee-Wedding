@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { Suspense } from 'react'
 
-export default function AdminLogin() {
+function AdminLoginInner() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -18,7 +18,7 @@ export default function AdminLogin() {
     // Check if user is already logged in
     getSession().then((session) => {
       if (session) {
-        router.push(callbackUrl)
+        router.replace(callbackUrl)
       }
     })
   }, [router, callbackUrl])
@@ -32,13 +32,26 @@ export default function AdminLogin() {
       const result = await signIn('credentials', {
         email,
         password,
+        callbackUrl,
         redirect: false,
       })
 
       if (result?.error) {
         setError('Invalid credentials')
       } else {
-        router.push(callbackUrl)
+        // In non-test env, wait briefly for session to be established to avoid race conditions
+        if (process.env.NODE_ENV !== 'test') {
+          for (let i = 0; i < 20; i++) {
+            const s = await getSession()
+            if (s) break
+            await new Promise((r) => setTimeout(r, 100))
+          }
+        }
+        if (result?.url) {
+          router.push(result.url)
+        } else {
+          router.push(callbackUrl)
+        }
       }
     } catch {
       setError('Something went wrong. Please try again.')
@@ -103,6 +116,7 @@ export default function AdminLogin() {
 
           <div className="mt-8">
             <button
+              data-testid="admin-login-submit"
               type="submit"
               disabled={loading}
               className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg hover:shadow-xl"
@@ -119,5 +133,14 @@ export default function AdminLogin() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function AdminLogin() {
+  // Wrap the component that uses useSearchParams in Suspense
+  return (
+    <Suspense fallback={null}>
+      <AdminLoginInner />
+    </Suspense>
   )
 }

@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Optimize HTML delivery and caching"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+Homepage HTML (~108 KB) is served uncompressed with a 1-year cache (`s-maxage=31536000`), leading to slow first loads and stale content.
+
+## Proposed Solution
+1. Enable gzip or Brotli compression via Next.js or proxy.
+2. Reduce HTML payload using dynamic imports and component splitting.
+3. Shorten Cache-Control for HTML to ensure timely updates.
+
+## Priority
+Medium; improves performance and freshness.

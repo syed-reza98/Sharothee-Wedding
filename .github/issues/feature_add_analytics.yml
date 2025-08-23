@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Add analytics instrumentation"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+The site lacks any analytics or tracking, leaving no insight into visitor activity or performance.
+
+## Proposed Solution
+1. Select a lightweight analytics provider (e.g., Plausible, GA4).
+2. Inject script or component in `client/src/app/layout.tsx` guarded by environment variables.
+3. Document setup and environment keys.
+
+## Priority
+Medium; aids monitoring and improvements.

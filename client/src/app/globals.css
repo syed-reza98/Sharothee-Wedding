@@ -46,40 +46,76 @@
   };
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a1a1a;
-    --foreground: #f5f5f5;
-    --primary: #d4a574;
-    --primary-dark: #b8946a;
-    --secondary: #a67c52;
-    --accent: #2d2419;
-    --muted: #9ca3af;
-  }
-}
+/* Force light theme by default; do not auto-switch based on OS */
+/* Dark mode variables removed intentionally to keep consistent light branding */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  /* Ensure native UI (forms, scrollbars) prefer light appearance */
+  color-scheme: light;
+  /* Prevent horizontal overflow and layout shift */
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100vw;
+  position: relative;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+html {
+  /* Prevent horizontal overflow at root level */
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100vw;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--accent);
+/* Ensure no element can cause horizontal overflow */
+*, *::before, *::after {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+/* Specific overflow prevention for scaled elements */
+.scale-110, .scale-125, .scale-150 {
+  max-width: 100%;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
+/* Container queries for responsive design */
+.container {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar - hidden on mobile/tablet to prevent layout issues */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--accent);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+  }
+}
+
+/* Hide scrollbars on mobile/tablet to prevent layout shift issues */
+@media (max-width: 1023px) {
+  html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 }
 
 /* Smooth transitions */
@@ -110,12 +146,174 @@ body {
   }
 }
 
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .animate-floatIn {
   animation: floatIn 0.8s ease-out forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Photo hover effects for Our Story section */
+.story-photo-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+}
+
+.story-photo-hover:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 20px 40px rgba(212, 165, 116, 0.3);
+}
+
+/* Warm tone effects for Where It All Began section */
+.warm-photo-hover {
+  transition: all 0.5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+}
+
+.warm-photo-hover:hover {
+  transform: scale(1.1) rotate(0deg);
+  box-shadow: 0 15px 35px rgba(251, 146, 60, 0.3);
+}
+
+/* Decorative elements */
+.story-divider {
+  position: relative;
+}
+
+.story-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  transform: translateY(-50%);
+}
+
+/* Enhanced photo cards */
+.photo-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.photo-card:hover {
+  box-shadow: 0 20px 60px rgba(212, 165, 116, 0.2);
+  transform: translateY(-5px);
+}
+
+.photo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(212, 165, 116, 0.1) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photo-card:hover::after {
+  opacity: 1;
+}
+
+/* Floating pulse animation for decorative dots */
+@keyframes warmPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes heartGlow {
+  0%, 100% {
+    filter: drop-shadow(0 8px 32px rgba(212, 165, 116, 0.3)) drop-shadow(0 4px 16px rgba(212, 165, 116, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 12px 48px rgba(212, 165, 116, 0.4)) drop-shadow(0 6px 24px rgba(212, 165, 116, 0.3));
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+}
+
+.animate-heartGlow {
+  animation: heartGlow 4s ease-in-out infinite;
+}
+
+.animate-gentleFloat {
+  animation: gentleFloat 6s ease-in-out infinite;
 }
 
 /* Elegant gradient backgrounds */
@@ -170,10 +368,42 @@ body {
   box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--color-primary);
 }
 
-/* Improved touch targets for mobile */
+/* Improved touch targets for mobile - WCAG 2.1 compliance */
 @media (max-width: 640px) {
-  button, a, [role="button"] {
+  button, a, [role="button"], input, select, textarea {
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+/* Reduce motion for users who prefer it - Accessibility best practice */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utilities */
+.touch-pan-zoom {
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+/* Route top progress bar */
+.route-progress-bar {
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+  box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  transition: width 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.route-progress-start {
+  width: 65%;
+}
+
+.route-progress-finish {
+  width: 100%;
+  opacity: 0;
 }

@@ -1,112 +1,71 @@
-'use client';
+"use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-import { useState } from "react";
+import { HandRaisedIcon, SparklesIcon } from '@heroicons/react/24/outline'
 
 export default function RSVPPage() {
-  const [step, setStep] = useState(1);
-  const [token, setToken] = useState('');
-  const [guestInfo, setGuestInfo] = useState<{
-    id: string;
-    name: string;
-    email: string;
-    country: string;
-  } | null>(null);
-  const [events, setEvents] = useState<Array<{
-    id: string;
-    title: string;
-    date: string;
-    time: string;
-  }>>([]);
-  const [responses, setResponses] = useState<Record<string, {
-    response?: string;
-    num_attendees?: number;
-    dietary_preferences?: string;
-    comments?: string;
-  }>>({});
+  // Always show the simplified RSVP form per spec
+  const [step, setStep] = useState<1 | 2 | 3>(2);
+  // Types for clarity and safety
+  type GuestInfo = { id: string; name: string; email: string; country: string };
+  // Demo guest name for a friendly greeting
+  const [guestInfo] = useState<GuestInfo>({ id: "demo", name: "Guest", email: "", country: "" });
   const [loading, setLoading] = useState(false);
+  // Form state based on RSVP_FORM_QUESTIONS.md
+  type AttendDhaka = "yes" | "no" | "maybe";
+  type FamilySide = "bride" | "groom" | "both";
+  type GuestCount = "1" | "2" | "3" | "4" | "other";
 
-  const handleTokenSubmit = async (e: React.FormEvent) => {
+  const [willAttendDhaka, setWillAttendDhaka] = useState<AttendDhaka | "">("");
+  const [familySide, setFamilySide] = useState<FamilySide | "">("");
+  const [guestCountOption, setGuestCountOption] = useState<GuestCount | "">("");
+  const [guestCountOther, setGuestCountOther] = useState<string>("");
+  const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [contactPreferred, setContactPreferred] = useState<string>("");
+  const [contactPreferredWhatsApp, setContactPreferredWhatsApp] = useState<boolean>(false);
+  const [contactPreferredBotim, setContactPreferredBotim] = useState<boolean>(false);
+  const [contactSecondary, setContactSecondary] = useState<string>("");
+  const [contactSecondaryWhatsApp, setContactSecondaryWhatsApp] = useState<boolean>(false);
+  const [contactSecondaryBotim, setContactSecondaryBotim] = useState<boolean>(false);
+  const [emergencyName, setEmergencyName] = useState<string>("");
+  const [emergencyPhone, setEmergencyPhone] = useState<string>("");
+  const [emergencyEmail, setEmergencyEmail] = useState<string>("");
+  const [emailAddress, setEmailAddress] = useState<string>("");
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const response = await fetch('/api/rsvp/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const payload = {
+        guestName: guestInfo?.name || "",
+        willAttendDhaka,
+        familySide,
+        guestCountOption,
+        guestCountOther: guestCountOther || undefined,
+        additionalInfo,
+        contact: {
+          preferred: { number: contactPreferred, whatsapp: contactPreferredWhatsApp, botim: contactPreferredBotim },
+          secondary: { number: contactSecondary, whatsapp: contactSecondaryWhatsApp, botim: contactSecondaryBotim },
+          emergency: { name: emergencyName, phone: emergencyPhone, email: emergencyEmail },
+          email: emailAddress,
         },
-        body: JSON.stringify({ token }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setGuestInfo(data.guest);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setEvents(data.events.map((event: any) => ({
-          id: event.id,
-          title: event.title,
-          date: event.date.split('T')[0],
-          time: event.time,
-        })));
-        setStep(2);
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || 'Invalid RSVP token');
+      };
+      const res = await fetch('/api/rsvp/form', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to submit RSVP form');
       }
-    } catch (error) {
-      console.error('Token validation error:', error);
-      alert('Failed to validate token. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleResponseChange = (eventId: string, field: string, value: string | number) => {
-    setResponses(prev => ({
-      ...prev,
-      [eventId]: {
-        ...prev[eventId],
-        [field]: value
-      }
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const rsvpPromises = Object.entries(responses).map(([eventId, response]) => {
-        if (!response.response) return null;
-
-        return fetch('/api/rsvp/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            guestId: guestInfo!.id,
-            eventId,
-            response: response.response.toUpperCase(),
-            attendees: response.num_attendees || 1,
-            dietaryPreferences: response.dietary_preferences,
-            comments: response.comments,
-          }),
-        });
-      }).filter(Boolean);
-
-      await Promise.all(rsvpPromises);
       setStep(3);
-    } catch (error) {
-      console.error('RSVP submission error:', error);
-      alert('Failed to submit RSVP. Please try again.');
+    } catch (err) {
+      console.error('RSVP form submit error:', err);
+      alert('Sorry, we could not submit your RSVP. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-wedding">
@@ -128,176 +87,131 @@ export default function RSVPPage() {
       {/* RSVP Form */}
       <section className="pb-16 sm:pb-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          {step === 1 && (
-            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-xl">
-              <div className="text-center mb-6 sm:mb-8">
-                <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🎫</div>
-                <h2 className="text-xl sm:text-2xl font-serif font-semibold text-secondary mb-2">
-                  Enter Your RSVP Code
-                </h2>
-                <p className="text-muted text-sm sm:text-base">
-                  Please enter the RSVP code from your invitation to continue.
-                </p>
-              </div>
-
-              <form onSubmit={handleTokenSubmit} className="space-y-4 sm:space-y-6">
-                <div>
-                  <label htmlFor="token" className="block text-sm font-medium text-foreground mb-2">
-                    RSVP Code
-                  </label>
-                  <input
-                    type="text"
-                    id="token"
-                    value={token}
-                    onChange={(e) => setToken(e.target.value)}
-                    placeholder="Enter your RSVP code"
-                    className="w-full px-4 py-3 border-2 border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-center text-lg tracking-wider transition-all"
-                    required
-                  />
-                  <p className="text-xs sm:text-sm text-muted mt-2">
-                    Your RSVP code can be found on your invitation card or email.
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  {loading ? 'Validating...' : 'Continue'}
-                </button>
-              </form>
-
-              <div className="mt-8 p-4 bg-cream-50 rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">Don&apos;t have an RSVP code?</h3>
-                <p className="text-sm text-muted mb-3">
-                  If you can&apos;t find your RSVP code, please contact us and we&apos;ll help you out.
-                </p>
-                <Link 
-                  href="/contact"
-                  className="text-primary hover:text-primary-dark font-medium text-sm"
-                >
-                  Contact Us →
-                </Link>
-              </div>
-            </div>
-          )}
-
           {step === 2 && (
-            <div className="bg-white rounded-lg p-8 shadow-lg">
-              <div className="text-center mb-8">
-                <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">
-                  Welcome, {guestInfo?.name}!
-                </h2>
-                <p className="text-muted">
-                  Please let us know which events you&apos;ll be attending.
-                </p>
+            <div className="bg-white rounded-lg p-6 sm:p-8 shadow-lg">
+              <div className="text-center mb-6 sm:mb-8">
+                <div className="mb-4 flex justify-center">
+                  <HandRaisedIcon className="h-10 w-10 text-primary" aria-hidden="true" />
+                </div>
+                <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">Welcome, {guestInfo?.name}!</h2>
+                <p className="text-gray-700">Please answer the questions below to complete your RSVP.</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-8">
-                {events.map((event) => (
-                  <div key={event.id} className="border border-cream-200 rounded-lg p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground">{event.title}</h3>
-                        <p className="text-muted text-sm">
-                          {new Date(event.date).toLocaleDateString()} at {event.time}
-                        </p>
+                <div className="border border-gray-200 rounded-lg p-4 sm:p-6 bg-white">
+                  <div className="space-y-6">
+                    {/* Q1 */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">Will you be able to grace us with your presence in Dhaka?</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {([
+                          { key: 'yes', label: 'Yes, I will attend' },
+                          { key: 'no', label: 'No, I will not attend' },
+                          { key: 'maybe', label: 'Maybe' },
+                        ] as { key: AttendDhaka; label: string }[]).map((opt) => (
+                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                            <input type="radio" name="attendDhaka" className="h-5 w-5 min-w-[20px]" checked={willAttendDhaka === opt.key} onChange={() => setWillAttendDhaka(opt.key)} />
+                            <span className="text-sm font-medium text-gray-900">{opt.label}</span>
+                          </label>
+                        ))}
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-3">
-                          Will you be attending?
-                        </label>
-                        <div className="grid grid-cols-3 gap-3">
-                          {['attending', 'not_attending', 'maybe'].map((response) => (
-                            <label key={response} className="cursor-pointer">
-                              <input
-                                type="radio"
-                                name={`response_${event.id}`}
-                                value={response}
-                                onChange={(e) => handleResponseChange(event.id, 'response', e.target.value)}
-                                className="sr-only"
-                              />
-                              <div className={`p-3 text-center rounded-lg border-2 transition-colors ${
-                                responses[event.id]?.response === response
-                                  ? 'border-primary bg-primary/10 text-primary'
-                                  : 'border-cream-200 text-muted hover:border-primary/50'
-                              }`}>
-                                <div className="text-lg mb-1">
-                                  {response === 'attending' ? '✅' : response === 'not_attending' ? '❌' : '🤔'}
-                                </div>
-                                <div className="text-xs font-medium">
-                                  {response === 'attending' ? 'Yes' : response === 'not_attending' ? 'No' : 'Maybe'}
-                                </div>
-                              </div>
-                            </label>
-                          ))}
-                        </div>
+                    {/* Q2 */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">Are you from The Bride&apos;s Family or The Groom&apos;s Family?</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {([
+                          { key: 'bride', label: "The Bride's Family" },
+                          { key: 'groom', label: "The Groom's Family" },
+                          { key: 'both', label: 'Both Families' },
+                        ] as { key: FamilySide; label: string }[]).map((opt) => (
+                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                            <input type="radio" name="familySide" className="h-5 w-5 min-w-[20px]" checked={familySide === opt.key} onChange={() => setFamilySide(opt.key)} />
+                            <span className="text-sm font-medium text-gray-900">{opt.label}</span>
+                          </label>
+                        ))}
                       </div>
+                    </div>
 
-                      {responses[event.id]?.response === 'attending' && (
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div>
-                            <label htmlFor={`attendees_${event.id}`} className="block text-sm font-medium text-foreground mb-2">
-                              Number of attendees
-                            </label>
-                            <select
-                              id={`attendees_${event.id}`}
-                              onChange={(e) => handleResponseChange(event.id, 'num_attendees', parseInt(e.target.value))}
-                              className="w-full px-3 py-2 border border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                            >
-                              <option value="1">1 person</option>
-                              <option value="2">2 people</option>
-                              <option value="3">3 people</option>
-                              <option value="4">4 people</option>
-                            </select>
-                          </div>
-
-                          <div>
-                            <label htmlFor={`dietary_${event.id}`} className="block text-sm font-medium text-foreground mb-2">
-                              Dietary preferences
-                            </label>
-                            <select
-                              id={`dietary_${event.id}`}
-                              onChange={(e) => handleResponseChange(event.id, 'dietary_preferences', e.target.value)}
-                              className="w-full px-3 py-2 border border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                            >
-                              <option value="">No preferences</option>
-                              <option value="vegetarian">Vegetarian</option>
-                              <option value="vegan">Vegan</option>
-                              <option value="halal">Halal</option>
-                              <option value="kosher">Kosher</option>
-                              <option value="gluten_free">Gluten Free</option>
-                              <option value="other">Other</option>
-                            </select>
-                          </div>
+                    {/* Q3 */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">How many guests will be present?</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                        {(['1','2','3','4','other'] as GuestCount[]).map((opt) => (
+                          <label key={opt} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                            <input type="radio" name="guestCount" className="h-5 w-5 min-w-[20px]" checked={guestCountOption === opt} onChange={() => setGuestCountOption(opt)} />
+                            <span className="text-sm font-medium text-gray-900">{opt==='other' ? 'Other' : `${opt} ${opt==='1'?'person':'people'}`}</span>
+                          </label>
+                        ))}
+                      </div>
+                      {guestCountOption==='other' && (
+                        <div className="mt-3">
+                          <input type="number" min={1} className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Please specify number of people" value={guestCountOther} onChange={e=>setGuestCountOther(e.target.value)} />
                         </div>
                       )}
                     </div>
-                  </div>
-                ))}
 
-                <div>
-                  <label htmlFor="special_requests" className="block text-sm font-medium text-foreground mb-2">
-                    Special requests or message
-                  </label>
-                  <textarea
-                    id="special_requests"
-                    rows={4}
-                    placeholder="Any special requests, accessibility needs, or a message for the couple..."
-                    className="w-full px-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
+                    {/* Q4 */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">Is there any additional information you’d like to share with us (food allergies, accommodation needs, medical conditions)?</label>
+                      <textarea rows={3} className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="Your notes…" value={additionalInfo} onChange={e=>setAdditionalInfo(e.target.value)} />
+                    </div>
+
+                    {/* Q5 */}
+                    <div className="space-y-4">
+                      <h4 className="text-md font-semibold text-gray-900">Contact Details</h4>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-900 mb-2">Preferred Number</label>
+                          <div className="flex gap-3">
+                            <input type="tel" className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Phone number" value={contactPreferred} onChange={e=>setContactPreferred(e.target.value)} />
+                          </div>
+                          <div className="flex items-center gap-6 mt-2">
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactPreferredWhatsApp} onChange={e=>setContactPreferredWhatsApp(e.target.checked)} /> WhatsApp
+                            </label>
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactPreferredBotim} onChange={e=>setContactPreferredBotim(e.target.checked)} /> Botim
+                            </label>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-900 mb-2">Secondary Number</label>
+                          <input type="tel" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Secondary phone" value={contactSecondary} onChange={e=>setContactSecondary(e.target.value)} />
+                          <div className="flex items-center gap-6 mt-2">
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactSecondaryWhatsApp} onChange={e=>setContactSecondaryWhatsApp(e.target.checked)} /> WhatsApp
+                            </label>
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactSecondaryBotim} onChange={e=>setContactSecondaryBotim(e.target.checked)} /> Botim
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <div>
+                          <label htmlFor="emergency_name" className="block text-sm font-semibold text-gray-900 mb-2">Emergency Contact Name</label>
+                          <input id="emergency_name" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Full name" value={emergencyName} onChange={e=>setEmergencyName(e.target.value)} />
+                        </div>
+                        <div>
+                          <label htmlFor="emergency_phone" className="block text-sm font-semibold text-gray-900 mb-2">Emergency Contact Phone</label>
+                          <input id="emergency_phone" type="tel" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Phone number" value={emergencyPhone} onChange={e=>setEmergencyPhone(e.target.value)} />
+                        </div>
+                        <div>
+                          <label htmlFor="emergency_email" className="block text-sm font-semibold text-gray-900 mb-2">Emergency Contact Email</label>
+                          <input id="emergency_email" type="email" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="name@example.com" value={emergencyEmail} onChange={e=>setEmergencyEmail(e.target.value)} />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
+                        <input type="email" required className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="you@example.com" value={emailAddress} onChange={e=>setEmailAddress(e.target.value)} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
-                >
+                <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors">
                   {loading ? 'Submitting RSVP...' : 'Submit RSVP'}
                 </button>
               </form>
@@ -306,26 +220,19 @@ export default function RSVPPage() {
 
           {step === 3 && (
             <div className="bg-white rounded-lg p-8 shadow-lg text-center">
-              <div className="text-6xl mb-6">🎉</div>
-              <h2 className="text-3xl font-serif font-semibold text-secondary mb-4">
-                Thank You!
-              </h2>
+              <div className="mb-6 flex justify-center">
+                <SparklesIcon className="h-12 w-12 text-primary" aria-hidden="true" />
+              </div>
+              <h2 className="text-3xl font-serif font-semibold text-secondary mb-4">Thank You!</h2>
               <p className="text-muted mb-8 max-w-md mx-auto">
-                Your RSVP has been submitted successfully. We&apos;ll send you a confirmation email 
-                with all the details shortly.
+                Your RSVP has been submitted successfully. We&apos;ll send you a confirmation email with all the details shortly.
               </p>
               
               <div className="space-y-4">
-                <Link 
-                  href="/events"
-                  className="block bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-lg font-medium transition-colors"
-                >
+                <Link href="/events" className="block bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-lg font-medium transition-colors">
                   View Event Details
                 </Link>
-                <Link 
-                  href="/travel"
-                  className="block border border-primary text-primary hover:bg-primary hover:text-white py-3 px-6 rounded-lg font-medium transition-colors"
-                >
+                <Link href="/travel" className="block border border-primary text-primary hover:bg-primary hover:text-white py-3 px-6 rounded-lg font-medium transition-colors">
                   Travel Information
                 </Link>
               </div>

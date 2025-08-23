@@ -123,8 +123,10 @@ export default function MonitoringDashboard() {
               {healthStatus?.status || 'Unknown'}
             </span>
           </div>
-          <p className="text-2xl font-semibold text-secondary mt-2">
-            {healthStatus?.status === 'healthy' ? '✅' : '❌'} Online
+          <p className="text-2xl font-semibold text-secondary mt-2 flex items-center gap-2">
+            <span className={healthStatus?.status === 'healthy' ? 'text-green-600' : 'text-red-600'}>
+              {healthStatus?.status === 'healthy' ? 'Online' : 'Offline'}
+            </span>
           </p>
         </div>
 
@@ -170,7 +172,7 @@ export default function MonitoringDashboard() {
                 <p className={`text-xl font-semibold ${
                   count === 'error' ? 'text-red-600' : 'text-secondary'
                 }`}>
-                  {count === 'error' ? '❌' : count}
+                  {count === 'error' ? 'Error' : count}
                 </p>
               </div>
             ))}

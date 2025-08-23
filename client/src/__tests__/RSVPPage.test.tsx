@@ -11,23 +11,39 @@ jest.mock('next/link', () => {
 })
 
 describe('RSVP Page', () => {
+  beforeAll(() => {
+    // Force the page to render the form (step 2)
+    process.env.NEXT_PUBLIC_SKIP_RSVP_CODE = 'true'
+  })
+
   it('renders the RSVP page heading', () => {
     render(<RSVPPage />)
     
     expect(screen.getByRole('heading', { name: /^RSVP$/i, level: 1 })).toBeInTheDocument()
   })
 
-  it('displays the token input form', () => {
+  it('shows the RSVP selection form', () => {
     render(<RSVPPage />)
     
-    const tokenInput = screen.getByRole('textbox')
-    expect(tokenInput).toBeInTheDocument()
-    expect(tokenInput).toHaveAttribute('placeholder', 'Enter your RSVP code')
+    // Check for the main RSVP question
+    expect(screen.getByText(/Will you be able to grace us with your presence in Dhaka\?/i)).toBeInTheDocument()
+    
+    // Check for family side question
+    expect(screen.getByText(/Are you from The Bride's Family or The Groom's Family\?/i)).toBeInTheDocument()
+    
+    // Check for guest count question
+    expect(screen.getByText(/How many guests will be present\?/i)).toBeInTheDocument()
+    
+    // Check for additional information field (use partial text to avoid special character issues)
+    expect(screen.getByText(/additional information/i)).toBeInTheDocument()
+    
+    // Check for contact details section
+    expect(screen.getByText(/Contact Details/i)).toBeInTheDocument()
   })
 
   it('has a continue button', () => {
     render(<RSVPPage />)
     
-    expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /submit rsvp/i })).toBeInTheDocument()
   })
 })
