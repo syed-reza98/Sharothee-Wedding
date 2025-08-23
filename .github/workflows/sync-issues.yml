@@ -1,5 +1,9 @@
 name: Sync Issues
 
+permissions:
+  contents: read
+  issues: write
+
 on:
   workflow_dispatch:
 
