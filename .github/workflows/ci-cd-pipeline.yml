@@ -28,6 +28,7 @@ permissions:
   issues: write
   pull-requests: write
   checks: write
+  statuses: write
 
 env:
   NODE_VERSION: '20'
@@ -41,6 +42,23 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Debug environment
+      run: |
+        echo "🐛 GitHub Actions Environment Debug Info:"
+        echo "Working Directory: $(pwd)"
+        echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        echo "NODE_VERSION: ${{ env.NODE_VERSION }}"
+        echo "WORKING_DIRECTORY: ${{ env.WORKING_DIRECTORY }}"
+        
+        echo "📁 Repository structure:"
+        ls -la
+        
+        echo "📁 Client directory structure:"
+        ls -la client/ | head -10
+        
+        echo "📄 Client package.json exists:"
+        [ -f "client/package.json" ] && echo "✅ Found" || echo "❌ Not found"
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -58,6 +76,7 @@ jobs:
     - name: Create environment file
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
+        echo "🔧 Creating environment file for CI build..."
         cat << EOF > .env.local
         # Database
         DATABASE_URL="file:./dev.db"
@@ -73,14 +92,37 @@ jobs:
         CLOUDINARY_CLOUD_NAME="test-cloud"
         CLOUDINARY_API_KEY="test-api-key"
         CLOUDINARY_API_SECRET="test-api-secret"
+        
+        # Additional required variables
+        NEXT_PUBLIC_APP_URL="http://localhost:3000"
+        ADMIN_EMAIL="admin@test.com"
+        ADMIN_PASSWORD="test-password"
         EOF
-        echo "✅ Environment file created for CI"
+        
+        echo "✅ Environment file created"
+        
+        # Verify environment file
+        echo "🔍 Environment file contents (sensitive values masked):"
+        cat .env.local | sed 's/=.*/=***/' | head -10
+        
+        # Check file size
+        FILE_SIZE=$(wc -c < .env.local)
+        echo "📄 Environment file size: ${FILE_SIZE} bytes"
 
     - name: Generate Prisma client
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
+        echo "🗄️ Generating Prisma client..."
         npx prisma generate
         echo "✅ Prisma client generated"
+        
+        # Verify Prisma client was generated
+        if [ -d "node_modules/@prisma/client" ]; then
+          echo "✅ Prisma client directory found"
+        else
+          echo "❌ Prisma client directory not found"
+          exit 1
+        fi
 
     - name: Lint code
       working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -103,16 +145,88 @@ jobs:
     - name: Build application
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
+        echo "🏗️ Starting Next.js production build..."
         npm run build
         echo "✅ Build completed successfully"
+
+    - name: Verify build artifacts
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Verifying build artifacts..."
+        
+        # Check if .next directory exists
+        if [ -d ".next" ]; then
+          echo "✅ .next directory found"
+          
+          # Show directory structure for debugging
+          echo "📁 .next directory contents:"
+          ls -la .next/ | head -10
+          
+          # Check for key build files
+          if [ -f ".next/BUILD_ID" ]; then
+            echo "✅ BUILD_ID found: $(cat .next/BUILD_ID)"
+          else
+            echo "❌ BUILD_ID not found"
+          fi
+          
+          if [ -f ".next/build-manifest.json" ]; then
+            echo "✅ build-manifest.json found"
+          else
+            echo "❌ build-manifest.json not found"
+          fi
+          
+          # Calculate total size
+          BUILD_SIZE=$(du -sh .next/ | cut -f1)
+          echo "📦 Build size: $BUILD_SIZE"
+          
+          # Count files
+          FILE_COUNT=$(find .next/ -type f | wc -l)
+          echo "📄 Total files: $FILE_COUNT"
+          
+        else
+          echo "❌ .next directory not found - build may have failed"
+          echo "📁 Current directory contents:"
+          ls -la
+          exit 1
+        fi
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: wedding-website-build
+        name: wedding-website-build-${{ github.sha }}
         path: client/.next/
         retention-days: 7
+        include-hidden-files: true
+
+    - name: Debug artifact paths (on failure)
+      if: failure()
+      run: |
+        echo "🐛 Debug: Checking paths for artifact upload troubleshooting..."
+        echo "Current working directory: $(pwd)"
+        echo "Repository root contents:"
+        ls -la
+        echo "Client directory exists:"
+        [ -d "client" ] && echo "✅ client/ found" || echo "❌ client/ not found"
+        echo "Client .next directory exists:"
+        [ -d "client/.next" ] && echo "✅ client/.next/ found" || echo "❌ client/.next/ not found"
+        
+        if [ -d "client/.next" ]; then
+          echo "Contents of client/.next/:"
+          ls -la client/.next/ | head -5
+        fi
+
+    - name: Upload build artifacts fallback
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: failed-build-logs-${{ github.sha }}
+        path: |
+          client/.next/
+          client/npm-debug.log*
+          client/yarn-error.log*
+        retention-days: 3
+        if-no-files-found: ignore
 
   security-audit:
     runs-on: ubuntu-latest
@@ -190,13 +304,83 @@ jobs:
         npx prisma generate
         echo "✅ Prisma client generated"
 
+    - name: Build application for Lighthouse
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🏗️ Building application for Lighthouse testing..."
+        npm run build
+        echo "✅ Build completed for Lighthouse testing"
+
     - name: Lighthouse Performance Test
-      uses: treosh/lighthouse-ci-action@v11
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Running Lighthouse CI from client directory..."
+        echo "Current directory: $(pwd)"
+        echo "Package.json exists: $([ -f package.json ] && echo 'YES' || echo 'NO')"
+        echo "Lighthouse config exists: $([ -f lighthouserc.json ] && echo 'YES' || echo 'NO')"
+        
+        # Install Lighthouse CI if not present
+        if ! command -v lhci &> /dev/null; then
+          echo "📦 Installing Lighthouse CI..."
+          npm install -g @lhci/cli@^0.12.0
+        fi
+        
+        # Create optimized Lighthouse configuration for CI
+        echo "🔧 Creating optimized Lighthouse configuration for CI environment..."
+        cat > lighthouserc.ci.json << 'LIGHTHOUSE_CONFIG'
+        {
+          "ci": {
+            "collect": {
+              "url": ["http://localhost:3000"],
+              "startServerCommand": "npm run start",
+              "startServerReadyPattern": "ready", 
+              "startServerReadyTimeout": 60000,
+              "numberOfRuns": 1,
+              "settings": {
+                "chromeFlags": "--no-sandbox --headless --disable-dev-shm-usage --disable-gpu --disable-web-security --disable-features=TranslateUI --disable-extensions --no-first-run --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-background-networking --disable-sync --disable-default-apps --disable-component-extensions-with-background-pages",
+                "skipAudits": [],
+                "onlyCategories": ["performance", "accessibility", "best-practices", "seo"]
+              }
+            },
+            "assert": {
+              "assertions": {
+                "categories:performance": ["warn", {"minScore": 0.6}],
+                "categories:accessibility": ["warn", {"minScore": 0.6}],
+                "categories:best-practices": ["warn", {"minScore": 0.7}],
+                "categories:seo": ["warn", {"minScore": 0.8}]
+              }
+            },
+            "upload": {
+              "target": "temporary-public-storage"
+            }
+          }
+        }
+        LIGHTHOUSE_CONFIG
+        
+        # Run Lighthouse CI with CI-optimized config
+        echo "🚀 Starting Lighthouse CI performance test..."
+        npx @lhci/cli autorun --config=lighthouserc.ci.json
+        
+        echo "✅ Lighthouse CI completed successfully"
+      env:
+        NODE_VERSION: ${{ env.NODE_VERSION }}
+        LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
+        LHCI_BUILD_CONTEXT__COMMIT_TIME: ${{ github.event.head_commit.timestamp }}
+        LHCI_BUILD_CONTEXT__CURRENT_BRANCH: ${{ github.ref_name }}
+        LHCI_BUILD_CONTEXT__COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+    - name: Upload Lighthouse results
+      uses: actions/upload-artifact@v4
+      if: always()
       with:
-        configPath: './client/lighthouserc.json'
-        uploadArtifacts: true
-        temporaryPublicStorage: true
-        artifactName: 'lighthouse-results'
+        name: lighthouse-results-${{ github.sha }}
+        path: |
+          client/.lighthouseci/
+          client/lighthouse-results.json
+        retention-days: 7
+        if-no-files-found: ignore
+
   deployment-check:
     runs-on: ubuntu-latest
     needs: [build-and-test, security-audit]
