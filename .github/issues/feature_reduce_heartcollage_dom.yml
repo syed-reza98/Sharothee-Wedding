@@ -1,0 +1,16 @@
+---
+title: "[FEATURE] Reduce DOM nodes in HeartCollage for mobile performance"
+labels:
+  - enhancement
+  - needs-review
+---
+## Summary
+`HeartCollage` component generates numerous decorative elements, inflating DOM size and affecting mobile performance.
+
+## Proposed Solution
+1. Simplify or virtualize decorative elements.
+2. Consider using CSS backgrounds or SVG instead of many divs.
+3. Benchmark performance on low-end devices.
+
+## Priority
+Low; incremental performance gain.

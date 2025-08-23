@@ -109,8 +109,8 @@ export default function RSVPPage() {
                           { key: 'no', label: 'No, I will not attend' },
                           { key: 'maybe', label: 'Maybe' },
                         ] as { key: AttendDhaka; label: string }[]).map((opt) => (
-                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60">
-                            <input type="radio" name="attendDhaka" className="h-4 w-4" checked={willAttendDhaka === opt.key} onChange={() => setWillAttendDhaka(opt.key)} />
+                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                            <input type="radio" name="attendDhaka" className="h-5 w-5 min-w-[20px]" checked={willAttendDhaka === opt.key} onChange={() => setWillAttendDhaka(opt.key)} />
                             <span className="text-sm font-medium text-gray-900">{opt.label}</span>
                           </label>
                         ))}
@@ -126,8 +126,8 @@ export default function RSVPPage() {
                           { key: 'groom', label: "The Groom's Family" },
                           { key: 'both', label: 'Both Families' },
                         ] as { key: FamilySide; label: string }[]).map((opt) => (
-                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60">
-                            <input type="radio" name="familySide" className="h-4 w-4" checked={familySide === opt.key} onChange={() => setFamilySide(opt.key)} />
+                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                            <input type="radio" name="familySide" className="h-5 w-5 min-w-[20px]" checked={familySide === opt.key} onChange={() => setFamilySide(opt.key)} />
                             <span className="text-sm font-medium text-gray-900">{opt.label}</span>
                           </label>
                         ))}
@@ -139,15 +139,15 @@ export default function RSVPPage() {
                       <label className="block text-sm font-semibold text-gray-900 mb-2">How many guests will be present?</label>
                       <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
                         {(['1','2','3','4','other'] as GuestCount[]).map((opt) => (
-                          <label key={opt} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60">
-                            <input type="radio" name="guestCount" className="h-4 w-4" checked={guestCountOption === opt} onChange={() => setGuestCountOption(opt)} />
+                          <label key={opt} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                            <input type="radio" name="guestCount" className="h-5 w-5 min-w-[20px]" checked={guestCountOption === opt} onChange={() => setGuestCountOption(opt)} />
                             <span className="text-sm font-medium text-gray-900">{opt==='other' ? 'Other' : `${opt} ${opt==='1'?'person':'people'}`}</span>
                           </label>
                         ))}
                       </div>
                       {guestCountOption==='other' && (
                         <div className="mt-3">
-                          <input type="number" min={1} className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="Please specify number of people" value={guestCountOther} onChange={e=>setGuestCountOther(e.target.value)} />
+                          <input type="number" min={1} className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Please specify number of people" value={guestCountOther} onChange={e=>setGuestCountOther(e.target.value)} />
                         </div>
                       )}
                     </div>
@@ -165,26 +165,26 @@ export default function RSVPPage() {
                         <div>
                           <label className="block text-sm font-semibold text-gray-900 mb-2">Preferred Number</label>
                           <div className="flex gap-3">
-                            <input type="tel" className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="Phone number" value={contactPreferred} onChange={e=>setContactPreferred(e.target.value)} />
+                            <input type="tel" className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Phone number" value={contactPreferred} onChange={e=>setContactPreferred(e.target.value)} />
                           </div>
                           <div className="flex items-center gap-6 mt-2">
-                            <label className="inline-flex items-center gap-2 text-sm">
-                              <input type="checkbox" checked={contactPreferredWhatsApp} onChange={e=>setContactPreferredWhatsApp(e.target.checked)} /> WhatsApp
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactPreferredWhatsApp} onChange={e=>setContactPreferredWhatsApp(e.target.checked)} /> WhatsApp
                             </label>
-                            <label className="inline-flex items-center gap-2 text-sm">
-                              <input type="checkbox" checked={contactPreferredBotim} onChange={e=>setContactPreferredBotim(e.target.checked)} /> Botim
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactPreferredBotim} onChange={e=>setContactPreferredBotim(e.target.checked)} /> Botim
                             </label>
                           </div>
                         </div>
                         <div>
                           <label className="block text-sm font-semibold text-gray-900 mb-2">Secondary Number</label>
-                          <input type="tel" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="Secondary phone" value={contactSecondary} onChange={e=>setContactSecondary(e.target.value)} />
+                          <input type="tel" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Secondary phone" value={contactSecondary} onChange={e=>setContactSecondary(e.target.value)} />
                           <div className="flex items-center gap-6 mt-2">
-                            <label className="inline-flex items-center gap-2 text-sm">
-                              <input type="checkbox" checked={contactSecondaryWhatsApp} onChange={e=>setContactSecondaryWhatsApp(e.target.checked)} /> WhatsApp
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactSecondaryWhatsApp} onChange={e=>setContactSecondaryWhatsApp(e.target.checked)} /> WhatsApp
                             </label>
-                            <label className="inline-flex items-center gap-2 text-sm">
-                              <input type="checkbox" checked={contactSecondaryBotim} onChange={e=>setContactSecondaryBotim(e.target.checked)} /> Botim
+                            <label className="inline-flex items-center gap-2 text-sm min-h-[44px] cursor-pointer">
+                              <input type="checkbox" className="h-5 w-5 min-w-[20px]" checked={contactSecondaryBotim} onChange={e=>setContactSecondaryBotim(e.target.checked)} /> Botim
                             </label>
                           </div>
                         </div>
@@ -192,20 +192,20 @@ export default function RSVPPage() {
                       <div className="grid md:grid-cols-3 gap-4">
                         <div>
                           <label htmlFor="emergency_name" className="block text-sm font-semibold text-gray-900 mb-2">Emergency Contact Name</label>
-                          <input id="emergency_name" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="Full name" value={emergencyName} onChange={e=>setEmergencyName(e.target.value)} />
+                          <input id="emergency_name" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Full name" value={emergencyName} onChange={e=>setEmergencyName(e.target.value)} />
                         </div>
                         <div>
                           <label htmlFor="emergency_phone" className="block text-sm font-semibold text-gray-900 mb-2">Emergency Contact Phone</label>
-                          <input id="emergency_phone" type="tel" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="Phone number" value={emergencyPhone} onChange={e=>setEmergencyPhone(e.target.value)} />
+                          <input id="emergency_phone" type="tel" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Phone number" value={emergencyPhone} onChange={e=>setEmergencyPhone(e.target.value)} />
                         </div>
                         <div>
                           <label htmlFor="emergency_email" className="block text-sm font-semibold text-gray-900 mb-2">Emergency Contact Email</label>
-                          <input id="emergency_email" type="email" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="name@example.com" value={emergencyEmail} onChange={e=>setEmergencyEmail(e.target.value)} />
+                          <input id="emergency_email" type="email" className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="name@example.com" value={emergencyEmail} onChange={e=>setEmergencyEmail(e.target.value)} />
                         </div>
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
-                        <input type="email" required className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg" placeholder="you@example.com" value={emailAddress} onChange={e=>setEmailAddress(e.target.value)} />
+                        <input type="email" required className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="you@example.com" value={emailAddress} onChange={e=>setEmailAddress(e.target.value)} />
                       </div>
                     </div>
                   </div>

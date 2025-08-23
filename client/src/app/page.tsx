@@ -3,11 +3,12 @@ import Image from "next/image";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Countdown from "@/components/Countdown";
+import HeartCollage from "@/components/HeartCollage";
 import { ArrowRightIcon, HeartIcon, CalendarDaysIcon, PhotoIcon, MapPinIcon, EnvelopeIcon, GlobeAmericasIcon, TrophyIcon } from '@heroicons/react/24/outline'
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <Navigation />
 
       {/* Hero Section */}
@@ -21,6 +22,14 @@ export default function HomePage() {
             <p className="text-lg sm:text-xl md:text-2xl text-muted mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
               From childhood friends at AISD to forever partners
             </p>
+            
+            {/* Heart Collage Component with enhanced presentation */}
+            <div className="my-6 sm:my-8 relative overflow-hidden">
+              {/* Subtle background glow for the collage - no scaling to prevent overflow */}
+              <div className="absolute inset-0 bg-gradient-radial from-primary/8 via-primary/3 to-transparent rounded-full blur-xl opacity-50"></div>
+              <HeartCollage />
+            </div>
+            
             <p className="text-base sm:text-lg text-muted mb-8 sm:mb-12">
               Join us as we celebrate our love story across continents
             </p>
@@ -142,7 +151,7 @@ export default function HomePage() {
                       src="/images/story/Where It All Began 2.jpeg"
                       alt="AISD school days together"
                       fill
-                      className="object-cover scale-[1.22] hover:scale-[1.26] transition-transform duration-700 brightness-125 contrast-110 saturate-110 motion-reduce:transform-none motion-reduce:transition-none"
+                      className="object-cover scale-[1.1] hover:scale-[1.15] transition-transform duration-700 brightness-125 contrast-110 saturate-110 motion-reduce:transform-none motion-reduce:transition-none"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 30vw"
                       style={{ objectPosition: '48% 32%' }}
                     />
@@ -153,7 +162,7 @@ export default function HomePage() {
                       src="/images/story/Where It All Began 3.jpeg"
                       alt="Early friendship moments"
                       fill
-      className="object-cover scale-[1.22] hover:scale-[1.26] transition-transform duration-700 brightness-105 saturate-105 motion-reduce:transform-none motion-reduce:transition-none"
+      className="object-cover scale-[1.1] hover:scale-[1.15] transition-transform duration-700 brightness-105 saturate-105 motion-reduce:transform-none motion-reduce:transition-none"
       sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 30vw"
       style={{ objectPosition: '50% 28%' }}
                     />

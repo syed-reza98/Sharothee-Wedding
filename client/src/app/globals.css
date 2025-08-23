@@ -55,24 +55,67 @@ body {
   font-family: var(--font-sans);
   /* Ensure native UI (forms, scrollbars) prefer light appearance */
   color-scheme: light;
+  /* Prevent horizontal overflow and layout shift */
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100vw;
+  position: relative;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+html {
+  /* Prevent horizontal overflow at root level */
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100vw;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--accent);
+/* Ensure no element can cause horizontal overflow */
+*, *::before, *::after {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+/* Specific overflow prevention for scaled elements */
+.scale-110, .scale-125, .scale-150 {
+  max-width: 100%;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
+/* Container queries for responsive design */
+.container {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar - hidden on mobile/tablet to prevent layout issues */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--accent);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+  }
+}
+
+/* Hide scrollbars on mobile/tablet to prevent layout shift issues */
+@media (max-width: 1023px) {
+  html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 }
 
 /* Smooth transitions */
@@ -242,6 +285,35 @@ body {
     transform: scale(1.2);
     opacity: 1;
   }
+}
+
+@keyframes heartGlow {
+  0%, 100% {
+    filter: drop-shadow(0 8px 32px rgba(212, 165, 116, 0.3)) drop-shadow(0 4px 16px rgba(212, 165, 116, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 12px 48px rgba(212, 165, 116, 0.4)) drop-shadow(0 6px 24px rgba(212, 165, 116, 0.3));
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+}
+
+.animate-heartGlow {
+  animation: heartGlow 4s ease-in-out infinite;
+}
+
+.animate-gentleFloat {
+  animation: gentleFloat 6s ease-in-out infinite;
 }
 
 /* Elegant gradient backgrounds */
