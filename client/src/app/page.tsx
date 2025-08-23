@@ -93,6 +93,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Our Story Section - Enhanced design with accessibility */}
       <section id="story" className="py-20 bg-white relative overflow-hidden" aria-label="Our love story timeline">
