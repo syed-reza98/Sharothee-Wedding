@@ -79,12 +79,13 @@ export default function ContactPage() {
         setIsSubmitted(true);
       } else {
         console.error('Contact form error:', data);
-        const errorMessage = data.error || 'Failed to send message. Please try again.';
-        setError(errorMessage.includes('required') ? 
-          'Please fill in all required fields correctly' : 
-          errorMessage
-        );
-      }
+        if (data.errors && typeof data.errors === 'object') {
+          setValidationErrors(data.errors);
+          setError('Please fill in all required fields correctly');
+        } else {
+          const errorMessage = data.error || 'Failed to send message. Please try again.';
+          setError(errorMessage);
+        }
     } catch (error) {
       console.error('Contact form error:', error);
       setError('Failed to send message. Please check your connection and try again.');
