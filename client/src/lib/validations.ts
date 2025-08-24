@@ -23,6 +23,38 @@ export const contactSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters"),
 })
 
+// RSVP Form Validation
+export const rsvpFormSchema = z.object({
+  guestName: z.string().optional(),
+  email: z.string().email("Please enter a valid email address"),
+  willAttendDhaka: z.enum(["yes", "no", "maybe"]),
+  familySide: z.enum(["bride", "groom", "both"]),
+  guestCount: z.enum(["1", "2", "3", "4", "other"]),
+  guestCountOther: z.string().optional(),
+  additionalInfo: z.string().optional(),
+  
+  // Contact Information
+  preferredNumber: z.string().optional(),
+  preferredWhatsapp: z.boolean().optional(),
+  preferredBotim: z.boolean().optional(),
+  secondaryNumber: z.string().optional(),
+  secondaryWhatsapp: z.boolean().optional(),
+  secondaryBotim: z.boolean().optional(),
+  
+  // Emergency Contact
+  emergencyName: z.string().optional(),
+  emergencyPhone: z.string().optional(),
+  emergencyEmail: z.string().email().optional().or(z.literal("")),
+}).refine((data) => {
+  if (data.guestCount === "other" && !data.guestCountOther) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please specify the number of people when selecting 'other'",
+  path: ["guestCountOther"],
+})
+
 // Guest Management
 export const guestSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -94,6 +126,7 @@ export const adminLoginSchema = z.object({
 })
 
 export type RSVPFormData = z.infer<typeof rsvpSchema>
+export type RSVPFormSubmissionData = z.infer<typeof rsvpFormSchema>
 export type ContactFormData = z.infer<typeof contactSchema>
 export type GuestFormData = z.infer<typeof guestSchema>
 export type EventFormData = z.infer<typeof eventSchema>

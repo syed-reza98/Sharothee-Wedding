@@ -9,11 +9,11 @@ export async function POST(request: NextRequest) {
     const validatedData = contactSchema.parse(body)
 
     // Save contact request to database
-    await prisma.contactRequest.create({
+    const contactRequest = await prisma.contactRequest.create({
       data: validatedData
     })
 
-    // Send notification email to admin
+    // Generate email content
     const adminEmailHtml = generateContactNotificationEmail(
       validatedData.name,
       validatedData.email,
@@ -21,11 +21,27 @@ export async function POST(request: NextRequest) {
       validatedData.message
     )
     
-    await sendEmail({
+    // CRITICAL: Send to arvincia@sparrow-group.com (highest priority)
+    const primaryResult = await sendEmail({
+      to: ["arvincia@sparrow-group.com"],
+      subject: `New Contact Request: ${validatedData.subject} - Incia & Arvin Wedding`,
+      html: adminEmailHtml
+    })
+
+    if (!primaryResult?.success) {
+      console.error('Contact form primary email to arvincia@sparrow-group.com failed:', primaryResult?.error)
+    }
+
+    // Send notification email to admin (backup)
+    const adminResult = await sendEmail({
       to: ["codestromhub@gmail.com"],
       subject: `New Contact Request: ${validatedData.subject}`,
       html: adminEmailHtml
     })
+
+    if (!adminResult?.success) {
+      console.warn('Contact form admin backup email failed:', adminResult?.error)
+    }
 
     // Send confirmation email to user
     const userConfirmationHtml = `
@@ -50,13 +66,23 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      id: contactRequest.id,
       message: "Contact request submitted successfully"
     })
 
   } catch (error) {
     console.error("Contact submission error:", error)
+    
+    // Handle validation errors specifically
+    if (error instanceof Error && error.name === 'ZodError') {
+      return NextResponse.json(
+        { error: 'Please fill in all required fields correctly', details: error.message }, 
+        { status: 400 }
+      )
+    }
+    
     return NextResponse.json(
-      { error: "Failed to submit contact request" },
+      { error: "Failed to submit contact request. Please try again." },
       { status: 500 }
     )
   }

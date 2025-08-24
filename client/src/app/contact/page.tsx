@@ -16,9 +16,52 @@ export default function ContactPage() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  // Client-side validation function
+  function validateForm(): Record<string, string> {
+    const errors: Record<string, string> = {};
+    
+    if (!formData.name.trim() || formData.name.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters";
+    }
+    if (!formData.email.trim()) {
+      errors.email = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+    if (!formData.subject) {
+      errors.subject = "Please select a subject";
+    }
+    if (!formData.message.trim() || formData.message.trim().length < 10) {
+      errors.message = "Message must be at least 10 characters";
+    }
+    
+    return errors;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Clear previous errors
+    setError('');
+    setValidationErrors({});
+    
+    // Client-side validation
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      // Focus on first error field for accessibility
+      const firstErrorField = Object.keys(errors)[0];
+      const fieldElement = document.querySelector(`[name="${firstErrorField}"]`) as HTMLElement;
+      if (fieldElement) {
+        fieldElement.focus();
+        fieldElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -30,16 +73,21 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+      
       if (response.ok) {
         setIsSubmitted(true);
       } else {
-        const errorData = await response.json();
-        console.error('Contact form error:', errorData);
-        alert('Failed to send message. Please try again.');
+        console.error('Contact form error:', data);
+        const errorMessage = data.error || 'Failed to send message. Please try again.';
+        setError(errorMessage.includes('required') ? 
+          'Please fill in all required fields correctly' : 
+          errorMessage
+        );
       }
     } catch (error) {
       console.error('Contact form error:', error);
-      alert('Failed to send message. Please try again.');
+      setError('Failed to send message. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -99,9 +147,26 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <>
+                  {/* Error Display */}
+                  {error && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-red-800">{error}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-secondary mb-6">
                     Send us a message
                   </h2>
+                  <p className="text-sm text-gray-600 mb-6">Fields marked with <span className="text-red-500">*</span> are required</p>
                   
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     <div className="grid sm:grid-cols-2 gap-4">
@@ -114,10 +179,20 @@ export default function ContactPage() {
                           id="name"
                           name="name"
                           value={formData.name}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all"
+                          onChange={(e) => {
+                            handleChange(e);
+                            if (validationErrors.name) {
+                              setValidationErrors(prev => ({ ...prev, name: '' }));
+                            }
+                          }}
+                          className={`w-full px-4 py-3 border-2 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary font-medium placeholder-gray-500 transition-all min-h-[48px] ${
+                            validationErrors.name ? 'border-red-300 bg-red-50 focus:border-red-500' : 'border-gray-300 focus:border-primary'
+                          }`}
                           required
                         />
+                        {validationErrors.name && (
+                          <p className="mt-1 text-sm text-red-600">{validationErrors.name}</p>
+                        )}
                       </div>
                       <div>
                         <label htmlFor="email" className="block text-sm font-bold text-gray-900 mb-2">
@@ -128,10 +203,20 @@ export default function ContactPage() {
                           id="email"
                           name="email"
                           value={formData.email}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all"
+                          onChange={(e) => {
+                            handleChange(e);
+                            if (validationErrors.email) {
+                              setValidationErrors(prev => ({ ...prev, email: '' }));
+                            }
+                          }}
+                          className={`w-full px-4 py-3 border-2 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary font-medium placeholder-gray-500 transition-all min-h-[48px] ${
+                            validationErrors.email ? 'border-red-300 bg-red-50 focus:border-red-500' : 'border-gray-300 focus:border-primary'
+                          }`}
                           required
                         />
+                        {validationErrors.email && (
+                          <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
+                        )}
                       </div>
                     </div>
 
@@ -145,7 +230,8 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all min-h-[48px]"
+                        placeholder="Your phone number (optional)"
                       />
                     </div>
 
@@ -157,8 +243,15 @@ export default function ContactPage() {
                         id="subject"
                         name="subject"
                         value={formData.subject}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium transition-all"
+                        onChange={(e) => {
+                          handleChange(e);
+                          if (validationErrors.subject) {
+                            setValidationErrors(prev => ({ ...prev, subject: '' }));
+                          }
+                        }}
+                        className={`w-full px-4 py-3 border-2 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary font-medium transition-all min-h-[48px] ${
+                          validationErrors.subject ? 'border-red-300 bg-red-50 focus:border-red-500' : 'border-gray-300 focus:border-primary'
+                        }`}
                         required
                       >
                         <option value="">Please select a subject</option>
@@ -170,6 +263,9 @@ export default function ContactPage() {
                         <option value="GENERAL">General Questions</option>
                         <option value="EMERGENCY">Emergency</option>
                       </select>
+                      {validationErrors.subject && (
+                        <p className="mt-1 text-sm text-red-600">{validationErrors.subject}</p>
+                      )}
                     </div>
 
                     <div>
@@ -180,20 +276,38 @@ export default function ContactPage() {
                         id="message"
                         name="message"
                         value={formData.message}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          if (validationErrors.message) {
+                            setValidationErrors(prev => ({ ...prev, message: '' }));
+                          }
+                        }}
                         rows={5}
-                        className="w-full px-4 py-3 border-2 border-gray-300 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-medium placeholder-gray-500 transition-all resize-vertical"
+                        className={`w-full px-4 py-3 border-2 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-primary font-medium placeholder-gray-500 transition-all resize-vertical ${
+                          validationErrors.message ? 'border-red-300 bg-red-50 focus:border-red-500' : 'border-gray-300 focus:border-primary'
+                        }`}
                         placeholder="Tell us how we can help you..."
                         required
                       />
+                      {validationErrors.message && (
+                        <p className="mt-1 text-sm text-red-600">{validationErrors.message}</p>
+                      )}
                     </div>
 
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+                      className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl min-h-[48px] text-lg"
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                      {isSubmitting ? (
+                        <div className="flex items-center justify-center">
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Sending Message...
+                        </div>
+                      ) : 'Send Message'}
                     </button>
                   </form>
                 </>

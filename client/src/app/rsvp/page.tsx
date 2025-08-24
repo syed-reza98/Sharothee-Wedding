@@ -181,7 +181,18 @@ export default function RSVPPage() {
                           { key: 'maybe', label: 'Maybe' },
                         ] as { key: AttendDhaka; label: string }[]).map((opt) => (
                           <label key={opt.key} className={`flex items-center gap-2 border-2 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px] ${validationErrors.willAttendDhaka ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}>
-                            <input type="radio" name="attendDhaka" className="h-5 w-5 min-w-[20px]" checked={willAttendDhaka === opt.key} onChange={() => setWillAttendDhaka(opt.key)} />
+                            <input 
+                              type="radio" 
+                              name="attendDhaka" 
+                              className="h-5 w-5 min-w-[20px]" 
+                              checked={willAttendDhaka === opt.key} 
+                              onChange={() => {
+                                setWillAttendDhaka(opt.key);
+                                if (validationErrors.willAttendDhaka) {
+                                  setValidationErrors(prev => ({ ...prev, willAttendDhaka: '' }));
+                                }
+                              }} 
+                            />
                             <span className="text-sm font-medium text-gray-900">{opt.label}</span>
                           </label>
                         ))}
@@ -203,7 +214,18 @@ export default function RSVPPage() {
                           { key: 'both', label: 'Both Families' },
                         ] as { key: FamilySide; label: string }[]).map((opt) => (
                           <label key={opt.key} className={`flex items-center gap-2 border-2 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px] ${validationErrors.familySide ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}>
-                            <input type="radio" name="familySide" className="h-5 w-5 min-w-[20px]" checked={familySide === opt.key} onChange={() => setFamilySide(opt.key)} />
+                            <input 
+                              type="radio" 
+                              name="familySide" 
+                              className="h-5 w-5 min-w-[20px]" 
+                              checked={familySide === opt.key} 
+                              onChange={() => {
+                                setFamilySide(opt.key);
+                                if (validationErrors.familySide) {
+                                  setValidationErrors(prev => ({ ...prev, familySide: '' }));
+                                }
+                              }} 
+                            />
                             <span className="text-sm font-medium text-gray-900">{opt.label}</span>
                           </label>
                         ))}
@@ -221,7 +243,18 @@ export default function RSVPPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
                         {(['1','2','3','4','other'] as GuestCount[]).map((opt) => (
                           <label key={opt} className={`flex items-center gap-2 border-2 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px] ${validationErrors.guestCountOption ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}>
-                            <input type="radio" name="guestCount" className="h-5 w-5 min-w-[20px]" checked={guestCountOption === opt} onChange={() => setGuestCountOption(opt)} />
+                            <input 
+                              type="radio" 
+                              name="guestCount" 
+                              className="h-5 w-5 min-w-[20px]" 
+                              checked={guestCountOption === opt} 
+                              onChange={() => {
+                                setGuestCountOption(opt);
+                                if (validationErrors.guestCountOption) {
+                                  setValidationErrors(prev => ({ ...prev, guestCountOption: '' }));
+                                }
+                              }} 
+                            />
                             <span className="text-sm font-medium text-gray-900">{opt==='other' ? 'Other' : `${opt} ${opt==='1'?'person':'people'}`}</span>
                           </label>
                         ))}
@@ -234,7 +267,12 @@ export default function RSVPPage() {
                             className={`w-full px-3 py-2 border-2 rounded-lg min-h-[44px] ${validationErrors.guestCountOther ? 'border-red-300 bg-red-50' : 'border-gray-300'}`} 
                             placeholder="Please specify number of people" 
                             value={guestCountOther} 
-                            onChange={e=>setGuestCountOther(e.target.value)} 
+                            onChange={(e) => {
+                              setGuestCountOther(e.target.value);
+                              if (validationErrors.guestCountOther) {
+                                setValidationErrors(prev => ({ ...prev, guestCountOther: '' }));
+                              }
+                            }} 
                           />
                           {validationErrors.guestCountOther && (
                             <p className="mt-1 text-sm text-red-600">{validationErrors.guestCountOther}</p>
@@ -307,7 +345,12 @@ export default function RSVPPage() {
                           className={`w-full px-3 py-2 border-2 rounded-lg min-h-[44px] ${validationErrors.emailAddress ? 'border-red-300 bg-red-50' : 'border-gray-300'}`} 
                           placeholder="you@example.com" 
                           value={emailAddress} 
-                          onChange={e=>setEmailAddress(e.target.value)} 
+                          onChange={(e) => {
+                            setEmailAddress(e.target.value);
+                            if (validationErrors.emailAddress) {
+                              setValidationErrors(prev => ({ ...prev, emailAddress: '' }));
+                            }
+                          }} 
                         />
                         {validationErrors.emailAddress && (
                           <p className="mt-1 text-sm text-red-600">{validationErrors.emailAddress}</p>

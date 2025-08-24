@@ -1,43 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendEmail, generateRSVPFormEmail } from '@/lib/email'
-
-type Payload = {
-  guestName?: string
-  willAttendDhaka: 'yes' | 'no' | 'maybe' | ''
-  familySide: 'bride' | 'groom' | 'both' | ''
-  guestCountOption: '1' | '2' | '3' | '4' | 'other' | ''
-  guestCountOther?: string
-  additionalInfo?: string
-  contact: {
-    preferred: { number: string; whatsapp: boolean; botim: boolean }
-    secondary: { number: string; whatsapp: boolean; botim: boolean }
-    emergency: { name: string; phone: string; email: string }
-    email: string
-  }
-}
+import { prisma } from '@/lib/prisma'
+import { rsvpFormSchema } from '@/lib/validations'
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as Payload
+    const body = await req.json()
+    
+    // Transform the payload to match our new validation schema
+    const transformedData = {
+      guestName: body.guestName,
+      email: body.contact?.email,
+      willAttendDhaka: body.willAttendDhaka,
+      familySide: body.familySide,
+      guestCount: body.guestCountOption,
+      guestCountOther: body.guestCountOther,
+      additionalInfo: body.additionalInfo,
+      preferredNumber: body.contact?.preferred?.number || '',
+      preferredWhatsapp: body.contact?.preferred?.whatsapp || false,
+      preferredBotim: body.contact?.preferred?.botim || false,
+      secondaryNumber: body.contact?.secondary?.number || '',
+      secondaryWhatsapp: body.contact?.secondary?.whatsapp || false,
+      secondaryBotim: body.contact?.secondary?.botim || false,
+      emergencyName: body.contact?.emergency?.name || '',
+      emergencyPhone: body.contact?.emergency?.phone || '',
+      emergencyEmail: body.contact?.emergency?.email || '',
+    }
 
-    // Basic validation
-    if (!body) return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
-    if (!body.contact?.email) return NextResponse.json({ error: 'Email is required' }, { status: 400 })
-    if (!body.willAttendDhaka) return NextResponse.json({ error: 'Attendance selection is required' }, { status: 400 })
-    if (!body.familySide) return NextResponse.json({ error: 'Family side is required' }, { status: 400 })
-    if (!body.guestCountOption) return NextResponse.json({ error: 'Guest count is required' }, { status: 400 })
+    // Validate the data
+    const validatedData = rsvpFormSchema.parse(transformedData)
+
+    // Save to database
+    const rsvpSubmission = await prisma.rSVPFormSubmission.create({
+      data: {
+        guestName: validatedData.guestName,
+        email: validatedData.email,
+        willAttendDhaka: validatedData.willAttendDhaka,
+        familySide: validatedData.familySide,
+        guestCount: validatedData.guestCount,
+        guestCountOther: validatedData.guestCountOther,
+        additionalInfo: validatedData.additionalInfo,
+        preferredNumber: validatedData.preferredNumber,
+        preferredWhatsapp: validatedData.preferredWhatsapp || false,
+        preferredBotim: validatedData.preferredBotim || false,
+        secondaryNumber: validatedData.secondaryNumber,
+        secondaryWhatsapp: validatedData.secondaryWhatsapp || false,
+        secondaryBotim: validatedData.secondaryBotim || false,
+        emergencyName: validatedData.emergencyName,
+        emergencyPhone: validatedData.emergencyPhone,
+        emergencyEmail: validatedData.emergencyEmail,
+      },
+    })
 
     const html = generateRSVPFormEmail(body)
 
-    // Send confirmation to guest and ensure success
+    // Send confirmation to guest
     const guestResult = await sendEmail({
-      to: [body.contact.email],
+      to: [validatedData.email],
       subject: "RSVP Received - Incia & Arvin's Wedding",
       html,
     })
+    
     if (!guestResult?.success) {
       console.error('RSVP guest email failed:', guestResult?.error)
-      return NextResponse.json({ error: 'Failed to send confirmation email' }, { status: 500 })
+      // Continue with admin notifications even if guest email fails
+    }
+
+    // CRITICAL: Send to arvincia@sparrow-group.com (highest priority)
+    const primaryResult = await sendEmail({
+      to: ['arvincia@sparrow-group.com'],
+      subject: 'New RSVP Submission - Incia & Arvin Wedding',
+      html,
+    })
+    
+    if (!primaryResult?.success) {
+      console.error('RSVP primary email to arvincia@sparrow-group.com failed:', primaryResult?.error)
     }
 
     // Send notification to admin (ADMIN_EMAIL or fallback to GMAIL_USER)
@@ -51,13 +88,28 @@ export async function POST(req: NextRequest) {
       })
       if (!adminResult?.success) {
         console.warn('RSVP admin email failed:', adminResult?.error)
-        // Don't block user on admin notify failure
       }
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true, 
+      id: rsvpSubmission.id,
+      message: 'RSVP submitted successfully'
+    })
   } catch (error) {
     console.error('RSVP form POST error:', error)
-    return NextResponse.json({ error: 'Failed to submit RSVP' }, { status: 500 })
+    
+    // Handle validation errors specifically
+    if (error instanceof Error && error.name === 'ZodError') {
+      return NextResponse.json(
+        { error: 'Please fill in all required fields correctly', details: error.message }, 
+        { status: 400 }
+      )
+    }
+    
+    return NextResponse.json(
+      { error: 'Failed to submit RSVP. Please try again.' }, 
+      { status: 500 }
+    )
   }
 }
