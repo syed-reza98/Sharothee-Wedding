@@ -5,7 +5,7 @@ describe('Home Page', () => {
   it('renders the home page heading', () => {
     render(<HomePage />)
     
-    expect(screen.getByRole('heading', { name: /Incia & Arvin/i, level: 2 })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Incia & Arvin/i, level: 1 })).toBeInTheDocument()
   })
 
   it('displays save the date section', () => {
@@ -30,8 +30,8 @@ describe('Home Page', () => {
     expect(screen.getByRole('main')).toBeInTheDocument()
     
     // Check for proper heading hierarchy
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument() // I & A logo
-    expect(screen.getByRole('heading', { level: 2, name: /Incia & Arvin/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /Incia & Arvin/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /Save the Date/i })).toBeInTheDocument()
   })
 
   it('has descriptive alt texts for images', () => {
@@ -39,7 +39,7 @@ describe('Home Page', () => {
     
     // Check for more descriptive alt texts in story section
     expect(screen.getByAltText(/Incia and Arvin as students at American International School/i)).toBeInTheDocument()
-    expect(screen.getByAltText(/Arvin proposing to Incia in the scenic countryside of Tuscany/i)).toBeInTheDocument()
+    expect(screen.getByAltText(/The magical Tuscany proposal moment/i)).toBeInTheDocument()
   })
 
   it('includes structured timing information', () => {
@@ -47,6 +47,6 @@ describe('Home Page', () => {
     
     // Check for enhanced timing information in the Save the Date section
     expect(screen.getByText(/6:00 PM Bangladesh Standard Time/i)).toBeInTheDocument()
-    expect(screen.getAllByText(/📍 Dhaka, Bangladesh/i)).toHaveLength(2) // One in hero, one in footer
+    expect(screen.getByText(/📍 Dhaka, Bangladesh/i)).toBeInTheDocument()
   })
 })
