@@ -101,11 +101,40 @@ export function generateRSVPFormEmail(data: {
     email: string
   }
 }) {
+  // Map form values to full descriptive text (matching form labels)
+  const attendanceOptions = {
+    'yes': 'Yes, I will attend',
+    'no': 'No, I will not attend', 
+    'maybe': 'Maybe'
+  } as const
+  
+  const familySideOptions = {
+    'bride': "The Bride's Family",
+    'groom': "The Groom's Family",
+    'both': 'Both Families'
+  } as const
+
+  const attendanceText = data.willAttendDhaka && data.willAttendDhaka in attendanceOptions 
+    ? attendanceOptions[data.willAttendDhaka as keyof typeof attendanceOptions]
+    : '—'
+
+  const familySideText = data.familySide && data.familySide in familySideOptions
+    ? familySideOptions[data.familySide as keyof typeof familySideOptions] 
+    : '—'
+
+  const guestCountText = data.guestCountOption === 'other' 
+    ? `Other: ${data.guestCountOther || '—'} people`
+    : data.guestCountOption === '1' 
+      ? '1 person'
+      : data.guestCountOption 
+        ? `${data.guestCountOption} people`
+        : '—'
+
   const rows = [
     ['Guest Name', data.guestName || '—'],
-    ['Will attend in Dhaka', data.willAttendDhaka || '—'],
-    ["Family Side", data.familySide || '—'],
-    ['Guest Count', data.guestCountOption === 'other' ? `Other: ${data.guestCountOther || '—'}` : data.guestCountOption || '—'],
+    ['Will attend in Dhaka', attendanceText],
+    ["Family Side", familySideText],
+    ['Guest Count', guestCountText],
     ['Additional Info', data.additionalInfo || '—'],
     ['Preferred Number', `${data.contact.preferred.number || '—'} (WhatsApp: ${data.contact.preferred.whatsapp ? 'Yes' : 'No'}, Botim: ${data.contact.preferred.botim ? 'Yes' : 'No'})`],
     ['Secondary Number', `${data.contact.secondary.number || '—'} (WhatsApp: ${data.contact.secondary.whatsapp ? 'Yes' : 'No'}, Botim: ${data.contact.secondary.botim ? 'Yes' : 'No'})`],
