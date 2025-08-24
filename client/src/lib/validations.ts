@@ -24,8 +24,7 @@ export const contactSchema = z.object({
 })
 
 // RSVP Form Validation
-export const rsvpFormSchema = z.object({
-  guestName: z.string().optional(),
+  guestName: z.string().min(1, "Guest name is required"),
   email: z.string().email("Please enter a valid email address"),
   willAttendDhaka: z.enum(["yes", "no", "maybe"]),
   familySide: z.enum(["bride", "groom", "both"]),
