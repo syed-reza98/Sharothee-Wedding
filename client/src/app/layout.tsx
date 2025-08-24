@@ -57,6 +57,11 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-cream-50 text-gray-800">
         <Providers>
           <ErrorBoundary>
+            {/* Skip to content link for accessibility */}
+            <a href="#main-content" className="skip-to-content">
+              Skip to main content
+            </a>
+            
             {/* Wrap components that read search params in Suspense to satisfy Next.js CSR bailout requirements */}
             <Suspense fallback={null}>
               <RouteLoader />
