@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { cn } from "@/lib/utils";
 
 interface MediaItem {
   id: string;
@@ -59,14 +60,14 @@ export default function GalleryPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-20 sm:pt-24 pb-12 sm:pb-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-light text-secondary mb-4 sm:mb-6">
+      <section className="pt-20 sm:pt-24 pb-12 sm:pb-16 lg:pb-20">
+        <div className="container max-w-7xl text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-secondary mb-4 sm:mb-6 tracking-tight">
             Our Gallery
           </h1>
-          <div className="w-16 sm:w-20 md:w-24 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
-          <p className="text-lg sm:text-xl text-muted max-w-2xl mx-auto leading-relaxed">
-            A visual journey of our love story, from childhood friends to forever partners.
+          <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
+          <p className="text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+            Cherished moments from our journey together, captured in time to share with our loved ones
           </p>
         </div>
       </section>

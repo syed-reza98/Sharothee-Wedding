@@ -1,14 +1,103 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Countdown from "@/components/Countdown";
 import HeartCollage from "@/components/HeartCollage";
-import { ArrowRightIcon, HeartIcon, CalendarDaysIcon, PhotoIcon, MapPinIcon, EnvelopeIcon, GlobeAmericasIcon, TrophyIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon, HeartIcon, CalendarDaysIcon, PhotoIcon, MapPinIcon, EnvelopeIcon, GlobeAmericasIcon, TrophyIcon } from '@heroicons/react/24/outline';
+
+// Structured Data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Incia & Arvin's Wedding",
+  "description": "Join us in celebrating the love story of Incia & Arvin - from childhood friends at AISD to forever partners. Wedding ceremony in Dhaka, Bangladesh with after-party in Phu Quoc, Vietnam.",
+  "startDate": "2025-12-16T18:00:00+06:00",
+  "endDate": "2025-12-16T23:00:00+06:00",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": "Dhaka, Bangladesh",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Dhaka",
+      "addressCountry": "Bangladesh"
+    }
+  },
+  "organizer": [
+    {
+      "@type": "Person",
+      "name": "Incia",
+      "jobTitle": "Bride"
+    },
+    {
+      "@type": "Person", 
+      "name": "Arvin",
+      "jobTitle": "Groom"
+    }
+  ],
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InviteOnly",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "image": "https://arvinwedsincia.com/images/heart/couple.jpeg",
+  "url": "https://arvinwedsincia.com"
+};
+
+// Enhanced Metadata for SEO
+export const metadata: Metadata = {
+  title: "Incia & Arvin's Wedding | December 16, 2025 | Dhaka, Bangladesh",
+  description: "Join us in celebrating the love story of Incia & Arvin - from childhood friends at AISD to forever partners. Wedding ceremony in Dhaka, Bangladesh with after-party in Phu Quoc, Vietnam.",
+  keywords: [
+    "wedding", "Incia", "Arvin", "Dhaka", "Bangladesh", "Vietnam", "Phu Quoc", 
+    "AISD", "American International School Dhaka", "wedding celebration", 
+    "December 2025", "wedding invitation", "RSVP"
+  ],
+  authors: [{ name: "CodeStorm Hub" }],
+  creator: "CodeStorm Hub",
+  openGraph: {
+    title: "Incia & Arvin's Wedding - December 16, 2025",
+    description: "Join us in celebrating our love story from childhood friends to forever partners. Dhaka, Bangladesh & Phu Quoc, Vietnam.",
+    type: "website",
+    locale: "en_US",
+    url: "https://arvinwedsincia.com",
+    siteName: "Incia & Arvin's Wedding",
+    images: [
+      {
+        url: "/images/heart/couple.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Incia & Arvin - Beautiful couple portrait"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Incia & Arvin's Wedding - December 16, 2025",
+    description: "Join us in celebrating our love story from childhood friends to forever partners",
+    images: ["/images/heart/couple.jpeg"]
+  },
+  robots: "index, follow",
+  alternates: {
+    canonical: "https://arvinwedsincia.com"
+  }
+};
 
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-x-hidden">
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
+      
       <Navigation />
 
       {/* Main content wrapper for skip link target */}
