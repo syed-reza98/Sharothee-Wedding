@@ -1,0 +1,81 @@
+{
+  "branch": "master",
+  "timestamp": "2025-08-24T02:23:19.547Z",
+  "screenshotCount": 42,
+  "screenSizes": [
+    {
+      "name": "2XL",
+      "width": 1920,
+      "height": 1080,
+      "description": "Large Desktop"
+    },
+    {
+      "name": "XL",
+      "width": 1440,
+      "height": 900,
+      "description": "Desktop"
+    },
+    {
+      "name": "LG",
+      "width": 1280,
+      "height": 720,
+      "description": "Laptop"
+    },
+    {
+      "name": "MD",
+      "width": 1024,
+      "height": 768,
+      "description": "Tablet Landscape"
+    },
+    {
+      "name": "SM",
+      "width": 768,
+      "height": 1024,
+      "description": "Tablet Portrait"
+    },
+    {
+      "name": "XS",
+      "width": 375,
+      "height": 812,
+      "description": "Mobile"
+    }
+  ],
+  "pages": [
+    {
+      "name": "Home",
+      "url": "/",
+      "waitTime": 8000
+    },
+    {
+      "name": "Events",
+      "url": "/events",
+      "waitTime": 6000
+    },
+    {
+      "name": "RSVP",
+      "url": "/rsvp",
+      "waitTime": 5000
+    },
+    {
+      "name": "Gallery",
+      "url": "/gallery",
+      "waitTime": 10000
+    },
+    {
+      "name": "Live",
+      "url": "/live",
+      "waitTime": 5000
+    },
+    {
+      "name": "Contact",
+      "url": "/contact",
+      "waitTime": 5000
+    },
+    {
+      "name": "Travel",
+      "url": "/travel",
+      "waitTime": 6000
+    }
+  ],
+  "directory": "./screenshots-master"
+}
