@@ -104,13 +104,13 @@ export default function HomePage() {
       <main id="main-content">
         {/* Hero Section */}
         <section id="home" className="min-h-screen flex items-center justify-center gradient-hero pt-16" role="banner">
-          <div className="container text-center max-w-7xl">
+          <div className="text-center px-4 sm:px-6 lg:px-8 w-full max-w-6xl">
             <div className="animate-fadeInUp">
-              <h1 className="pt-2 sm:pt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight tracking-tight">
+              <h1 className="pt-2 sm:pt-3 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light text-secondary mb-4 sm:mb-6 leading-tight">
                 Incia & Arvin
               </h1>
-              <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
-              <p className="text-lg sm:text-xl md:text-2xl text-neutral-700 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed font-medium">
+              <div className="w-16 sm:w-20 md:w-24 h-1 bg-primary mx-auto mb-6 sm:mb-8"></div>
+              <p className="text-lg sm:text-xl md:text-2xl text-neutral-700 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
                 From childhood friends at AISD to forever partners
               </p>
               
@@ -175,15 +175,15 @@ export default function HomePage() {
         </section>
 
         {/* Our Story Section */}
-        <section id="story" className="py-16 sm:py-20 lg:py-24 bg-white relative overflow-hidden">
+        <section id="story" className="py-20 bg-white relative overflow-hidden">
           {/* Decorative Background Elements */}
           <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
             <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/50 rounded-full blur-3xl"></div>
           </div>
           
-          <div className="container max-w-7xl relative">
-            <header className="text-center mb-16 lg:mb-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <header className="text-center mb-16">
               <div className="inline-flex items-center justify-center mb-6">
                 <div className="w-12 h-px bg-primary/60"></div>
                 <HeartIcon className="h-4 w-4 text-primary mx-3" aria-hidden="true" />
@@ -191,11 +191,11 @@ export default function HomePage() {
                 <HeartIcon className="h-4 w-4 text-primary mx-3" aria-hidden="true" />
                 <div className="w-12 h-px bg-primary/60"></div>
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-secondary mb-6 tracking-tight">
+              <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
                 Our Love Story
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-              <p className="text-lg text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
                 A journey that began in the hallways of school and blossomed across continents
               </p>
             </header>
@@ -494,8 +494,8 @@ export default function HomePage() {
       </section>
 
       {/* Gallery Preview Section */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-cream-50">
-        <div className="container max-w-7xl">
+      <section className="py-20 bg-cream-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
               Our Memories
@@ -596,8 +596,8 @@ export default function HomePage() {
       </section>
 
       {/* Quick Links Section */}
-      <section className="py-16 sm:py-20 lg:py-24 gradient-wedding">
-        <div className="container max-w-7xl">
+      <section className="py-20 gradient-wedding">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-serif font-light text-secondary mb-6">
               Wedding Information
