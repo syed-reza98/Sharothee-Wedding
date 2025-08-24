@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-08-24T01:29:59.401Z",
+  "totalScreenSizes": 6,
+  "totalPages": 7,
+  "screenSizes": [
+    {
+      "name": "2xl",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "name": "xl",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "lg",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "name": "md",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "name": "sm",
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "name": "xs",
+      "width": 375,
+      "height": 812
+    }
+  ],
+  "pages": [
+    {
+      "name": "home",
+      "url": "/"
+    },
+    {
+      "name": "events",
+      "url": "/events"
+    },
+    {
+      "name": "rsvp",
+      "url": "/rsvp"
+    },
+    {
+      "name": "gallery",
+      "url": "/gallery"
+    },
+    {
+      "name": "live",
+      "url": "/live"
+    },
+    {
+      "name": "contact",
+      "url": "/contact"
+    },
+    {
+      "name": "travel",
+      "url": "/travel"
+    }
+  ]
+}
