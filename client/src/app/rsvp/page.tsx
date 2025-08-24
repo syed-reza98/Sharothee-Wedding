@@ -109,10 +109,28 @@ export default function RSVPPage() {
       setStep(3);
     } catch (err) {
       console.error('RSVP form submit error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to submit RSVP';
-      setError(errorMessage.includes('required') ? 
-        'Please fill in all required fields marked with *' : 
-        'Sorry, we could not submit your RSVP. Please try again or contact us for assistance.'
+      // Try to extract structured validation errors from the error object
+      let hasRequiredFieldError = false;
+      if (err && typeof err === 'object') {
+        // If the error was thrown with a structured error object, check for validation errors
+        if ('validationErrors' in err && err.validationErrors) {
+          // If any validation error mentions 'required', set flag
+          hasRequiredFieldError = Object.values(err.validationErrors).some(
+            (msg) => typeof msg === 'string' && msg.toLowerCase().includes('required')
+          );
+        }
+        // If the error message itself mentions 'required'
+        if ('message' in err && typeof err.message === 'string' && err.message.toLowerCase().includes('required')) {
+          hasRequiredFieldError = true;
+        }
+        // If the error object has an 'error' field mentioning 'required'
+        if ('error' in err && typeof err.error === 'string' && err.error.toLowerCase().includes('required')) {
+          hasRequiredFieldError = true;
+        }
+      }
+      setError(hasRequiredFieldError
+        ? 'Please fill in all required fields marked with *'
+        : 'Sorry, we could not submit your RSVP. Please try again or contact us for assistance.'
       );
     } finally {
       setLoading(false);
