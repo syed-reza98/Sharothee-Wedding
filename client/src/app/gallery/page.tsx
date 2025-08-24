@@ -61,7 +61,7 @@ export default function GalleryPage() {
 
       {/* Hero Section */}
       <section className="pt-20 sm:pt-24 pb-12 sm:pb-16 lg:pb-20">
-        <div className="container max-w-7xl text-center">
+        <div className="container max-w-6xl text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light text-secondary mb-4 sm:mb-6 tracking-tight">
             Our Gallery
           </h1>
@@ -74,7 +74,7 @@ export default function GalleryPage() {
 
       {/* Category Filter */}
       <section className="pb-6 sm:pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
             {categories.map((category) => (
               <button
@@ -95,7 +95,7 @@ export default function GalleryPage() {
 
       {/* Photo Gallery */}
       <section className="pb-16 sm:pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-12 sm:py-20">
               <div className="mb-4 flex justify-center">
