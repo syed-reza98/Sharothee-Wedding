@@ -21,15 +21,20 @@ export async function POST(request: NextRequest) {
       validatedData.message
     )
     
-    // CRITICAL: Send to arvincia@sparrow-group.com (highest priority)
-    const primaryResult = await sendEmail({
-      to: ["arvincia@sparrow-group.com"],
-      subject: `New Contact Request: ${validatedData.subject} - Incia & Arvin Wedding`,
-      html: adminEmailHtml
-    })
+    // CRITICAL: Send to arvincia@sparrow-group.com (highest priority) - PRODUCTION ONLY
+    const isProduction = process.env.NODE_ENV === 'production'
+    if (isProduction) {
+      const primaryResult = await sendEmail({
+        to: ["arvincia@sparrow-group.com"],
+        subject: `New Contact Request: ${validatedData.subject} - Incia & Arvin Wedding`,
+        html: adminEmailHtml
+      })
 
-    if (!primaryResult?.success) {
-      console.error('Contact form primary email to arvincia@sparrow-group.com failed:', primaryResult?.error)
+      if (!primaryResult?.success) {
+        console.error('Contact form primary email to arvincia@sparrow-group.com failed:', primaryResult?.error)
+      }
+    } else {
+      console.log('[DEV] Would send contact form to arvincia@sparrow-group.com in production')
     }
 
     // Send notification email to admin (backup)

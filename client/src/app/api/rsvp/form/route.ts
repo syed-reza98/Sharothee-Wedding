@@ -66,15 +66,20 @@ export async function POST(req: NextRequest) {
       // Continue with admin notifications even if guest email fails
     }
 
-    // CRITICAL: Send to arvincia@sparrow-group.com (highest priority)
-    const primaryResult = await sendEmail({
-      to: ['arvincia@sparrow-group.com'],
-      subject: 'New RSVP Submission - Incia & Arvin Wedding',
-      html,
-    })
-    
-    if (!primaryResult?.success) {
-      console.error('RSVP primary email to arvincia@sparrow-group.com failed:', primaryResult?.error)
+    // CRITICAL: Send to arvincia@sparrow-group.com (highest priority) - PRODUCTION ONLY
+    const isProduction = process.env.NODE_ENV === 'production'
+    if (isProduction) {
+      const primaryResult = await sendEmail({
+        to: ['arvincia@sparrow-group.com'],
+        subject: 'New RSVP Submission - Incia & Arvin Wedding',
+        html,
+      })
+      
+      if (!primaryResult?.success) {
+        console.error('RSVP primary email to arvincia@sparrow-group.com failed:', primaryResult?.error)
+      }
+    } else {
+      console.log('[DEV] Would send RSVP to arvincia@sparrow-group.com in production')
     }
 
     // Send notification to admin (ADMIN_EMAIL or fallback to GMAIL_USER)

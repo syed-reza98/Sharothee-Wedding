@@ -86,6 +86,7 @@ export default function ContactPage() {
           const errorMessage = data.error || 'Failed to send message. Please try again.';
           setError(errorMessage);
         }
+      }
     } catch (error) {
       console.error('Contact form error:', error);
       setError('Failed to send message. Please check your connection and try again.');

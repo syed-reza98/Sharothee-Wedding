@@ -9,10 +9,6 @@ import { HandRaisedIcon, SparklesIcon } from '@heroicons/react/24/outline'
 export default function RSVPPage() {
   // Always show the simplified RSVP form per spec
   const [step, setStep] = useState<1 | 2 | 3>(2);
-  // Types for clarity and safety
-  type GuestInfo = { id: string; name: string; email: string; country: string };
-  // Demo guest name for a friendly greeting
-  const [guestInfo] = useState<GuestInfo>({ id: "demo", name: "Guest", email: "", country: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
@@ -36,11 +32,15 @@ export default function RSVPPage() {
   const [emergencyPhone, setEmergencyPhone] = useState<string>("");
   const [emergencyEmail, setEmergencyEmail] = useState<string>("");
   const [emailAddress, setEmailAddress] = useState<string>("");
+  const [guestName, setGuestName] = useState<string>("");
 
   // Client-side validation function
   function validateForm(): Record<string, string> {
     const errors: Record<string, string> = {};
     
+    if (!guestName.trim()) {
+      errors.guestName = "Please enter your name";
+    }
     if (!willAttendDhaka) {
       errors.willAttendDhaka = "Please select whether you will attend";
     }
@@ -88,7 +88,7 @@ export default function RSVPPage() {
     setLoading(true);
     try {
       const payload = {
-        guestName: guestInfo?.name || "",
+        guestName: guestName.trim(),
         willAttendDhaka,
         familySide,
         guestCountOption,
@@ -146,8 +146,8 @@ export default function RSVPPage() {
                 <div className="mb-4 flex justify-center">
                   <HandRaisedIcon className="h-10 w-10 text-primary" aria-hidden="true" />
                 </div>
-                <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">Welcome, {guestInfo?.name}!</h2>
-                <p className="text-gray-700">Please answer the questions below to complete your RSVP.</p>
+                <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">RSVP Details</h2>
+                <p className="text-gray-700">Please fill out the form below to complete your RSVP.</p>
                 <p className="text-sm text-gray-600 mt-2">Fields marked with <span className="text-red-500">*</span> are required</p>
               </div>
 
@@ -170,6 +170,29 @@ export default function RSVPPage() {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="border border-gray-200 rounded-lg p-4 sm:p-6 bg-white">
                   <div className="space-y-6">
+                    {/* Guest Name Field */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        Your Full Name <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        required 
+                        className={`w-full px-3 py-2 border-2 rounded-lg min-h-[44px] ${validationErrors.guestName ? 'border-red-300 bg-red-50' : 'border-gray-300'}`} 
+                        placeholder="Enter your full name" 
+                        value={guestName} 
+                        onChange={(e) => {
+                          setGuestName(e.target.value);
+                          if (validationErrors.guestName) {
+                            setValidationErrors(prev => ({ ...prev, guestName: '' }));
+                          }
+                        }} 
+                      />
+                      {validationErrors.guestName && (
+                        <p className="mt-1 text-sm text-red-600">{validationErrors.guestName}</p>
+                      )}
+                    </div>
+
                     {/* Q1 */}
                     <div>
                       <label className="block text-sm font-semibold text-gray-900 mb-2">

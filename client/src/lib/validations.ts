@@ -23,7 +23,8 @@ export const contactSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters"),
 })
 
-// RSVP Form Validation
+// RSVP Form Validation (for complete form submission)
+export const rsvpFormSchema = z.object({
   guestName: z.string().min(1, "Guest name is required"),
   email: z.string().email("Please enter a valid email address"),
   willAttendDhaka: z.enum(["yes", "no", "maybe"]),
