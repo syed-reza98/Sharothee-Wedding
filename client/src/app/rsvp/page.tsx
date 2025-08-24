@@ -14,6 +14,8 @@ export default function RSVPPage() {
   // Demo guest name for a friendly greeting
   const [guestInfo] = useState<GuestInfo>({ id: "demo", name: "Guest", email: "", country: "" });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   // Form state based on RSVP_FORM_QUESTIONS.md
   type AttendDhaka = "yes" | "no" | "maybe";
   type FamilySide = "bride" | "groom" | "both";
@@ -35,8 +37,54 @@ export default function RSVPPage() {
   const [emergencyEmail, setEmergencyEmail] = useState<string>("");
   const [emailAddress, setEmailAddress] = useState<string>("");
 
+  // Client-side validation function
+  function validateForm(): Record<string, string> {
+    const errors: Record<string, string> = {};
+    
+    if (!willAttendDhaka) {
+      errors.willAttendDhaka = "Please select whether you will attend";
+    }
+    if (!familySide) {
+      errors.familySide = "Please select which family you are from";
+    }
+    if (!guestCountOption) {
+      errors.guestCountOption = "Please select the number of guests";
+    }
+    if (guestCountOption === "other" && !guestCountOther) {
+      errors.guestCountOther = "Please specify the number of people";
+    }
+    if (!emailAddress) {
+      errors.emailAddress = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress)) {
+      errors.emailAddress = "Please enter a valid email address";
+    }
+    
+    return errors;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    
+    // Clear previous errors
+    setError("");
+    setValidationErrors({});
+    
+    // Client-side validation
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      // Focus on first error field for mobile accessibility
+      const firstErrorField = Object.keys(errors)[0];
+      if (firstErrorField === "willAttendDhaka" || firstErrorField === "familySide" || firstErrorField === "guestCountOption") {
+        // Scroll to the top of the form for radio button errors
+        const formElement = document.querySelector('form');
+        if (formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+      return;
+    }
+    
     setLoading(true);
     try {
       const payload = {
@@ -61,7 +109,11 @@ export default function RSVPPage() {
       setStep(3);
     } catch (err) {
       console.error('RSVP form submit error:', err);
-      alert('Sorry, we could not submit your RSVP. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to submit RSVP';
+      setError(errorMessage.includes('required') ? 
+        'Please fill in all required fields marked with *' : 
+        'Sorry, we could not submit your RSVP. Please try again or contact us for assistance.'
+      );
     } finally {
       setLoading(false);
     }
@@ -95,51 +147,80 @@ export default function RSVPPage() {
                 </div>
                 <h2 className="text-2xl font-serif font-semibold text-secondary mb-2">Welcome, {guestInfo?.name}!</h2>
                 <p className="text-gray-700">Please answer the questions below to complete your RSVP.</p>
+                <p className="text-sm text-gray-600 mt-2">Fields marked with <span className="text-red-500">*</span> are required</p>
               </div>
+
+              {/* Error Display */}
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm text-red-800">{error}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="border border-gray-200 rounded-lg p-4 sm:p-6 bg-white">
                   <div className="space-y-6">
                     {/* Q1 */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">Will you be able to grace us with your presence in Dhaka?</label>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        Will you be able to grace us with your presence in Dhaka? <span className="text-red-500">*</span>
+                      </label>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {([
                           { key: 'yes', label: 'Yes, I will attend' },
                           { key: 'no', label: 'No, I will not attend' },
                           { key: 'maybe', label: 'Maybe' },
                         ] as { key: AttendDhaka; label: string }[]).map((opt) => (
-                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                          <label key={opt.key} className={`flex items-center gap-2 border-2 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px] ${validationErrors.willAttendDhaka ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}>
                             <input type="radio" name="attendDhaka" className="h-5 w-5 min-w-[20px]" checked={willAttendDhaka === opt.key} onChange={() => setWillAttendDhaka(opt.key)} />
                             <span className="text-sm font-medium text-gray-900">{opt.label}</span>
                           </label>
                         ))}
                       </div>
+                      {validationErrors.willAttendDhaka && (
+                        <p className="mt-2 text-sm text-red-600">{validationErrors.willAttendDhaka}</p>
+                      )}
                     </div>
 
                     {/* Q2 */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">Are you from The Bride&apos;s Family or The Groom&apos;s Family?</label>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        Are you from The Bride&apos;s Family or The Groom&apos;s Family? <span className="text-red-500">*</span>
+                      </label>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {([
                           { key: 'bride', label: "The Bride's Family" },
                           { key: 'groom', label: "The Groom's Family" },
                           { key: 'both', label: 'Both Families' },
                         ] as { key: FamilySide; label: string }[]).map((opt) => (
-                          <label key={opt.key} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                          <label key={opt.key} className={`flex items-center gap-2 border-2 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px] ${validationErrors.familySide ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}>
                             <input type="radio" name="familySide" className="h-5 w-5 min-w-[20px]" checked={familySide === opt.key} onChange={() => setFamilySide(opt.key)} />
                             <span className="text-sm font-medium text-gray-900">{opt.label}</span>
                           </label>
                         ))}
                       </div>
+                      {validationErrors.familySide && (
+                        <p className="mt-2 text-sm text-red-600">{validationErrors.familySide}</p>
+                      )}
                     </div>
 
                     {/* Q3 */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">How many guests will be present?</label>
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        How many guests will be present? <span className="text-red-500">*</span>
+                      </label>
                       <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
                         {(['1','2','3','4','other'] as GuestCount[]).map((opt) => (
-                          <label key={opt} className="flex items-center gap-2 border-2 border-gray-200 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px]">
+                          <label key={opt} className={`flex items-center gap-2 border-2 rounded-lg p-3 cursor-pointer hover:border-primary/60 min-h-[44px] ${validationErrors.guestCountOption ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}>
                             <input type="radio" name="guestCount" className="h-5 w-5 min-w-[20px]" checked={guestCountOption === opt} onChange={() => setGuestCountOption(opt)} />
                             <span className="text-sm font-medium text-gray-900">{opt==='other' ? 'Other' : `${opt} ${opt==='1'?'person':'people'}`}</span>
                           </label>
@@ -147,8 +228,21 @@ export default function RSVPPage() {
                       </div>
                       {guestCountOption==='other' && (
                         <div className="mt-3">
-                          <input type="number" min={1} className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="Please specify number of people" value={guestCountOther} onChange={e=>setGuestCountOther(e.target.value)} />
+                          <input 
+                            type="number" 
+                            min={1} 
+                            className={`w-full px-3 py-2 border-2 rounded-lg min-h-[44px] ${validationErrors.guestCountOther ? 'border-red-300 bg-red-50' : 'border-gray-300'}`} 
+                            placeholder="Please specify number of people" 
+                            value={guestCountOther} 
+                            onChange={e=>setGuestCountOther(e.target.value)} 
+                          />
+                          {validationErrors.guestCountOther && (
+                            <p className="mt-1 text-sm text-red-600">{validationErrors.guestCountOther}</p>
+                          )}
                         </div>
+                      )}
+                      {validationErrors.guestCountOption && (
+                        <p className="mt-2 text-sm text-red-600">{validationErrors.guestCountOption}</p>
                       )}
                     </div>
 
@@ -204,15 +298,35 @@ export default function RSVPPage() {
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
-                        <input type="email" required className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg min-h-[44px]" placeholder="you@example.com" value={emailAddress} onChange={e=>setEmailAddress(e.target.value)} />
+                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                          Email Address <span className="text-red-500">*</span>
+                        </label>
+                        <input 
+                          type="email" 
+                          required 
+                          className={`w-full px-3 py-2 border-2 rounded-lg min-h-[44px] ${validationErrors.emailAddress ? 'border-red-300 bg-red-50' : 'border-gray-300'}`} 
+                          placeholder="you@example.com" 
+                          value={emailAddress} 
+                          onChange={e=>setEmailAddress(e.target.value)} 
+                        />
+                        {validationErrors.emailAddress && (
+                          <p className="mt-1 text-sm text-red-600">{validationErrors.emailAddress}</p>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors">
-                  {loading ? 'Submitting RSVP...' : 'Submit RSVP'}
+                <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-medium transition-colors min-h-[48px] text-lg">
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Submitting RSVP...
+                    </div>
+                  ) : 'Submit RSVP'}
                 </button>
               </form>
             </div>
