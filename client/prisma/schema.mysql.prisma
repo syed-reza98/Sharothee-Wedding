@@ -1,12 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Production Prisma Schema - MySQL Version
+// Copy this content to replace prisma/schema.prisma for production deployment
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -16,12 +16,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -78,8 +78,8 @@ model Venue {
   country     String
   latitude    Float?
   longitude   Float?
-  googleMapUrl String?
-  description String?
+  googleMapUrl String? @db.Text
+  description String? @db.Text
   events      Event[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -88,7 +88,7 @@ model Venue {
 model Event {
   id          String   @id @default(cuid())
   title       String
-  description String
+  description String   @db.Text
   date        DateTime
   time        String
   venue       Venue    @relation(fields: [venueId], references: [id])
@@ -109,8 +109,8 @@ model RSVP {
   eventId            String
   response           RSVPResponse
   attendees          Int          @default(1)
-  dietaryPreferences String?
-  comments           String?
+  dietaryPreferences String?      @db.Text
+  comments           String?      @db.Text
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
@@ -126,8 +126,8 @@ model Hotel {
   phone       String?
   email       String?
   website     String?
-  description String?
-  amenities   String?
+  description String?  @db.Text
+  amenities   String?  @db.Text
   bookingCode String?
   discount    String?
   deadline    DateTime?
@@ -138,13 +138,13 @@ model Hotel {
 model MediaItem {
   id          String    @id @default(cuid())
   title       String?
-  description String?
+  description String?   @db.Text
   type        MediaType
   url         String
   publicId    String?   // Cloudinary public ID
   category    String
   album       String?
-  caption     String?
+  caption     String?   @db.Text
   public      Boolean   @default(true)
   approved    Boolean   @default(false)
   featured    Boolean   @default(false)
@@ -157,7 +157,7 @@ model MediaItem {
 model Stream {
   id          String   @id @default(cuid())
   title       String
-  description String?
+  description String?  @db.Text
   streamUrl   String
   isLive      Boolean  @default(false)
   eventId     String?
@@ -174,9 +174,9 @@ model ContactRequest {
   email     String
   phone     String?
   subject   ContactSubject
-  message   String
+  message   String        @db.Text
   status    RequestStatus @default(PENDING)
-  adminNote String?
+  adminNote String?       @db.Text
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 }
@@ -189,7 +189,7 @@ model RSVPFormSubmission {
   familySide         String   // 'bride' | 'groom' | 'both'
   guestCount         String   // '1' | '2' | '3' | '4' | 'other'
   guestCountOther    String?
-  additionalInfo     String?
+  additionalInfo     String?  @db.Text
   
   // Contact Information
   preferredNumber    String?
@@ -205,7 +205,7 @@ model RSVPFormSubmission {
   emergencyEmail     String?
   
   status             RequestStatus @default(PENDING)
-  adminNote          String?
+  adminNote          String?       @db.Text
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 }
