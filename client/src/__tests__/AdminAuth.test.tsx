@@ -43,7 +43,7 @@ describe('Admin auth flow', () => {
   })
 
   it('renders children when authenticated in AdminLayout', () => {
-  ;(AuthModule.useSession as unknown as jest.Mock).mockReturnValue({ data: { user: { email: 'admin@test.com' } }, status: 'authenticated' })
+  ;(AuthModule.useSession as unknown as jest.Mock).mockReturnValue({ data: { user: { email: 'arvincia@sparrow-group.com' } }, status: 'authenticated' })
 
     render(
       <AdminLayout>
