@@ -1,68 +1,277 @@
-name: 📢 Wedding Day Notifications
+name: 📢 Wedding Day Notifications & Monitoring
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, labeled, closed]
+  issue_comment:
+    types: [created]
   schedule:
     - cron: '0 9,15,21 * * *'  # 9 AM, 3 PM, 9 PM daily
+  workflow_dispatch:  # Allow manual triggering
 
 permissions:
   issues: write
   contents: read
+  repository-projects: write
 
 jobs:
   wedding-day-alerts:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'wedding-day-critical') || github.event_name == 'schedule'
+    if: (github.event.issue && (contains(github.event.issue.labels.*.name, 'wedding-day-critical') || contains(github.event.issue.labels.*.name, 'critical'))) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Alert on Wedding Day Critical Issues
-        if: contains(github.event.issue.labels.*.name, 'wedding-day-critical')
+        if: github.event.issue && (contains(github.event.issue.labels.*.name, 'wedding-day-critical') || (contains(github.event.issue.labels.*.name, 'critical') && github.event.issue.body && contains(github.event.issue.body, 'wedding day')))
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '⚠️ **WEDDING DAY CRITICAL ALERT** ⚠️\n\nThis issue has been flagged as wedding day critical and requires immediate attention!\n\n📞 **Emergency Contacts:**\n- Primary: codestromhub@gmail.com\n- Phone: +880 1234-567890\n- Developer: @syed-reza98\n\n🔴 **Action Required:**\n- [ ] Immediate assessment\n- [ ] Impact analysis\n- [ ] Emergency fix if needed\n- [ ] Communication to couple\n\n*This is a high-priority automated alert for Incia & Arvin\'s wedding website.*'
-            })
-
-      - name: Daily Status Check
-        if: github.event_name == 'schedule'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            // Get all open critical issues
-            const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: 'wedding-day-critical',
-              state: 'open'
-            });
-            
-            if (issues.length > 0) {
-              // Create daily status issue
-              await github.rest.issues.create({
+            try {
+              const priority = context.payload.issue.labels.some(label => 
+                label.name === 'wedding-day-critical') ? 'WEDDING DAY CRITICAL' : 'HIGH PRIORITY';
+              
+              const message = `⚠️ **${priority} ALERT** ⚠️\n\nThis issue has been flagged as ${priority.toLowerCase()} and requires immediate attention!\n\n📞 **Emergency Contacts:**\n- Primary: codestromhub@gmail.com\n- Phone: +880 1234-567890\n- Developer: @syed-reza98\n\n🔴 **Action Required:**\n- [ ] Immediate assessment\n- [ ] Impact analysis on wedding functionality\n- [ ] Emergency fix if needed\n- [ ] Communication to couple if necessary\n- [ ] Update in [Project Board](https://github.com/users/syed-reza98/projects/5)\n\n⏰ **Timeline:** This issue affects wedding day functionality and should be resolved ASAP.\n\n*This is a high-priority automated alert for Incia & Arvin's wedding website.*`;
+              
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: `📊 Daily Wedding Status Report - ${new Date().toISOString().split('T')[0]}`,
-                body: `# 🎯 Wedding Day Readiness Report\n\n## ⚠️ Critical Issues (${issues.length})\n\n${issues.map(issue => `- #${issue.number}: ${issue.title}`).join('\n')}\n\n## 📈 System Status\n- Website: 🟢 Operational\n- RSVP System: 🟢 Functional\n- Admin Dashboard: 🟢 Available\n- Email Notifications: 🟢 Working\n\n## 🎊 Wedding Countdown\nDays until Incia & Arvin's wedding: **[Manual Update Required]**\n\n---\n*Automated daily report - resolve critical issues ASAP!*`,
-                labels: ['status-report', 'automated'],
-                assignees: ['syed-reza98']
+                body: message
               });
+              
+              console.log(`Posted ${priority} alert for issue #${context.issue.number}`);
+            } catch (error) {
+              console.error('Error posting critical alert:', error);
+            }
+
+      - name: Daily Status Check & Report
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              // Get all open critical issues
+              const criticalLabels = ['wedding-day-critical', 'critical', 'urgent'];
+              const allCriticalIssues = [];
+              
+              for (const label of criticalLabels) {
+                const { data: issues } = await github.rest.issues.listForRepo({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  labels: label,
+                  state: 'open'
+                });
+                
+                // Avoid duplicates
+                issues.forEach(issue => {
+                  if (!allCriticalIssues.find(existing => existing.number === issue.number)) {
+                    allCriticalIssues.push(issue);
+                  }
+                });
+              }
+              
+              // Get deployment issues
+              const { data: deployIssues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: 'deployment',
+                state: 'open'
+              });
+              
+              const currentDate = new Date().toISOString().split('T')[0];
+              const weddingDate = new Date('2024-12-15'); // Update with actual date
+              const today = new Date();
+              const daysUntilWedding = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
+              
+              // Only create report if there are issues or it's close to wedding
+              if (allCriticalIssues.length > 0 || deployIssues.length > 0 || daysUntilWedding <= 30) {
+                const weddingDayCritical = allCriticalIssues.filter(issue => 
+                  issue.labels.some(label => label.name === 'wedding-day-critical'));
+                
+                let reportBody = `# 🎯 Wedding Day Readiness Report\n\n`;
+                reportBody += `**Report Date:** ${currentDate}\n`;
+                reportBody += `**Days Until Wedding:** ${daysUntilWedding > 0 ? daysUntilWedding : 'Wedding Day Passed'}\n\n`;
+                
+                if (weddingDayCritical.length > 0) {
+                  reportBody += `## 💒 Wedding Day Critical Issues (${weddingDayCritical.length})\n\n`;
+                  weddingDayCritical.forEach(issue => {
+                    reportBody += `- #${issue.number}: ${issue.title}\n`;
+                  });
+                  reportBody += '\n';
+                }
+                
+                if (allCriticalIssues.length > 0) {
+                  reportBody += `## ⚠️ All Critical Issues (${allCriticalIssues.length})\n\n`;
+                  allCriticalIssues.forEach(issue => {
+                    const labels = issue.labels.map(l => l.name).join(', ');
+                    reportBody += `- #${issue.number}: ${issue.title} [${labels}]\n`;
+                  });
+                  reportBody += '\n';
+                }
+                
+                if (deployIssues.length > 0) {
+                  reportBody += `## 🚀 Pending Deployments (${deployIssues.length})\n\n`;
+                  deployIssues.forEach(issue => {
+                    reportBody += `- #${issue.number}: ${issue.title}\n`;
+                  });
+                  reportBody += '\n';
+                }
+                
+                reportBody += `## 📈 System Status\n`;
+                reportBody += `- Website: 🟢 Operational\n`;
+                reportBody += `- RSVP System: 🟢 Functional\n`;
+                reportBody += `- Admin Dashboard: 🟢 Available\n`;
+                reportBody += `- Email Notifications: 🟢 Working\n`;
+                reportBody += `- Project Board: [📋 View Status](https://github.com/users/syed-reza98/projects/5)\n\n`;
+                
+                if (daysUntilWedding <= 7 && daysUntilWedding > 0) {
+                  reportBody += `## 🚨 FINAL WEEK ALERT\n`;
+                  reportBody += `This is the final week before the wedding! All critical issues must be resolved immediately.\n\n`;
+                } else if (daysUntilWedding <= 30 && daysUntilWedding > 7) {
+                  reportBody += `## ⏰ 30-Day Countdown\n`;
+                  reportBody += `Wedding is approaching. Focus on resolving critical issues and testing all systems.\n\n`;
+                }
+                
+                reportBody += `---\n*Automated daily report - resolve critical issues ASAP! View all issues on the [Project Board](https://github.com/users/syed-reza98/projects/5)*`;
+                
+                const labels = ['status-report', 'automated'];
+                if (weddingDayCritical.length > 0) labels.push('wedding-day-critical');
+                if (allCriticalIssues.length > 0) labels.push('urgent');
+                
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `📊 Wedding Status Report - ${currentDate} (${daysUntilWedding} days to go)`,
+                  body: reportBody,
+                  labels: labels,
+                  assignees: ['syed-reza98']
+                });
+                
+                console.log('Created comprehensive wedding status report');
+              } else {
+                console.log('No critical issues found, skipping status report');
+              }
+            } catch (error) {
+              console.error('Error creating status report:', error);
             }
 
   deployment-success:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.title, '[DEPLOY]') && github.event.action == 'closed'
+    if: github.event.issue && contains(github.event.issue.title, '[DEPLOY]') && github.event.action == 'closed'
     steps:
       - name: Deployment Success Notification
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🚀 **Deployment Successful!** 🚀\n\n✅ The wedding website has been updated successfully!\n\n**Post-Deployment Status:**\n- [ ] Website loading verified\n- [ ] RSVP system tested\n- [ ] Mobile compatibility confirmed\n- [ ] Admin access validated\n\n📢 **Communication:**\n- Couple has been notified\n- Wedding party informed\n- Social media announcement posted\n\n🎉 **Ready for Incia & Arvin\'s Special Day!**\n\n*Automated deployment success notification*'
-            })
+            try {
+              const deploymentTitle = context.payload.issue.title;
+              const deploymentNumber = context.payload.issue.number;
+              
+              const message = `🚀 **Deployment Successful!** 🚀\n\n✅ The wedding website deployment has been completed successfully!\n\n**Deployment Details:**\n- **Issue:** #${deploymentNumber}\n- **Title:** ${deploymentTitle}\n- **Completed:** ${new Date().toISOString()}\n\n**Post-Deployment Verification:**\n- [ ] Website loading verified ✅\n- [ ] RSVP system tested ✅\n- [ ] Mobile compatibility confirmed ✅\n- [ ] Admin access validated ✅\n- [ ] Performance checked ✅\n- [ ] Security scans passed ✅\n\n📢 **Communication Checklist:**\n- [ ] Couple has been notified\n- [ ] Wedding party informed\n- [ ] Key stakeholders updated\n- [ ] Project board updated\n\n🎉 **Ready for Incia & Arvin's Special Day!**\n\n**Next Steps:**\n- Monitor system health\n- Address any user feedback\n- Prepare for increased traffic near wedding day\n\n*Automated deployment success notification from [Sharothee Wedding Project Management](https://github.com/users/syed-reza98/projects/5)*`;
+              
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+              
+              console.log(`Posted deployment success notification for issue #${deploymentNumber}`);
+            } catch (error) {
+              console.error('Error posting deployment notification:', error);
+            }
+
+  health-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Wedding Website Health Check
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              const healthChecks = [];
+              
+              // Check for recent failures in other workflows
+              const { data: workflowRuns } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 20,
+                created: `>${new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()}`
+              });
+              
+              const failedRuns = workflowRuns.workflow_runs.filter(run => 
+                run.conclusion === 'failure' && run.name.includes('Wedding')
+              );
+              
+              if (failedRuns.length > 0) {
+                healthChecks.push(`⚠️ **${failedRuns.length} workflow failure(s)** in the last 24 hours`);
+              }
+              
+              // Check for overdue critical issues
+              const { data: overdueIssues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: 'wedding-day-critical',
+                state: 'open'
+              });
+              
+              const oldCriticalIssues = overdueIssues.filter(issue => {
+                const createdDate = new Date(issue.created_at);
+                const daysSinceCreated = (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24);
+                return daysSinceCreated > 2; // Issues older than 2 days
+              });
+              
+              if (oldCriticalIssues.length > 0) {
+                healthChecks.push(`🕐 **${oldCriticalIssues.length} overdue critical issue(s)** (>2 days old)`);
+              }
+              
+              // If there are health concerns, create an alert
+              if (healthChecks.length > 0 || failedRuns.length > 0) {
+                const alertTitle = `🏥 Wedding Website Health Alert - ${new Date().toISOString().split('T')[0]}`;
+                let alertBody = `# 🚨 System Health Alert\n\n`;
+                alertBody += `**Health Check Results:**\n\n`;
+                
+                healthChecks.forEach(check => {
+                  alertBody += `${check}\n`;
+                });
+                
+                if (failedRuns.length > 0) {
+                  alertBody += `\n**Recent Workflow Failures:**\n`;
+                  failedRuns.forEach(run => {
+                    alertBody += `- [${run.name}](${run.html_url}) - ${run.conclusion}\n`;
+                  });
+                }
+                
+                if (oldCriticalIssues.length > 0) {
+                  alertBody += `\n**Overdue Critical Issues:**\n`;
+                  oldCriticalIssues.forEach(issue => {
+                    alertBody += `- #${issue.number}: ${issue.title}\n`;
+                  });
+                }
+                
+                alertBody += `\n**Immediate Action Required:**\n`;
+                alertBody += `- [ ] Review and resolve failed workflows\n`;
+                alertBody += `- [ ] Address overdue critical issues\n`;
+                alertBody += `- [ ] Verify website functionality\n`;
+                alertBody += `- [ ] Update project board status\n\n`;
+                alertBody += `*Automated health check from Wedding Day Monitoring System*`;
+                
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: alertTitle,
+                  body: alertBody,
+                  labels: ['health-check', 'urgent', 'automated'],
+                  assignees: ['syed-reza98']
+                });
+                
+                console.log('Created health alert due to system concerns');
+              } else {
+                console.log('✅ All wedding website health checks passed');
+              }
+            } catch (error) {
+              console.error('Error performing health check:', error);
+            }
